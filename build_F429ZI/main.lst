@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccGV3S4L.s 			page 1
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccOUTT8y.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -27,10 +27,13 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccGV3S4L.s 			page 1
   24              		.thumb
   25              		.thumb_func
   27              	main:
-  28              	.LFB0:
+  28              	.LFB130:
    1:Core/Src/main.c **** #include "../Inc/init.h"
-   2:Core/Src/main.c **** int main(void){
-  29              		.loc 1 2 15 view -0
+   2:Core/Src/main.c **** 
+   3:Core/Src/main.c **** #define TIME_DELAY 1500
+   4:Core/Src/main.c **** 
+   5:Core/Src/main.c **** int main(void){
+  29              		.loc 1 5 15 view -0
   30              		.cfi_startproc
   31              		@ Volatile: function does not return.
   32              		@ args = 0, pretend = 0, frame = 0
@@ -40,67 +43,85 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccGV3S4L.s 			page 1
   36              		.cfi_def_cfa_offset 8
   37              		.cfi_offset 3, -8
   38              		.cfi_offset 14, -4
-   3:Core/Src/main.c ****         GPIO_Init_With_My_Macros();
-  39              		.loc 1 3 9 view .LVU1
+   6:Core/Src/main.c ****         GPIO_Init_With_My_Macros();
+  39              		.loc 1 6 9 view .LVU1
   40 0002 FFF7FEFF 		bl	GPIO_Init_With_My_Macros
   41              	.LVL0:
-  42 0006 06E0     		b	.L2
-  43              	.L6:
-   4:Core/Src/main.c ****         
-   5:Core/Src/main.c ****         while(1){
-   6:Core/Src/main.c **** 
-   7:Core/Src/main.c ****             if(BIT_READ(GPIOC_IDR, GPIO_PIN_13)){
-   8:Core/Src/main.c ****                 BIT_SET(GPIOB_BSSR, GPIO_PIN_SET_7);
-  44              		.loc 1 8 17 view .LVU2
-  45 0008 0A4A     		ldr	r2, .L7
-  46 000a D2F81834 		ldr	r3, [r2, #1048]
-  47 000e 43F08003 		orr	r3, r3, #128
-  48 0012 C2F81834 		str	r3, [r2, #1048]
-  49              	.L2:
-   5:Core/Src/main.c **** 
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccGV3S4L.s 			page 2
+   7:Core/Src/main.c ****         GPIO_Init_CMSIS();
+  42              		.loc 1 7 9 view .LVU2
+  43 0006 FFF7FEFF 		bl	GPIO_Init_CMSIS
+  44              	.LVL1:
+  45 000a 0CE0     		b	.L2
+  46              	.L6:
+   8:Core/Src/main.c ****         
+   9:Core/Src/main.c ****         while(1){
+  10:Core/Src/main.c ****             if(BIT_READ(GPIOC_IDR, GPIO_PIN_13)){
+  11:Core/Src/main.c ****                 BIT_SET(GPIOB_BSSR, GPIO_PIN_SET_7);
+  47              		.loc 1 11 17 view .LVU3
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccOUTT8y.s 			page 2
 
 
-  50              		.loc 1 5 9 view .LVU3
-   7:Core/Src/main.c ****                 BIT_SET(GPIOB_BSSR, GPIO_PIN_SET_7);
-  51              		.loc 1 7 13 view .LVU4
-   7:Core/Src/main.c ****                 BIT_SET(GPIOB_BSSR, GPIO_PIN_SET_7);
-  52              		.loc 1 7 16 is_stmt 0 view .LVU5
-  53 0016 074B     		ldr	r3, .L7
-  54 0018 D3F81038 		ldr	r3, [r3, #2064]
-   7:Core/Src/main.c ****                 BIT_SET(GPIOB_BSSR, GPIO_PIN_SET_7);
-  55              		.loc 1 7 15 view .LVU6
-  56 001c 13F4005F 		tst	r3, #8192
-  57 0020 F2D1     		bne	.L6
-   9:Core/Src/main.c **** 
-  10:Core/Src/main.c ****             }
-  11:Core/Src/main.c ****             else{
-  12:Core/Src/main.c ****                 BIT_SET(GPIOB_BSSR, GPIO_PIN_RESET_7);
-  58              		.loc 1 12 17 is_stmt 1 view .LVU7
-  59 0022 044A     		ldr	r2, .L7
-  60 0024 D2F81834 		ldr	r3, [r2, #1048]
-  61 0028 43F40003 		orr	r3, r3, #8388608
-  62 002c C2F81834 		str	r3, [r2, #1048]
-  63 0030 F1E7     		b	.L2
-  64              	.L8:
-  65 0032 00BF     		.align	2
-  66              	.L7:
-  67 0034 00000240 		.word	1073872896
-  68              		.cfi_endproc
-  69              	.LFE0:
-  71              		.text
-  72              	.Letext0:
-  73              		.file 2 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/machine/_default_types.
-  74              		.file 3 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/sys/_stdint.h"
-  75              		.file 4 "Core/Src/../Inc/init.h"
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccGV3S4L.s 			page 3
+  48 000c 104A     		ldr	r2, .L7
+  49 000e D2F81834 		ldr	r3, [r2, #1048]
+  50 0012 43F08003 		orr	r3, r3, #128
+  51 0016 C2F81834 		str	r3, [r2, #1048]
+  12:Core/Src/main.c ****                 SET_BIT(GPIOB->BSRR, GPIO_BSRR_BR14);
+  52              		.loc 1 12 17 view .LVU4
+  53 001a 02F58062 		add	r2, r2, #1024
+  54 001e 9369     		ldr	r3, [r2, #24]
+  55 0020 43F08043 		orr	r3, r3, #1073741824
+  56 0024 9361     		str	r3, [r2, #24]
+  57              	.L2:
+   9:Core/Src/main.c ****             if(BIT_READ(GPIOC_IDR, GPIO_PIN_13)){
+  58              		.loc 1 9 9 view .LVU5
+  10:Core/Src/main.c ****                 BIT_SET(GPIOB_BSSR, GPIO_PIN_SET_7);
+  59              		.loc 1 10 13 view .LVU6
+  10:Core/Src/main.c ****                 BIT_SET(GPIOB_BSSR, GPIO_PIN_SET_7);
+  60              		.loc 1 10 16 is_stmt 0 view .LVU7
+  61 0026 0A4B     		ldr	r3, .L7
+  62 0028 D3F81038 		ldr	r3, [r3, #2064]
+  10:Core/Src/main.c ****                 BIT_SET(GPIOB_BSSR, GPIO_PIN_SET_7);
+  63              		.loc 1 10 15 view .LVU8
+  64 002c 13F4005F 		tst	r3, #8192
+  65 0030 ECD1     		bne	.L6
+  13:Core/Src/main.c **** 
+  14:Core/Src/main.c **** 
+  15:Core/Src/main.c ****             }
+  16:Core/Src/main.c ****             else{
+  17:Core/Src/main.c ****                 BIT_SET(GPIOB_BSSR, GPIO_PIN_RESET_7);
+  66              		.loc 1 17 17 is_stmt 1 view .LVU9
+  67 0032 074A     		ldr	r2, .L7
+  68 0034 D2F81834 		ldr	r3, [r2, #1048]
+  69 0038 43F40003 		orr	r3, r3, #8388608
+  70 003c C2F81834 		str	r3, [r2, #1048]
+  18:Core/Src/main.c ****                 SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS14);
+  71              		.loc 1 18 17 view .LVU10
+  72 0040 02F58062 		add	r2, r2, #1024
+  73 0044 9369     		ldr	r3, [r2, #24]
+  74 0046 43F48043 		orr	r3, r3, #16384
+  75 004a 9361     		str	r3, [r2, #24]
+  76 004c EBE7     		b	.L2
+  77              	.L8:
+  78 004e 00BF     		.align	2
+  79              	.L7:
+  80 0050 00000240 		.word	1073872896
+  81              		.cfi_endproc
+  82              	.LFE130:
+  84              		.text
+  85              	.Letext0:
+  86              		.file 2 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/machine/_default_types.
+  87              		.file 3 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/sys/_stdint.h"
+  88              		.file 4 "CMSIS/Devices/STM32F4xx/Inc/STM32F429ZI/stm32f429xx.h"
+  89              		.file 5 "Core/Src/../Inc/init.h"
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccOUTT8y.s 			page 3
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 main.c
-C:\Users\VICTUS\AppData\Local\Temp\ccGV3S4L.s:21     .text.main:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccGV3S4L.s:27     .text.main:00000000 main
-C:\Users\VICTUS\AppData\Local\Temp\ccGV3S4L.s:67     .text.main:00000034 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccOUTT8y.s:21     .text.main:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccOUTT8y.s:27     .text.main:00000000 main
+C:\Users\VICTUS\AppData\Local\Temp\ccOUTT8y.s:80     .text.main:00000050 $d
 
 UNDEFINED SYMBOLS
 GPIO_Init_With_My_Macros
+GPIO_Init_CMSIS

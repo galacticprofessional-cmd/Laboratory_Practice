@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccvSjeki.s 			page 1
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccdw8VQA.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -27,7 +27,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccvSjeki.s 			page 1
   24              		.thumb
   25              		.thumb_func
   27              	GPIO_Init_Memory:
-  28              	.LFB0:
+  28              	.LFB130:
    1:Core/Src/init.c **** #include "../Inc/init.h"
    2:Core/Src/init.c **** 
    3:Core/Src/init.c **** void GPIO_Init_Memory(void){
@@ -36,32 +36,32 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccvSjeki.s 			page 1
   31              		@ args = 0, pretend = 0, frame = 0
   32              		@ frame_needed = 0, uses_anonymous_args = 0
   33              		@ link register save eliminated.
-   4:Core/Src/init.c ****         *(uint32_t *)(0x40023800UL + 0x30UL) |= 0x02UL;
+   4:Core/Src/init.c ****         *(uint32_t *)(0x40023800UL + 0x30UL) |= 0x02UL;         //Включение тактиро
   34              		.loc 1 4 9 view .LVU1
   35 0000 0D4A     		ldr	r2, .L2
   36 0002 D2F83038 		ldr	r3, [r2, #2096]
   37              		.loc 1 4 46 is_stmt 0 view .LVU2
   38 0006 43F00203 		orr	r3, r3, #2
   39 000a C2F83038 		str	r3, [r2, #2096]
-   5:Core/Src/init.c ****         *(uint32_t *)(0x40020400UL + 0x00UL) |= 0x4000UL;
+   5:Core/Src/init.c ****         *(uint32_t *)(0x40020400UL + 0x00UL) |= 0x4000UL;       //Настройка пина PB7 �
   40              		.loc 1 5 9 is_stmt 1 view .LVU3
   41 000e 0B4B     		ldr	r3, .L2+4
   42 0010 D3F80024 		ldr	r2, [r3, #1024]
   43              		.loc 1 5 46 is_stmt 0 view .LVU4
   44 0014 42F48042 		orr	r2, r2, #16384
   45 0018 C3F80024 		str	r2, [r3, #1024]
-   6:Core/Src/init.c ****         *(uint32_t *)(0x40020400UL + 0x04UL) |= 0x00UL;
+   6:Core/Src/init.c ****         *(uint32_t *)(0x40020400UL + 0x04UL) |= 0x00UL;         //Настройка режима �
   46              		.loc 1 6 9 is_stmt 1 view .LVU5
-   7:Core/Src/init.c ****         *(uint32_t *)(0x40020400UL + 0x08UL) |= 0x4000UL;
+   7:Core/Src/init.c ****         *(uint32_t *)(0x40020400UL + 0x08UL) |= 0x4000UL;       //Настройка скорост
   47              		.loc 1 7 9 view .LVU6
   48 001c D3F80824 		ldr	r2, [r3, #1032]
   49              		.loc 1 7 46 is_stmt 0 view .LVU7
   50 0020 42F48042 		orr	r2, r2, #16384
   51 0024 C3F80824 		str	r2, [r3, #1032]
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccvSjeki.s 			page 2
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccdw8VQA.s 			page 2
 
 
-   8:Core/Src/init.c ****         *(uint32_t *)(0x40020400UL + 0x18UL) |= 0x800000UL;
+   8:Core/Src/init.c ****         *(uint32_t *)(0x40020400UL + 0x18UL) |= 0x800000UL;     //Предварительное в
   52              		.loc 1 8 9 is_stmt 1 view .LVU8
   53 0028 D3F81824 		ldr	r2, [r3, #1048]
   54              		.loc 1 8 46 is_stmt 0 view .LVU9
@@ -76,7 +76,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccvSjeki.s 			page 1
   62 0038 00300240 		.word	1073885184
   63 003c 00000240 		.word	1073872896
   64              		.cfi_endproc
-  65              	.LFE0:
+  65              	.LFE130:
   67              		.section	.text.GPIO_Init_With_My_Macros,"ax",%progbits
   68              		.align	1
   69              		.global	GPIO_Init_With_My_Macros
@@ -84,7 +84,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccvSjeki.s 			page 1
   71              		.thumb
   72              		.thumb_func
   74              	GPIO_Init_With_My_Macros:
-  75              	.LFB1:
+  75              	.LFB131:
   10:Core/Src/init.c **** 
   11:Core/Src/init.c **** void GPIO_Init_With_My_Macros(void){
   76              		.loc 1 11 36 is_stmt 1 view -0
@@ -92,33 +92,33 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccvSjeki.s 			page 1
   78              		@ args = 0, pretend = 0, frame = 0
   79              		@ frame_needed = 0, uses_anonymous_args = 0
   80              		@ link register save eliminated.
-  12:Core/Src/init.c ****     RCC_AHB1ENR |= RCC_GPIOB_EN | RCC_GPIOC_EN;
+  12:Core/Src/init.c ****     RCC_AHB1ENR |= RCC_GPIOB_EN | RCC_GPIOC_EN;     //Включение тактирования �
   81              		.loc 1 12 5 view .LVU12
   82 0000 0D4A     		ldr	r2, .L5
   83 0002 D2F83038 		ldr	r3, [r2, #2096]
   84              		.loc 1 12 17 is_stmt 0 view .LVU13
   85 0006 43F00603 		orr	r3, r3, #6
   86 000a C2F83038 		str	r3, [r2, #2096]
-  13:Core/Src/init.c ****     
-  14:Core/Src/init.c ****     BIT_SET(GPIOB_MODER,    GPIO_PIN_OUT_7);
+  13:Core/Src/init.c **** 
+  14:Core/Src/init.c ****     BIT_SET(GPIOB_MODER,    GPIO_PIN_OUT_7);        //Настройка пина PB7 на выво
   87              		.loc 1 14 5 is_stmt 1 view .LVU14
   88 000e 0B4B     		ldr	r3, .L5+4
   89 0010 D3F80024 		ldr	r2, [r3, #1024]
   90 0014 42F48042 		orr	r2, r2, #16384
   91 0018 C3F80024 		str	r2, [r3, #1024]
-  15:Core/Src/init.c ****     BIT_SET(GPIOB_OTYPER,   GPIO_OFF);
+  15:Core/Src/init.c ****     BIT_SET(GPIOB_OTYPER,   GPIO_OFF);              //Настройка режима работы 
   92              		.loc 1 15 5 view .LVU15
-  16:Core/Src/init.c ****     BIT_SET(GPIOB_OSPEEDR,  GPIO_PIN_MED_7);
+  16:Core/Src/init.c ****     BIT_SET(GPIOB_OSPEEDR,  GPIO_PIN_MED_7);        //Настройка скорости выво�
   93              		.loc 1 16 5 view .LVU16
   94 001c D3F80824 		ldr	r2, [r3, #1032]
   95 0020 42F48042 		orr	r2, r2, #16384
   96 0024 C3F80824 		str	r2, [r3, #1032]
-  17:Core/Src/init.c ****     BIT_SET(GPIOB_BSSR,     GPIO_PIN_RESET_7);
+  17:Core/Src/init.c ****     BIT_SET(GPIOB_BSSR,     GPIO_PIN_RESET_7);      //Предварительное выключе
   97              		.loc 1 17 5 view .LVU17
   98 0028 D3F81824 		ldr	r2, [r3, #1048]
   99 002c 42F40002 		orr	r2, r2, #8388608
  100 0030 C3F81824 		str	r2, [r3, #1048]
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccvSjeki.s 			page 3
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccdw8VQA.s 			page 3
 
 
   18:Core/Src/init.c **** 
@@ -131,7 +131,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccvSjeki.s 			page 1
  106 0038 00300240 		.word	1073885184
  107 003c 00000240 		.word	1073872896
  108              		.cfi_endproc
- 109              	.LFE1:
+ 109              	.LFE131:
  111              		.section	.text.GPIO_Init_CMSIS,"ax",%progbits
  112              		.align	1
  113              		.global	GPIO_Init_CMSIS
@@ -139,35 +139,75 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccvSjeki.s 			page 1
  115              		.thumb
  116              		.thumb_func
  118              	GPIO_Init_CMSIS:
- 119              	.LFB2:
-  20:Core/Src/init.c **** void GPIO_Init_CMSIS(void){
- 120              		.loc 1 20 27 is_stmt 1 view -0
+ 119              	.LFB132:
+  20:Core/Src/init.c **** 
+  21:Core/Src/init.c **** void GPIO_Init_CMSIS(void){
+ 120              		.loc 1 21 27 is_stmt 1 view -0
  121              		.cfi_startproc
  122              		@ args = 0, pretend = 0, frame = 0
  123              		@ frame_needed = 0, uses_anonymous_args = 0
  124              		@ link register save eliminated.
-  21:Core/Src/init.c **** 
-  22:Core/Src/init.c **** }...
- 125              		.loc 1 22 1 view .LVU20
- 126 0000 7047     		bx	lr
- 127              		.cfi_endproc
- 128              	.LFE2:
- 130              		.text
- 131              	.Letext0:
- 132              		.file 2 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/machine/_default_types.
- 133              		.file 3 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/sys/_stdint.h"
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccvSjeki.s 			page 4
+  22:Core/Src/init.c ****     SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOBEN);
+ 125              		.loc 1 22 5 view .LVU20
+ 126 0000 0B4A     		ldr	r2, .L8
+ 127 0002 136B     		ldr	r3, [r2, #48]
+ 128 0004 43F00203 		orr	r3, r3, #2
+ 129 0008 1363     		str	r3, [r2, #48]
+  23:Core/Src/init.c **** 
+  24:Core/Src/init.c ****     SET_BIT(GPIOB->MODER, GPIO_MODER_MODER14_0);        //Настройка пина PB14 на в�
+ 130              		.loc 1 24 5 view .LVU21
+ 131 000a 0A4B     		ldr	r3, .L8+4
+ 132 000c 1A68     		ldr	r2, [r3]
+ 133 000e 42F08052 		orr	r2, r2, #268435456
+ 134 0012 1A60     		str	r2, [r3]
+  25:Core/Src/init.c ****     CLEAR_BIT(GPIOB->OTYPER, GPIO_OTYPER_OT14);         //Настройка режима рабо�
+ 135              		.loc 1 25 5 view .LVU22
+ 136 0014 5A68     		ldr	r2, [r3, #4]
+ 137 0016 22F48042 		bic	r2, r2, #16384
+ 138 001a 5A60     		str	r2, [r3, #4]
+  26:Core/Src/init.c ****     SET_BIT(GPIOB->OSPEEDR,GPIO_OSPEEDER_OSPEEDR14_0);  //Настройка скорости ра�
+ 139              		.loc 1 26 5 view .LVU23
+ 140 001c 9A68     		ldr	r2, [r3, #8]
+ 141 001e 42F08052 		orr	r2, r2, #268435456
+ 142 0022 9A60     		str	r2, [r3, #8]
+  27:Core/Src/init.c ****     SET_BIT(GPIOB->BSRR, GPIO_BSRR_BR14);               //Предварительное выклю
+ 143              		.loc 1 27 5 view .LVU24
+ 144 0024 9A69     		ldr	r2, [r3, #24]
+ 145 0026 42F08042 		orr	r2, r2, #1073741824
+ 146 002a 9A61     		str	r2, [r3, #24]
+  28:Core/Src/init.c **** 
+  29:Core/Src/init.c **** 
+  30:Core/Src/init.c **** }...
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccdw8VQA.s 			page 4
+
+
+ 147              		.loc 1 30 1 is_stmt 0 view .LVU25
+ 148 002c 7047     		bx	lr
+ 149              	.L9:
+ 150 002e 00BF     		.align	2
+ 151              	.L8:
+ 152 0030 00380240 		.word	1073887232
+ 153 0034 00040240 		.word	1073873920
+ 154              		.cfi_endproc
+ 155              	.LFE132:
+ 157              		.text
+ 158              	.Letext0:
+ 159              		.file 2 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/machine/_default_types.
+ 160              		.file 3 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/sys/_stdint.h"
+ 161              		.file 4 "CMSIS/Devices/STM32F4xx/Inc/STM32F429ZI/stm32f429xx.h"
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccdw8VQA.s 			page 5
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 init.c
-C:\Users\VICTUS\AppData\Local\Temp\ccvSjeki.s:21     .text.GPIO_Init_Memory:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccvSjeki.s:27     .text.GPIO_Init_Memory:00000000 GPIO_Init_Memory
-C:\Users\VICTUS\AppData\Local\Temp\ccvSjeki.s:62     .text.GPIO_Init_Memory:00000038 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccvSjeki.s:68     .text.GPIO_Init_With_My_Macros:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccvSjeki.s:74     .text.GPIO_Init_With_My_Macros:00000000 GPIO_Init_With_My_Macros
-C:\Users\VICTUS\AppData\Local\Temp\ccvSjeki.s:106    .text.GPIO_Init_With_My_Macros:00000038 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccvSjeki.s:112    .text.GPIO_Init_CMSIS:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccvSjeki.s:118    .text.GPIO_Init_CMSIS:00000000 GPIO_Init_CMSIS
+C:\Users\VICTUS\AppData\Local\Temp\ccdw8VQA.s:21     .text.GPIO_Init_Memory:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccdw8VQA.s:27     .text.GPIO_Init_Memory:00000000 GPIO_Init_Memory
+C:\Users\VICTUS\AppData\Local\Temp\ccdw8VQA.s:62     .text.GPIO_Init_Memory:00000038 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccdw8VQA.s:68     .text.GPIO_Init_With_My_Macros:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccdw8VQA.s:74     .text.GPIO_Init_With_My_Macros:00000000 GPIO_Init_With_My_Macros
+C:\Users\VICTUS\AppData\Local\Temp\ccdw8VQA.s:106    .text.GPIO_Init_With_My_Macros:00000038 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccdw8VQA.s:112    .text.GPIO_Init_CMSIS:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccdw8VQA.s:118    .text.GPIO_Init_CMSIS:00000000 GPIO_Init_CMSIS
+C:\Users\VICTUS\AppData\Local\Temp\ccdw8VQA.s:152    .text.GPIO_Init_CMSIS:00000030 $d
 
 NO UNDEFINED SYMBOLS

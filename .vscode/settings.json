@@ -3,6 +3,8 @@
         "stdint.h": "c",
         "cstdint": "c",
         "stdint-gcc.h": "c",
-        "init.h": "c"
+        "init.h": "c",
+        "stm32f4xx.h": "c",
+        "stm32f429xx.h": "c"
     }
 }
