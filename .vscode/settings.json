@@ -5,6 +5,7 @@
         "stdint-gcc.h": "c",
         "init.h": "c",
         "stm32f4xx.h": "c",
-        "stm32f429xx.h": "c"
+        "stm32f429xx.h": "c",
+        "init_lb1.h": "c"
     }
 }

@@ -1,4 +1,4 @@
-build_F429ZI/main.o: Core/Src/main.c Core/Src/../Inc/init_LB1.h \
+build_F429ZI/main_LB1.o: Core/Src/main_LB1.c Core/Src/../Inc/init_LB1.h \
  Core/Src/../Inc/../../CMSIS/Devices/STM32F4xx/Inc/stm32f4xx.h \
  CMSIS/Devices/STM32F4xx/Inc/STM32F429ZI/stm32f429xx.h \
  CMSIS/Include/../include/core_cm4.h \

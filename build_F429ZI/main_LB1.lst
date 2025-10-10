@@ -1,0 +1,111 @@
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccAIRUIe.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"main_LB1.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Core/Src/main_LB1.c"
+  20              		.section	.text.main,"ax",%progbits
+  21              		.align	1
+  22              		.global	main
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	main:
+  28              	.LFB130:
+   1:Core/Src/main_LB1.c **** #include "../Inc/init_LB1.h"
+   2:Core/Src/main_LB1.c **** 
+   3:Core/Src/main_LB1.c **** #define TIME_DELAY 1500
+   4:Core/Src/main_LB1.c **** 
+   5:Core/Src/main_LB1.c **** int main(void){
+  29              		.loc 1 5 15 view -0
+  30              		.cfi_startproc
+  31              		@ Volatile: function does not return.
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34 0000 08B5     		push	{r3, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 3, -8
+  38              		.cfi_offset 14, -4
+   6:Core/Src/main_LB1.c ****         GPIO_Init_CMSIS();
+  39              		.loc 1 6 9 view .LVU1
+  40 0002 FFF7FEFF 		bl	GPIO_Init_CMSIS
+  41              	.LVL0:
+  42 0006 04E0     		b	.L2
+  43              	.L6:
+   7:Core/Src/main_LB1.c ****         
+   8:Core/Src/main_LB1.c ****         while(1){
+   9:Core/Src/main_LB1.c ****             if(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2)){
+  10:Core/Src/main_LB1.c ****                 SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS14);
+  44              		.loc 1 10 17 view .LVU2
+  45 0008 074A     		ldr	r2, .L7
+  46 000a 9369     		ldr	r3, [r2, #24]
+  47 000c 43F48043 		orr	r3, r3, #16384
+  48 0010 9361     		str	r3, [r2, #24]
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccAIRUIe.s 			page 2
+
+
+  49              	.L2:
+   8:Core/Src/main_LB1.c ****             if(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2)){
+  50              		.loc 1 8 9 view .LVU3
+   9:Core/Src/main_LB1.c ****                 SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS14);
+  51              		.loc 1 9 13 view .LVU4
+   9:Core/Src/main_LB1.c ****                 SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS14);
+  52              		.loc 1 9 16 is_stmt 0 view .LVU5
+  53 0012 064B     		ldr	r3, .L7+4
+  54 0014 1B69     		ldr	r3, [r3, #16]
+   9:Core/Src/main_LB1.c ****                 SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS14);
+  55              		.loc 1 9 15 view .LVU6
+  56 0016 13F0040F 		tst	r3, #4
+  57 001a F5D1     		bne	.L6
+  11:Core/Src/main_LB1.c **** 
+  12:Core/Src/main_LB1.c **** 
+  13:Core/Src/main_LB1.c ****             }
+  14:Core/Src/main_LB1.c ****             else{
+  15:Core/Src/main_LB1.c ****                 SET_BIT(GPIOB->BSRR, GPIO_BSRR_BR14);
+  58              		.loc 1 15 17 is_stmt 1 view .LVU7
+  59 001c 024A     		ldr	r2, .L7
+  60 001e 9369     		ldr	r3, [r2, #24]
+  61 0020 43F08043 		orr	r3, r3, #1073741824
+  62 0024 9361     		str	r3, [r2, #24]
+  63 0026 F4E7     		b	.L2
+  64              	.L8:
+  65              		.align	2
+  66              	.L7:
+  67 0028 00040240 		.word	1073873920
+  68 002c 000C0240 		.word	1073875968
+  69              		.cfi_endproc
+  70              	.LFE130:
+  72              		.text
+  73              	.Letext0:
+  74              		.file 2 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/machine/_default_types.
+  75              		.file 3 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/sys/_stdint.h"
+  76              		.file 4 "CMSIS/Devices/STM32F4xx/Inc/STM32F429ZI/stm32f429xx.h"
+  77              		.file 5 "Core/Src/../Inc/init_LB1.h"
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccAIRUIe.s 			page 3
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 main_LB1.c
+C:\Users\VICTUS\AppData\Local\Temp\ccAIRUIe.s:21     .text.main:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccAIRUIe.s:27     .text.main:00000000 main
+C:\Users\VICTUS\AppData\Local\Temp\ccAIRUIe.s:67     .text.main:00000028 $d
+
+UNDEFINED SYMBOLS
+GPIO_Init_CMSIS

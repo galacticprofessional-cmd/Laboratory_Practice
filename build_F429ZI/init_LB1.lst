@@ -1,0 +1,207 @@
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccks3gVV.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"init_LB1.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Core/Src/init_LB1.c"
+  20              		.section	.text.GPIO_Init_Memory1,"ax",%progbits
+  21              		.align	1
+  22              		.global	GPIO_Init_Memory1
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	GPIO_Init_Memory1:
+  28              	.LFB130:
+   1:Core/Src/init_LB1.c **** #include "../Inc/init_LB1.h"
+   2:Core/Src/init_LB1.c **** 
+   3:Core/Src/init_LB1.c **** void GPIO_Init_Memory1(void){
+  29              		.loc 1 3 29 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+   4:Core/Src/init_LB1.c **** //         *(uint32_t *)() |=     //Включение тактирования на перефер
+   5:Core/Src/init_LB1.c **** //         *(uint32_t *)() |=     //Настройка пина PB7 на вывводб регис�
+   6:Core/Src/init_LB1.c **** //         *(uint32_t *)() |=     //Настройка режима работы выxода на p
+   7:Core/Src/init_LB1.c **** //         *(uint32_t *)() |=     //Настройка скорости вывода PB7, реги�
+   8:Core/Src/init_LB1.c **** //         *(uint32_t *)() |=     //Предварительное выключение свето�
+   9:Core/Src/init_LB1.c **** }
+  34              		.loc 1 9 1 view .LVU1
+  35 0000 7047     		bx	lr
+  36              		.cfi_endproc
+  37              	.LFE130:
+  39              		.section	.text.GPIO_Init_Using_My_Macros,"ax",%progbits
+  40              		.align	1
+  41              		.global	GPIO_Init_Using_My_Macros
+  42              		.syntax unified
+  43              		.thumb
+  44              		.thumb_func
+  46              	GPIO_Init_Using_My_Macros:
+  47              	.LFB131:
+  10:Core/Src/init_LB1.c **** 
+  11:Core/Src/init_LB1.c **** void GPIO_Init_Using_My_Macros(void){
+  48              		.loc 1 11 37 view -0
+  49              		.cfi_startproc
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccks3gVV.s 			page 2
+
+
+  50              		@ args = 0, pretend = 0, frame = 0
+  51              		@ frame_needed = 0, uses_anonymous_args = 0
+  52              		@ link register save eliminated.
+  12:Core/Src/init_LB1.c **** //     RCC_AHB1ENR |= RCC_GPIOB_EN | RCC_GPIOC_EN;     //Включение тактировани�
+  13:Core/Src/init_LB1.c **** 
+  14:Core/Src/init_LB1.c **** //     BIT_SET();        //Настройка пина PB7 на вывод, регистр MODER
+  15:Core/Src/init_LB1.c **** //     BIT_SET();              //Настройка режима работы выxода на push
+  16:Core/Src/init_LB1.c **** //     BIT_SET();        //Настройка скорости вывода PB7, регистр OSP
+  17:Core/Src/init_LB1.c **** //     BIT_SET();      //Предварительное выключение светодиода, 
+  18:Core/Src/init_LB1.c **** 
+  19:Core/Src/init_LB1.c **** }
+  53              		.loc 1 19 1 view .LVU3
+  54 0000 7047     		bx	lr
+  55              		.cfi_endproc
+  56              	.LFE131:
+  58              		.section	.text.GPIO_Init_CMSIS1,"ax",%progbits
+  59              		.align	1
+  60              		.global	GPIO_Init_CMSIS1
+  61              		.syntax unified
+  62              		.thumb
+  63              		.thumb_func
+  65              	GPIO_Init_CMSIS1:
+  66              	.LFB132:
+  20:Core/Src/init_LB1.c **** 
+  21:Core/Src/init_LB1.c **** void GPIO_Init_CMSIS1(void){
+  67              		.loc 1 21 28 view -0
+  68              		.cfi_startproc
+  69              		@ args = 0, pretend = 0, frame = 0
+  70              		@ frame_needed = 0, uses_anonymous_args = 0
+  71              		@ link register save eliminated.
+  22:Core/Src/init_LB1.c ****     // SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIODEN);
+  23:Core/Src/init_LB1.c **** 
+  24:Core/Src/init_LB1.c ****     // SET_BIT(GPIOD->MODER, GPIO_MODER_MODER2_0);        //Настройка пина PD2 на в
+  25:Core/Src/init_LB1.c ****     // CLEAR_BIT(GPIOB->OTYPER, GPIO_OTYPER_OT14);         //Настройка режима раб
+  26:Core/Src/init_LB1.c ****     // SET_BIT(GPIOB->OSPEEDR,GPIO_OSPEEDER_OSPEEDR14_0);  //Настройка скорости р
+  27:Core/Src/init_LB1.c ****     // SET_BIT(GPIOB->BSRR, GPIO_BSRR_BR14);               //Предварительное вык�
+  28:Core/Src/init_LB1.c ****     SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOBEN | RCC_AHB1ENR_GPIODEN | RCC_AHB1ENR_GPIOGEN);
+  72              		.loc 1 28 5 view .LVU5
+  73 0000 1C4A     		ldr	r2, .L4
+  74 0002 136B     		ldr	r3, [r2, #48]
+  75 0004 43F04A03 		orr	r3, r3, #74
+  76 0008 1363     		str	r3, [r2, #48]
+  29:Core/Src/init_LB1.c **** 
+  30:Core/Src/init_LB1.c ****     SET_BIT(GPIOB->MODER, GPIO_MODER_MODER14_0);        //Настройка пина PB14 на в�
+  77              		.loc 1 30 5 view .LVU6
+  78 000a 1B4B     		ldr	r3, .L4+4
+  79 000c 1A68     		ldr	r2, [r3]
+  80 000e 42F08052 		orr	r2, r2, #268435456
+  81 0012 1A60     		str	r2, [r3]
+  31:Core/Src/init_LB1.c ****     CLEAR_BIT(GPIOB->OTYPER, GPIO_OTYPER_OT14);         //Настройка режима рабо�
+  82              		.loc 1 31 5 view .LVU7
+  83 0014 5A68     		ldr	r2, [r3, #4]
+  84 0016 22F48042 		bic	r2, r2, #16384
+  85 001a 5A60     		str	r2, [r3, #4]
+  32:Core/Src/init_LB1.c ****     SET_BIT(GPIOB->OSPEEDR,GPIO_OSPEEDER_OSPEEDR14_0);  //Настройка скорости ра�
+  86              		.loc 1 32 5 view .LVU8
+  87 001c 9A68     		ldr	r2, [r3, #8]
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccks3gVV.s 			page 3
+
+
+  88 001e 42F08052 		orr	r2, r2, #268435456
+  89 0022 9A60     		str	r2, [r3, #8]
+  33:Core/Src/init_LB1.c ****     SET_BIT(GPIOB->BSRR, GPIO_BSRR_BR14);
+  90              		.loc 1 33 5 view .LVU9
+  91 0024 9A69     		ldr	r2, [r3, #24]
+  92 0026 42F08042 		orr	r2, r2, #1073741824
+  93 002a 9A61     		str	r2, [r3, #24]
+  34:Core/Src/init_LB1.c **** 
+  35:Core/Src/init_LB1.c ****     SET_BIT(GPIOD->MODER, GPIO_MODER_MODER14_0);        //Настройка пина PD14 на в�
+  94              		.loc 1 35 5 view .LVU10
+  95 002c 03F50063 		add	r3, r3, #2048
+  96 0030 1A68     		ldr	r2, [r3]
+  97 0032 42F08052 		orr	r2, r2, #268435456
+  98 0036 1A60     		str	r2, [r3]
+  36:Core/Src/init_LB1.c ****     CLEAR_BIT(GPIOD->OTYPER, GPIO_OTYPER_OT14);         //Настройка режима рабо�
+  99              		.loc 1 36 5 view .LVU11
+ 100 0038 5A68     		ldr	r2, [r3, #4]
+ 101 003a 22F48042 		bic	r2, r2, #16384
+ 102 003e 5A60     		str	r2, [r3, #4]
+  37:Core/Src/init_LB1.c ****     SET_BIT(GPIOD->OSPEEDR,GPIO_OSPEEDER_OSPEEDR14_0);  //Настройка скорости ра�
+ 103              		.loc 1 37 5 view .LVU12
+ 104 0040 9A68     		ldr	r2, [r3, #8]
+ 105 0042 42F08052 		orr	r2, r2, #268435456
+ 106 0046 9A60     		str	r2, [r3, #8]
+  38:Core/Src/init_LB1.c ****     SET_BIT(GPIOD->BSRR, GPIO_BSRR_BR14);
+ 107              		.loc 1 38 5 view .LVU13
+ 108 0048 9A69     		ldr	r2, [r3, #24]
+ 109 004a 42F08042 		orr	r2, r2, #1073741824
+ 110 004e 9A61     		str	r2, [r3, #24]
+  39:Core/Src/init_LB1.c **** 
+  40:Core/Src/init_LB1.c ****     SET_BIT(GPIOD->MODER, GPIO_MODER_MODER15_0);        //Настройка пина PD15 на в�
+ 111              		.loc 1 40 5 view .LVU14
+ 112 0050 1A68     		ldr	r2, [r3]
+ 113 0052 42F08042 		orr	r2, r2, #1073741824
+ 114 0056 1A60     		str	r2, [r3]
+  41:Core/Src/init_LB1.c ****     CLEAR_BIT(GPIOD->OTYPER, GPIO_OTYPER_OT15);         //Настройка режима рабо�
+ 115              		.loc 1 41 5 view .LVU15
+ 116 0058 5A68     		ldr	r2, [r3, #4]
+ 117 005a 22F40042 		bic	r2, r2, #32768
+ 118 005e 5A60     		str	r2, [r3, #4]
+  42:Core/Src/init_LB1.c ****     SET_BIT(GPIOD->OSPEEDR,GPIO_OSPEEDER_OSPEEDR15_0);  //Настройка скорости ра�
+ 119              		.loc 1 42 5 view .LVU16
+ 120 0060 9A68     		ldr	r2, [r3, #8]
+ 121 0062 42F08042 		orr	r2, r2, #1073741824
+ 122 0066 9A60     		str	r2, [r3, #8]
+  43:Core/Src/init_LB1.c ****     SET_BIT(GPIOD->BSRR, GPIO_BSRR_BR15);
+ 123              		.loc 1 43 5 view .LVU17
+ 124 0068 9A69     		ldr	r2, [r3, #24]
+ 125 006a 42F00042 		orr	r2, r2, #-2147483648
+ 126 006e 9A61     		str	r2, [r3, #24]
+  44:Core/Src/init_LB1.c **** 
+  45:Core/Src/init_LB1.c **** 
+  46:Core/Src/init_LB1.c **** }
+ 127              		.loc 1 46 1 is_stmt 0 view .LVU18
+ 128 0070 7047     		bx	lr
+ 129              	.L5:
+ 130 0072 00BF     		.align	2
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccks3gVV.s 			page 4
+
+
+ 131              	.L4:
+ 132 0074 00380240 		.word	1073887232
+ 133 0078 00040240 		.word	1073873920
+ 134              		.cfi_endproc
+ 135              	.LFE132:
+ 137              		.text
+ 138              	.Letext0:
+ 139              		.file 2 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/machine/_default_types.
+ 140              		.file 3 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/sys/_stdint.h"
+ 141              		.file 4 "CMSIS/Devices/STM32F4xx/Inc/STM32F429ZI/stm32f429xx.h"
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccks3gVV.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 init_LB1.c
+C:\Users\VICTUS\AppData\Local\Temp\ccks3gVV.s:21     .text.GPIO_Init_Memory1:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccks3gVV.s:27     .text.GPIO_Init_Memory1:00000000 GPIO_Init_Memory1
+C:\Users\VICTUS\AppData\Local\Temp\ccks3gVV.s:40     .text.GPIO_Init_Using_My_Macros:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccks3gVV.s:46     .text.GPIO_Init_Using_My_Macros:00000000 GPIO_Init_Using_My_Macros
+C:\Users\VICTUS\AppData\Local\Temp\ccks3gVV.s:59     .text.GPIO_Init_CMSIS1:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccks3gVV.s:65     .text.GPIO_Init_CMSIS1:00000000 GPIO_Init_CMSIS1
+C:\Users\VICTUS\AppData\Local\Temp\ccks3gVV.s:132    .text.GPIO_Init_CMSIS1:00000074 $d
+
+NO UNDEFINED SYMBOLS
