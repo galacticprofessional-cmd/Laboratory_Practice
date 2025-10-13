@@ -29,6 +29,6 @@
 
 void GPIO_Init_Memory1(void);
 void GPIO_Init_Using_My_Macros(void);
-void GPIO_Init_CMSIS1(void);
+void GPIO_Init_CMSIS_LB1(void);
 
 #endif 

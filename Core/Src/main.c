@@ -41,7 +41,7 @@ int TheSwitcher(int count){
 
 int main(void){
     
-    GPIO_Init_CMSIS1();
+    GPIO_Init_CMSIS_LB1();
     int count = 0;
 
     while(1){

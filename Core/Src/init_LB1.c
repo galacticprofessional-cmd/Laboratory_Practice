@@ -18,7 +18,7 @@ void GPIO_Init_Using_My_Macros(void){
 
 }
 
-void GPIO_Init_CMSIS1(void){
+void GPIO_Init_CMSIS_LB1(void){
 
     SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIODEN | RCC_AHB1ENR_GPIOGEN | RCC_AHB1ENR_GPIOEEN | RCC_AHB1ENR_GPIOFEN);
 
