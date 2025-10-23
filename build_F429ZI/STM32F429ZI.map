@@ -477,7 +477,7 @@ LOAD D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13
                 0x08000000                g_pfnVectors
                 0x080001ac                        . = ALIGN (0x4)
 
-.text           0x080001ac      0x220
+.text           0x080001ac      0x308
                 0x080001ac                        . = ALIGN (0x4)
  *(.text)
  *(.text*)
@@ -488,196 +488,212 @@ LOAD D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13
  .text.SystemInit
                 0x080001ec       0x14 build_F429ZI/system_stm32f4xx.o
                 0x080001ec                SystemInit
- .text.main     0x08000200       0x9c build_F429ZI/main.o
-                0x08000200                main
- .text.GPIO_Init_CMSIS1
-                0x0800029c       0x7c build_F429ZI/init_LB1.o
-                0x0800029c                GPIO_Init_CMSIS1
+ .text.pressedButton1
+                0x08000200       0x3c build_F429ZI/main.o
+                0x08000200                pressedButton1
+ .text.pressedButton2
+                0x0800023c       0x3c build_F429ZI/main.o
+                0x0800023c                pressedButton2
+ .text.TurningOnState
+                0x08000278       0x18 build_F429ZI/main.o
+                0x08000278                TurningOnState
+ .text.TurningOffState
+                0x08000290       0x18 build_F429ZI/main.o
+                0x08000290                TurningOffState
+ .text.TheSwitcher
+                0x080002a8        0xa build_F429ZI/main.o
+                0x080002a8                TheSwitcher
+ *fill*         0x080002b2        0x2 
+ .text.main     0x080002b4       0x70 build_F429ZI/main.o
+                0x080002b4                main
+ .text.GPIO_Init_CMSIS_LB1
+                0x08000324       0xdc build_F429ZI/init_LB1.o
+                0x08000324                GPIO_Init_CMSIS_LB1
  .text.Reset_Handler
-                0x08000318       0x50 build_F429ZI/startup_stm32f429xx.o
-                0x08000318                Reset_Handler
+                0x08000400       0x50 build_F429ZI/startup_stm32f429xx.o
+                0x08000400                Reset_Handler
  .text.Default_Handler
-                0x08000368        0x2 build_F429ZI/startup_stm32f429xx.o
-                0x08000368                RTC_Alarm_IRQHandler
-                0x08000368                HASH_RNG_IRQHandler
-                0x08000368                EXTI2_IRQHandler
-                0x08000368                TIM8_CC_IRQHandler
-                0x08000368                DebugMon_Handler
-                0x08000368                UART8_IRQHandler
-                0x08000368                SPI4_IRQHandler
-                0x08000368                TIM1_CC_IRQHandler
-                0x08000368                DMA2_Stream5_IRQHandler
-                0x08000368                HardFault_Handler
-                0x08000368                DMA1_Stream5_IRQHandler
-                0x08000368                SysTick_Handler
-                0x08000368                PVD_IRQHandler
-                0x08000368                SDIO_IRQHandler
-                0x08000368                TAMP_STAMP_IRQHandler
-                0x08000368                PendSV_Handler
-                0x08000368                NMI_Handler
-                0x08000368                CAN2_RX1_IRQHandler
-                0x08000368                EXTI3_IRQHandler
-                0x08000368                TIM8_TRG_COM_TIM14_IRQHandler
-                0x08000368                TIM1_UP_TIM10_IRQHandler
-                0x08000368                TIM8_UP_TIM13_IRQHandler
-                0x08000368                I2C3_ER_IRQHandler
-                0x08000368                EXTI0_IRQHandler
-                0x08000368                I2C2_EV_IRQHandler
-                0x08000368                DMA1_Stream2_IRQHandler
-                0x08000368                CAN1_RX0_IRQHandler
-                0x08000368                FPU_IRQHandler
-                0x08000368                OTG_HS_WKUP_IRQHandler
-                0x08000368                UsageFault_Handler
-                0x08000368                LTDC_ER_IRQHandler
-                0x08000368                CAN2_SCE_IRQHandler
-                0x08000368                DMA2_Stream2_IRQHandler
-                0x08000368                SPI1_IRQHandler
-                0x08000368                TIM6_DAC_IRQHandler
-                0x08000368                TIM1_BRK_TIM9_IRQHandler
-                0x08000368                DCMI_IRQHandler
-                0x08000368                CAN2_RX0_IRQHandler
-                0x08000368                DMA2_Stream3_IRQHandler
-                0x08000368                USART6_IRQHandler
-                0x08000368                USART3_IRQHandler
-                0x08000368                CAN1_RX1_IRQHandler
-                0x08000368                UART5_IRQHandler
-                0x08000368                DMA2_Stream0_IRQHandler
-                0x08000368                TIM4_IRQHandler
-                0x08000368                I2C1_EV_IRQHandler
-                0x08000368                DMA1_Stream6_IRQHandler
-                0x08000368                DMA1_Stream1_IRQHandler
-                0x08000368                UART4_IRQHandler
-                0x08000368                TIM3_IRQHandler
-                0x08000368                RCC_IRQHandler
-                0x08000368                TIM8_BRK_TIM12_IRQHandler
-                0x08000368                Default_Handler
-                0x08000368                EXTI15_10_IRQHandler
-                0x08000368                ADC_IRQHandler
-                0x08000368                DMA1_Stream7_IRQHandler
-                0x08000368                SPI5_IRQHandler
-                0x08000368                TIM7_IRQHandler
-                0x08000368                CAN2_TX_IRQHandler
-                0x08000368                TIM5_IRQHandler
-                0x08000368                DMA2_Stream7_IRQHandler
-                0x08000368                I2C3_EV_IRQHandler
-                0x08000368                EXTI9_5_IRQHandler
-                0x08000368                RTC_WKUP_IRQHandler
-                0x08000368                LTDC_IRQHandler
-                0x08000368                ETH_WKUP_IRQHandler
-                0x08000368                SPI2_IRQHandler
-                0x08000368                OTG_HS_EP1_IN_IRQHandler
-                0x08000368                MemManage_Handler
-                0x08000368                DMA1_Stream0_IRQHandler
-                0x08000368                CAN1_TX_IRQHandler
-                0x08000368                SVC_Handler
-                0x08000368                EXTI4_IRQHandler
-                0x08000368                ETH_IRQHandler
-                0x08000368                OTG_HS_EP1_OUT_IRQHandler
-                0x08000368                WWDG_IRQHandler
-                0x08000368                SPI6_IRQHandler
-                0x08000368                TIM2_IRQHandler
-                0x08000368                OTG_FS_WKUP_IRQHandler
-                0x08000368                TIM1_TRG_COM_TIM11_IRQHandler
-                0x08000368                OTG_HS_IRQHandler
-                0x08000368                DMA2D_IRQHandler
-                0x08000368                EXTI1_IRQHandler
-                0x08000368                UART7_IRQHandler
-                0x08000368                USART2_IRQHandler
-                0x08000368                I2C2_ER_IRQHandler
-                0x08000368                DMA2_Stream1_IRQHandler
-                0x08000368                CAN1_SCE_IRQHandler
-                0x08000368                FLASH_IRQHandler
-                0x08000368                DMA2_Stream4_IRQHandler
-                0x08000368                BusFault_Handler
-                0x08000368                USART1_IRQHandler
-                0x08000368                OTG_FS_IRQHandler
-                0x08000368                SPI3_IRQHandler
-                0x08000368                DMA1_Stream4_IRQHandler
-                0x08000368                I2C1_ER_IRQHandler
-                0x08000368                FMC_IRQHandler
-                0x08000368                DMA2_Stream6_IRQHandler
-                0x08000368                SAI1_IRQHandler
-                0x08000368                DMA1_Stream3_IRQHandler
- *fill*         0x0800036a        0x2 
+                0x08000450        0x2 build_F429ZI/startup_stm32f429xx.o
+                0x08000450                RTC_Alarm_IRQHandler
+                0x08000450                HASH_RNG_IRQHandler
+                0x08000450                EXTI2_IRQHandler
+                0x08000450                TIM8_CC_IRQHandler
+                0x08000450                DebugMon_Handler
+                0x08000450                UART8_IRQHandler
+                0x08000450                SPI4_IRQHandler
+                0x08000450                TIM1_CC_IRQHandler
+                0x08000450                DMA2_Stream5_IRQHandler
+                0x08000450                HardFault_Handler
+                0x08000450                DMA1_Stream5_IRQHandler
+                0x08000450                SysTick_Handler
+                0x08000450                PVD_IRQHandler
+                0x08000450                SDIO_IRQHandler
+                0x08000450                TAMP_STAMP_IRQHandler
+                0x08000450                PendSV_Handler
+                0x08000450                NMI_Handler
+                0x08000450                CAN2_RX1_IRQHandler
+                0x08000450                EXTI3_IRQHandler
+                0x08000450                TIM8_TRG_COM_TIM14_IRQHandler
+                0x08000450                TIM1_UP_TIM10_IRQHandler
+                0x08000450                TIM8_UP_TIM13_IRQHandler
+                0x08000450                I2C3_ER_IRQHandler
+                0x08000450                EXTI0_IRQHandler
+                0x08000450                I2C2_EV_IRQHandler
+                0x08000450                DMA1_Stream2_IRQHandler
+                0x08000450                CAN1_RX0_IRQHandler
+                0x08000450                FPU_IRQHandler
+                0x08000450                OTG_HS_WKUP_IRQHandler
+                0x08000450                UsageFault_Handler
+                0x08000450                LTDC_ER_IRQHandler
+                0x08000450                CAN2_SCE_IRQHandler
+                0x08000450                DMA2_Stream2_IRQHandler
+                0x08000450                SPI1_IRQHandler
+                0x08000450                TIM6_DAC_IRQHandler
+                0x08000450                TIM1_BRK_TIM9_IRQHandler
+                0x08000450                DCMI_IRQHandler
+                0x08000450                CAN2_RX0_IRQHandler
+                0x08000450                DMA2_Stream3_IRQHandler
+                0x08000450                USART6_IRQHandler
+                0x08000450                USART3_IRQHandler
+                0x08000450                CAN1_RX1_IRQHandler
+                0x08000450                UART5_IRQHandler
+                0x08000450                DMA2_Stream0_IRQHandler
+                0x08000450                TIM4_IRQHandler
+                0x08000450                I2C1_EV_IRQHandler
+                0x08000450                DMA1_Stream6_IRQHandler
+                0x08000450                DMA1_Stream1_IRQHandler
+                0x08000450                UART4_IRQHandler
+                0x08000450                TIM3_IRQHandler
+                0x08000450                RCC_IRQHandler
+                0x08000450                TIM8_BRK_TIM12_IRQHandler
+                0x08000450                Default_Handler
+                0x08000450                EXTI15_10_IRQHandler
+                0x08000450                ADC_IRQHandler
+                0x08000450                DMA1_Stream7_IRQHandler
+                0x08000450                SPI5_IRQHandler
+                0x08000450                TIM7_IRQHandler
+                0x08000450                CAN2_TX_IRQHandler
+                0x08000450                TIM5_IRQHandler
+                0x08000450                DMA2_Stream7_IRQHandler
+                0x08000450                I2C3_EV_IRQHandler
+                0x08000450                EXTI9_5_IRQHandler
+                0x08000450                RTC_WKUP_IRQHandler
+                0x08000450                LTDC_IRQHandler
+                0x08000450                ETH_WKUP_IRQHandler
+                0x08000450                SPI2_IRQHandler
+                0x08000450                OTG_HS_EP1_IN_IRQHandler
+                0x08000450                MemManage_Handler
+                0x08000450                DMA1_Stream0_IRQHandler
+                0x08000450                CAN1_TX_IRQHandler
+                0x08000450                SVC_Handler
+                0x08000450                EXTI4_IRQHandler
+                0x08000450                ETH_IRQHandler
+                0x08000450                OTG_HS_EP1_OUT_IRQHandler
+                0x08000450                WWDG_IRQHandler
+                0x08000450                SPI6_IRQHandler
+                0x08000450                TIM2_IRQHandler
+                0x08000450                OTG_FS_WKUP_IRQHandler
+                0x08000450                TIM1_TRG_COM_TIM11_IRQHandler
+                0x08000450                OTG_HS_IRQHandler
+                0x08000450                DMA2D_IRQHandler
+                0x08000450                EXTI1_IRQHandler
+                0x08000450                UART7_IRQHandler
+                0x08000450                USART2_IRQHandler
+                0x08000450                I2C2_ER_IRQHandler
+                0x08000450                DMA2_Stream1_IRQHandler
+                0x08000450                CAN1_SCE_IRQHandler
+                0x08000450                FLASH_IRQHandler
+                0x08000450                DMA2_Stream4_IRQHandler
+                0x08000450                BusFault_Handler
+                0x08000450                USART1_IRQHandler
+                0x08000450                OTG_FS_IRQHandler
+                0x08000450                SPI3_IRQHandler
+                0x08000450                DMA1_Stream4_IRQHandler
+                0x08000450                I2C1_ER_IRQHandler
+                0x08000450                FMC_IRQHandler
+                0x08000450                DMA2_Stream6_IRQHandler
+                0x08000450                SAI1_IRQHandler
+                0x08000450                DMA1_Stream3_IRQHandler
+ *fill*         0x08000452        0x2 
  .text.__libc_init_array
-                0x0800036c       0x48 D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-init.o)
-                0x0800036c                __libc_init_array
+                0x08000454       0x48 D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-init.o)
+                0x08000454                __libc_init_array
  *(.glue_7)
- .glue_7        0x080003b4        0x0 linker stubs
+ .glue_7        0x0800049c        0x0 linker stubs
  *(.glue_7t)
- .glue_7t       0x080003b4        0x0 linker stubs
+ .glue_7t       0x0800049c        0x0 linker stubs
  *(.eh_frame)
- .eh_frame      0x080003b4        0x0 D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+fp/hard/crtbegin.o
+ .eh_frame      0x0800049c        0x0 D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+fp/hard/crtbegin.o
  *(.init)
- .init          0x080003b4        0x4 D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+fp/hard/crti.o
-                0x080003b4                _init
- .init          0x080003b8        0x8 D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+fp/hard/crtn.o
+ .init          0x0800049c        0x4 D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+fp/hard/crti.o
+                0x0800049c                _init
+ .init          0x080004a0        0x8 D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+fp/hard/crtn.o
  *(.fini)
- .fini          0x080003c0        0x4 D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+fp/hard/crti.o
-                0x080003c0                _fini
- .fini          0x080003c4        0x8 D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+fp/hard/crtn.o
-                0x080003cc                        . = ALIGN (0x4)
-                0x080003cc                        _etext = .
+ .fini          0x080004a8        0x4 D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+fp/hard/crti.o
+                0x080004a8                _fini
+ .fini          0x080004ac        0x8 D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+fp/hard/crtn.o
+                0x080004b4                        . = ALIGN (0x4)
+                0x080004b4                        _etext = .
 
-.vfp11_veneer   0x080003cc        0x0
- .vfp11_veneer  0x080003cc        0x0 linker stubs
+.vfp11_veneer   0x080004b4        0x0
+ .vfp11_veneer  0x080004b4        0x0 linker stubs
 
-.v4_bx          0x080003cc        0x0
- .v4_bx         0x080003cc        0x0 linker stubs
+.v4_bx          0x080004b4        0x0
+ .v4_bx         0x080004b4        0x0 linker stubs
 
-.iplt           0x080003cc        0x0
- .iplt          0x080003cc        0x0 D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+fp/hard/crtbegin.o
+.iplt           0x080004b4        0x0
+ .iplt          0x080004b4        0x0 D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+fp/hard/crtbegin.o
 
-.rel.dyn        0x080003cc        0x0
- .rel.iplt      0x080003cc        0x0 D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+fp/hard/crtbegin.o
+.rel.dyn        0x080004b4        0x0
+ .rel.iplt      0x080004b4        0x0 D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+fp/hard/crtbegin.o
 
-.rodata         0x080003cc        0x0
-                0x080003cc                        . = ALIGN (0x4)
+.rodata         0x080004b4        0x0
+                0x080004b4                        . = ALIGN (0x4)
  *(.rodata)
  *(.rodata*)
-                0x080003cc                        . = ALIGN (0x4)
+                0x080004b4                        . = ALIGN (0x4)
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
 
-.ARM            0x080003cc        0x0
-                0x080003cc                        __exidx_start = .
+.ARM            0x080004b4        0x0
+                0x080004b4                        __exidx_start = .
  *(.ARM.exidx*)
-                0x080003cc                        __exidx_end = .
+                0x080004b4                        __exidx_end = .
 
-.preinit_array  0x080003cc        0x0
-                0x080003cc                        PROVIDE (__preinit_array_start = .)
+.preinit_array  0x080004b4        0x0
+                0x080004b4                        PROVIDE (__preinit_array_start = .)
  *(.preinit_array*)
-                0x080003cc                        PROVIDE (__preinit_array_end = .)
+                0x080004b4                        PROVIDE (__preinit_array_end = .)
 
-.init_array     0x080003cc        0x4
-                0x080003cc                        PROVIDE (__init_array_start = .)
+.init_array     0x080004b4        0x4
+                0x080004b4                        PROVIDE (__init_array_start = .)
  *(SORT_BY_NAME(.init_array.*))
  *(.init_array*)
- .init_array    0x080003cc        0x4 D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+fp/hard/crtbegin.o
-                0x080003d0                        PROVIDE (__init_array_end = .)
+ .init_array    0x080004b4        0x4 D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+fp/hard/crtbegin.o
+                0x080004b8                        PROVIDE (__init_array_end = .)
 
-.fini_array     0x080003d0        0x4
-                0x080003d0                        PROVIDE (__fini_array_start = .)
+.fini_array     0x080004b8        0x4
+                0x080004b8                        PROVIDE (__fini_array_start = .)
  *(SORT_BY_NAME(.fini_array.*))
  *(.fini_array*)
- .fini_array    0x080003d0        0x4 D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+fp/hard/crtbegin.o
-                0x080003d4                        PROVIDE (__fini_array_end = .)
-                0x080003d4                        _sidata = LOADADDR (.data)
+ .fini_array    0x080004b8        0x4 D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+fp/hard/crtbegin.o
+                0x080004bc                        PROVIDE (__fini_array_end = .)
+                0x080004bc                        _sidata = LOADADDR (.data)
 
-.data           0x20000000        0x0 load address 0x080003d4
+.data           0x20000000        0x0 load address 0x080004bc
                 0x20000000                        . = ALIGN (0x4)
                 0x20000000                        _sdata = .
  *(.data)
  *(.data*)
                 0x20000000                        . = ALIGN (0x4)
                 0x20000000                        _edata = .
-                0x080003d4                        _siccmram = LOADADDR (.ccmram)
+                0x080004bc                        _siccmram = LOADADDR (.ccmram)
 
-.igot.plt       0x20000000        0x0 load address 0x080003d4
+.igot.plt       0x20000000        0x0 load address 0x080004bc
  .igot.plt      0x20000000        0x0 D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+fp/hard/crtbegin.o
 
-.ccmram         0x10000000        0x0 load address 0x080003d4
+.ccmram         0x10000000        0x0 load address 0x080004bc
                 0x10000000                        . = ALIGN (0x4)
                 0x10000000                        _sccmram = .
  *(.ccmram)
@@ -750,55 +766,55 @@ LOAD D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13
  .comment       0x00000039       0x3a build_F429ZI/init_LB1.o
  .comment       0x00000039       0x3a D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-init.o)
 
-.debug_info     0x00000000      0xbab
+.debug_info     0x00000000      0xcb9
  .debug_info    0x00000000      0x5ce build_F429ZI/system_stm32f4xx.o
- .debug_info    0x000005ce      0x1f6 build_F429ZI/main.o
- .debug_info    0x000007c4      0x3b7 build_F429ZI/init_LB1.o
- .debug_info    0x00000b7b       0x30 build_F429ZI/startup_stm32f429xx.o
+ .debug_info    0x000005ce      0x304 build_F429ZI/main.o
+ .debug_info    0x000008d2      0x3b7 build_F429ZI/init_LB1.o
+ .debug_info    0x00000c89       0x30 build_F429ZI/startup_stm32f429xx.o
 
-.debug_abbrev   0x00000000      0x2dc
+.debug_abbrev   0x00000000      0x387
  .debug_abbrev  0x00000000      0x11b build_F429ZI/system_stm32f4xx.o
- .debug_abbrev  0x0000011b       0xf6 build_F429ZI/main.o
- .debug_abbrev  0x00000211       0xae build_F429ZI/init_LB1.o
- .debug_abbrev  0x000002bf       0x1d build_F429ZI/startup_stm32f429xx.o
+ .debug_abbrev  0x0000011b      0x1a1 build_F429ZI/main.o
+ .debug_abbrev  0x000002bc       0xae build_F429ZI/init_LB1.o
+ .debug_abbrev  0x0000036a       0x1d build_F429ZI/startup_stm32f429xx.o
 
-.debug_loc      0x00000000      0x22d
+.debug_loc      0x00000000      0x280
  .debug_loc     0x00000000      0x181 build_F429ZI/system_stm32f4xx.o
- .debug_loc     0x00000181       0xac build_F429ZI/main.o
+ .debug_loc     0x00000181       0xff build_F429ZI/main.o
 
-.debug_aranges  0x00000000       0xa0
+.debug_aranges  0x00000000       0xc8
  .debug_aranges
                 0x00000000       0x28 build_F429ZI/system_stm32f4xx.o
  .debug_aranges
-                0x00000028       0x20 build_F429ZI/main.o
+                0x00000028       0x48 build_F429ZI/main.o
  .debug_aranges
-                0x00000048       0x30 build_F429ZI/init_LB1.o
+                0x00000070       0x30 build_F429ZI/init_LB1.o
  .debug_aranges
-                0x00000078       0x28 build_F429ZI/startup_stm32f429xx.o
+                0x000000a0       0x28 build_F429ZI/startup_stm32f429xx.o
 
-.debug_ranges   0x00000000       0x80
+.debug_ranges   0x00000000       0xf0
  .debug_ranges  0x00000000       0x18 build_F429ZI/system_stm32f4xx.o
- .debug_ranges  0x00000018       0x28 build_F429ZI/main.o
- .debug_ranges  0x00000040       0x20 build_F429ZI/init_LB1.o
- .debug_ranges  0x00000060       0x20 build_F429ZI/startup_stm32f429xx.o
+ .debug_ranges  0x00000018       0x98 build_F429ZI/main.o
+ .debug_ranges  0x000000b0       0x20 build_F429ZI/init_LB1.o
+ .debug_ranges  0x000000d0       0x20 build_F429ZI/startup_stm32f429xx.o
 
-.debug_line     0x00000000      0x66d
+.debug_line     0x00000000      0x79a
  .debug_line    0x00000000      0x274 build_F429ZI/system_stm32f4xx.o
- .debug_line    0x00000274      0x207 build_F429ZI/main.o
- .debug_line    0x0000047b      0x168 build_F429ZI/init_LB1.o
- .debug_line    0x000005e3       0x8a build_F429ZI/startup_stm32f429xx.o
+ .debug_line    0x00000274      0x328 build_F429ZI/main.o
+ .debug_line    0x0000059c      0x174 build_F429ZI/init_LB1.o
+ .debug_line    0x00000710       0x8a build_F429ZI/startup_stm32f429xx.o
 
-.debug_str      0x00000000      0x412
- .debug_str     0x00000000      0x412 build_F429ZI/system_stm32f4xx.o
+.debug_str      0x00000000      0x464
+ .debug_str     0x00000000      0x464 build_F429ZI/system_stm32f4xx.o
                                 0x37b (size before relaxing)
- .debug_str     0x00000412      0x1c7 build_F429ZI/main.o
- .debug_str     0x00000412      0x301 build_F429ZI/init_LB1.o
- .debug_str     0x00000412       0x85 build_F429ZI/startup_stm32f429xx.o
+ .debug_str     0x00000464      0x219 build_F429ZI/main.o
+ .debug_str     0x00000464      0x304 build_F429ZI/init_LB1.o
+ .debug_str     0x00000464       0x85 build_F429ZI/startup_stm32f429xx.o
 
-.debug_frame    0x00000000       0x98
+.debug_frame    0x00000000       0xe8
  .debug_frame   0x00000000       0x30 build_F429ZI/system_stm32f4xx.o
- .debug_frame   0x00000030       0x28 build_F429ZI/main.o
- .debug_frame   0x00000058       0x40 build_F429ZI/init_LB1.o
+ .debug_frame   0x00000030       0x78 build_F429ZI/main.o
+ .debug_frame   0x000000a8       0x40 build_F429ZI/init_LB1.o
 
 Cross Reference Table
 
@@ -848,7 +864,7 @@ FLASH_IRQHandler                                  build_F429ZI/startup_stm32f429
 FMC_IRQHandler                                    build_F429ZI/startup_stm32f429xx.o
 FPU_IRQHandler                                    build_F429ZI/startup_stm32f429xx.o
 GPIO_Init_CMSIS                                   build_F429ZI/init.o
-GPIO_Init_CMSIS1                                  build_F429ZI/init_LB1.o
+GPIO_Init_CMSIS_LB1                               build_F429ZI/init_LB1.o
                                                   build_F429ZI/main.o
 GPIO_Init_Memory                                  build_F429ZI/init.o
 GPIO_Init_Memory1                                 build_F429ZI/init_LB1.o
@@ -907,6 +923,9 @@ TIM8_BRK_TIM12_IRQHandler                         build_F429ZI/startup_stm32f429
 TIM8_CC_IRQHandler                                build_F429ZI/startup_stm32f429xx.o
 TIM8_TRG_COM_TIM14_IRQHandler                     build_F429ZI/startup_stm32f429xx.o
 TIM8_UP_TIM13_IRQHandler                          build_F429ZI/startup_stm32f429xx.o
+TheSwitcher                                       build_F429ZI/main.o
+TurningOffState                                   build_F429ZI/main.o
+TurningOnState                                    build_F429ZI/main.o
 UART4_IRQHandler                                  build_F429ZI/startup_stm32f429xx.o
 UART5_IRQHandler                                  build_F429ZI/startup_stm32f429xx.o
 UART7_IRQHandler                                  build_F429ZI/startup_stm32f429xx.o
@@ -1106,4 +1125,6 @@ malloc                                            D:/Tools/xpack-arm-none-eabi-g
 memset                                            D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-memset.o)
                                                   D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-findfp.o)
                                                   D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/crt0.o
+pressedButton1                                    build_F429ZI/main.o
+pressedButton2                                    build_F429ZI/main.o
 software_init_hook                                D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/crt0.o
