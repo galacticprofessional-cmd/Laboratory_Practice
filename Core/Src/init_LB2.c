@@ -1,6 +1,27 @@
 #include "../../CMSIS/Devices/STM32F4xx/Inc/stm32f4xx.h"
 #include "../../CMSIS/Devices/STM32F4xx/Inc/STM32F429ZI/stm32f429xx.h"
 
+void GPIO_Init_CMSIS_LB2(void){
+    SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOCEN | RCC_AHB1ENR_GPIOAEN | RCC_AHB1ENR_GPIOBEN);
+
+    SET_BIT(GPIOC->MODER, GPIO_MODER_MODER9_1);        //Настройка пина PC9 на вывод, на альтернативный режим
+    SET_BIT(GPIOC->OSPEEDR,GPIO_OSPEEDER_OSPEEDR9);  //Настройка скорости работы вывода PC, регистр OSPEEDR
+    MODIFY_REG(GPIOC->AFR[1], GPIO_AFRH_AFSEL9_Msk, 0x00UL);     
+    
+
+    SET_BIT(GPIOA->MODER, GPIO_MODER_MODER8_1);        //Настройка пина PC9 на вывод, на альтернативный режим
+    SET_BIT(GPIOC->OSPEEDR,GPIO_OSPEEDER_OSPEEDR8);  //Настройка скорости работы вывода PC, регистр OSPEEDR
+    CLEAR_BIT(GPIOA->AFR[1], GPIO_AFRH_AFSEL8);  
+
+    SET_BIT     (GPIOB->MODER,      GPIO_MODER_MODER7_0);          //Настройка пина PF13 на вывод, регистр MODER
+    CLEAR_BIT   (GPIOB->OTYPER,     GPIO_OTYPER_OT7);              //Настройка режима работы выxода на push-pull, регистр OTYPER
+    SET_BIT     (GPIOB->OSPEEDR,    GPIO_OSPEEDER_OSPEEDR7_0);     //Настройка скорости работы вывода PF13, регистр OSPEEDR
+    SET_BIT     (GPIOB->BSRR,       GPIO_BSRR_BR7);                //Предварительное выключение светодиода, регистр BSR, бит BR13
+
+
+}
+
+
 void RCC_Init(void){
     MODIFY_REG(RCC->CR, RCC_CR_HSITRIM, 0x80U); 
     CLEAR_REG(RCC->CFGR); 
@@ -16,7 +37,6 @@ void RCC_Init(void){
     // CLEAR_BIT(RCC->CR, RCC_CR_HSEBYP); //Сбросим бит байпаса в 0, если вдруг там что-то лежит 
     // SET_BIT(RCC->CR, RCC_CR_CSSON); //Запустим Clock detector 
 
-    CLEAR_BIT(RCC->CR, RCC_CR_HSION);
     SET_BIT(RCC->CR, RCC_CR_HSEON);
     while(READ_BIT(RCC->CR, RCC_CR_HSERDY) == RESET);
     SET_BIT(RCC->CR, RCC_CR_CSSON);
@@ -24,26 +44,25 @@ void RCC_Init(void){
     CLEAR_REG(RCC->PLLCFGR);
     SET_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLLSRC_HSE);
     SET_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLLM_2);
-    SET_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLLN_2 | RCC_PLLCFGR_PLLN_4 |
-                          RCC_PLLCFGR_PLLN_5 | RCC_PLLCFGR_PLLN_7);
-    CLEAR_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLLP);
+    SET_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLLN_3 | RCC_PLLCFGR_PLLN_5 |
+                          RCC_PLLCFGR_PLLN_6 | RCC_PLLCFGR_PLLN_8);
+    SET_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLLP_0);
     SET_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLLQ_0 | RCC_PLLCFGR_PLLQ_1 |
-                            RCC_PLLCFGR_PLLQ_2);
+                            RCC_PLLCFGR_PLLQ_2 | RCC_PLLCFGR_PLLQ_3);
 
     SET_BIT(RCC->CFGR, RCC_CFGR_SW_1);
-    while(READ_BIT(RCC->CFGR, RCC_CFGR_SWS_1) == RESET);
     SET_BIT(RCC->CFGR, RCC_CFGR_HPRE_DIV1);
     SET_BIT(RCC->CFGR, RCC_CFGR_PPRE1_DIV4);
     SET_BIT(RCC->CFGR, RCC_CFGR_PPRE2_DIV2);
     SET_BIT(RCC->CFGR, RCC_CFGR_MCO1);
-    SET_BIT(RCC->CFGR, RCC_CFGR_MCO1PRE_2);
+    SET_BIT(RCC->CFGR, RCC_CFGR_MCO1PRE_2 | RCC_CFGR_MCO1PRE_1);
     CLEAR_BIT(RCC->CFGR, RCC_CFGR_MCO2);
-    SET_BIT(RCC->CFGR, RCC_CFGR_MCO2PRE_2);
+    SET_BIT(RCC->CFGR, RCC_CFGR_MCO2PRE_2 | RCC_CFGR_MCO2PRE_1);
 
+
+    SET_BIT(FLASH->ACR, FLASH_ACR_LATENCY_5WS); 
 
     SET_BIT(RCC->CR, RCC_CR_PLLON);
     while(READ_BIT(RCC->CR, RCC_CR_PLLRDY) == RESET);
-
-    MODIFY_REG(FLASH->ACR, FLASH_ACR_LATENCY, FLASH_ACR_LATENCY_5WS); 
 
 }

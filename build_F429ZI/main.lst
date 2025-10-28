@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s 			page 1
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc35pgA5.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -20,611 +20,397 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s 			page 1
   17              	.Ltext0:
   18              		.cfi_sections	.debug_frame
   19              		.file 1 "Core/Src/main.c"
-  20              		.section	.text.pressedButton1,"ax",%progbits
+  20              		.section	.text.GPIO_Init_CMSIS_LB2,"ax",%progbits
   21              		.align	1
-  22              		.global	pressedButton1
+  22              		.global	GPIO_Init_CMSIS_LB2
   23              		.syntax unified
   24              		.thumb
   25              		.thumb_func
-  27              	pressedButton1:
+  27              	GPIO_Init_CMSIS_LB2:
   28              	.LFB130:
-   1:Core/Src/main.c **** #include "../Inc/init_LB1.h"
+  29              		.file 2 "Core/Src/../Src/init_LB2.c"
+   1:Core/Src/../Src/init_LB2.c **** #include "../../CMSIS/Devices/STM32F4xx/Inc/stm32f4xx.h"
+   2:Core/Src/../Src/init_LB2.c **** #include "../../CMSIS/Devices/STM32F4xx/Inc/STM32F429ZI/stm32f429xx.h"
+   3:Core/Src/../Src/init_LB2.c **** 
+   4:Core/Src/../Src/init_LB2.c **** void GPIO_Init_CMSIS_LB2(void){
+  30              		.loc 2 4 31 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+   5:Core/Src/../Src/init_LB2.c ****     SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOCEN | RCC_AHB1ENR_GPIOAEN | RCC_AHB1ENR_GPIOBEN);
+  35              		.loc 2 5 5 view .LVU1
+  36 0000 184A     		ldr	r2, .L2
+  37 0002 136B     		ldr	r3, [r2, #48]
+  38 0004 43F00703 		orr	r3, r3, #7
+  39 0008 1363     		str	r3, [r2, #48]
+   6:Core/Src/../Src/init_LB2.c **** 
+   7:Core/Src/../Src/init_LB2.c ****     SET_BIT(GPIOC->MODER, GPIO_MODER_MODER9_1);        //Настройка пина PC9 на вы�
+  40              		.loc 2 7 5 view .LVU2
+  41 000a 174B     		ldr	r3, .L2+4
+  42 000c 1A68     		ldr	r2, [r3]
+  43 000e 42F40022 		orr	r2, r2, #524288
+  44 0012 1A60     		str	r2, [r3]
+   8:Core/Src/../Src/init_LB2.c ****     SET_BIT(GPIOC->OSPEEDR,GPIO_OSPEEDER_OSPEEDR9);  //Настройка скорости рабо
+  45              		.loc 2 8 5 view .LVU3
+  46 0014 9A68     		ldr	r2, [r3, #8]
+  47 0016 42F44022 		orr	r2, r2, #786432
+  48 001a 9A60     		str	r2, [r3, #8]
+   9:Core/Src/../Src/init_LB2.c ****     MODIFY_REG(GPIOC->AFR[1], GPIO_AFRH_AFSEL9_Msk, 0x00UL);     
+  49              		.loc 2 9 5 view .LVU4
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc35pgA5.s 			page 2
+
+
+  50 001c 5A6A     		ldr	r2, [r3, #36]
+  51 001e 22F0F002 		bic	r2, r2, #240
+  52 0022 5A62     		str	r2, [r3, #36]
+  10:Core/Src/../Src/init_LB2.c ****     
+  11:Core/Src/../Src/init_LB2.c **** 
+  12:Core/Src/../Src/init_LB2.c ****     SET_BIT(GPIOA->MODER, GPIO_MODER_MODER8_1);        //Настройка пина PC9 на вы�
+  53              		.loc 2 12 5 view .LVU5
+  54 0024 114A     		ldr	r2, .L2+8
+  55 0026 1168     		ldr	r1, [r2]
+  56 0028 41F40031 		orr	r1, r1, #131072
+  57 002c 1160     		str	r1, [r2]
+  13:Core/Src/../Src/init_LB2.c ****     SET_BIT(GPIOC->OSPEEDR,GPIO_OSPEEDER_OSPEEDR8);  //Настройка скорости рабо
+  58              		.loc 2 13 5 view .LVU6
+  59 002e 9968     		ldr	r1, [r3, #8]
+  60 0030 41F44031 		orr	r1, r1, #196608
+  61 0034 9960     		str	r1, [r3, #8]
+  14:Core/Src/../Src/init_LB2.c ****     CLEAR_BIT(GPIOA->AFR[1], GPIO_AFRH_AFSEL8);  
+  62              		.loc 2 14 5 view .LVU7
+  63 0036 536A     		ldr	r3, [r2, #36]
+  64 0038 23F00F03 		bic	r3, r3, #15
+  65 003c 5362     		str	r3, [r2, #36]
+  15:Core/Src/../Src/init_LB2.c **** 
+  16:Core/Src/../Src/init_LB2.c ****     SET_BIT     (GPIOB->MODER,      GPIO_MODER_MODER7_0);          //Настройка пина PF
+  66              		.loc 2 16 5 view .LVU8
+  67 003e 0C4B     		ldr	r3, .L2+12
+  68 0040 1A68     		ldr	r2, [r3]
+  69 0042 42F48042 		orr	r2, r2, #16384
+  70 0046 1A60     		str	r2, [r3]
+  17:Core/Src/../Src/init_LB2.c ****     CLEAR_BIT   (GPIOB->OTYPER,     GPIO_OTYPER_OT7);              //Настройка режим�
+  71              		.loc 2 17 5 view .LVU9
+  72 0048 5A68     		ldr	r2, [r3, #4]
+  73 004a 22F08002 		bic	r2, r2, #128
+  74 004e 5A60     		str	r2, [r3, #4]
+  18:Core/Src/../Src/init_LB2.c ****     SET_BIT     (GPIOB->OSPEEDR,    GPIO_OSPEEDER_OSPEEDR7_0);     //Настройка скоро�
+  75              		.loc 2 18 5 view .LVU10
+  76 0050 9A68     		ldr	r2, [r3, #8]
+  77 0052 42F48042 		orr	r2, r2, #16384
+  78 0056 9A60     		str	r2, [r3, #8]
+  19:Core/Src/../Src/init_LB2.c ****     SET_BIT     (GPIOB->BSRR,       GPIO_BSRR_BR7);                //Предварительное
+  79              		.loc 2 19 5 view .LVU11
+  80 0058 9A69     		ldr	r2, [r3, #24]
+  81 005a 42F40002 		orr	r2, r2, #8388608
+  82 005e 9A61     		str	r2, [r3, #24]
+  20:Core/Src/../Src/init_LB2.c **** 
+  21:Core/Src/../Src/init_LB2.c **** 
+  22:Core/Src/../Src/init_LB2.c **** }
+  83              		.loc 2 22 1 is_stmt 0 view .LVU12
+  84 0060 7047     		bx	lr
+  85              	.L3:
+  86 0062 00BF     		.align	2
+  87              	.L2:
+  88 0064 00380240 		.word	1073887232
+  89 0068 00080240 		.word	1073874944
+  90 006c 00000240 		.word	1073872896
+  91 0070 00040240 		.word	1073873920
+  92              		.cfi_endproc
+  93              	.LFE130:
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc35pgA5.s 			page 3
+
+
+  95              		.section	.text.RCC_Init,"ax",%progbits
+  96              		.align	1
+  97              		.global	RCC_Init
+  98              		.syntax unified
+  99              		.thumb
+ 100              		.thumb_func
+ 102              	RCC_Init:
+ 103              	.LFB131:
+  23:Core/Src/../Src/init_LB2.c **** 
+  24:Core/Src/../Src/init_LB2.c **** 
+  25:Core/Src/../Src/init_LB2.c **** void RCC_Init(void){
+ 104              		.loc 2 25 20 is_stmt 1 view -0
+ 105              		.cfi_startproc
+ 106              		@ args = 0, pretend = 0, frame = 0
+ 107              		@ frame_needed = 0, uses_anonymous_args = 0
+ 108              		@ link register save eliminated.
+  26:Core/Src/../Src/init_LB2.c ****     MODIFY_REG(RCC->CR, RCC_CR_HSITRIM, 0x80U); 
+ 109              		.loc 2 26 5 view .LVU14
+ 110 0000 3B4A     		ldr	r2, .L10
+ 111 0002 1368     		ldr	r3, [r2]
+ 112 0004 23F0F803 		bic	r3, r3, #248
+ 113 0008 43F08003 		orr	r3, r3, #128
+ 114 000c 1360     		str	r3, [r2]
+  27:Core/Src/../Src/init_LB2.c ****     CLEAR_REG(RCC->CFGR); 
+ 115              		.loc 2 27 5 view .LVU15
+ 116 000e 0023     		movs	r3, #0
+ 117 0010 9360     		str	r3, [r2, #8]
+  28:Core/Src/../Src/init_LB2.c ****     while(READ_BIT(RCC->CFGR, RCC_CFGR_SWS) != RESET); 
+ 118              		.loc 2 28 5 view .LVU16
+ 119              	.L5:
+ 120              		.loc 2 28 45 discriminator 1 view .LVU17
+ 121              		.loc 2 28 11 is_stmt 0 discriminator 1 view .LVU18
+ 122 0012 374B     		ldr	r3, .L10
+ 123 0014 9B68     		ldr	r3, [r3, #8]
+ 124              		.loc 2 28 45 discriminator 1 view .LVU19
+ 125 0016 13F00C0F 		tst	r3, #12
+ 126 001a FAD1     		bne	.L5
+  29:Core/Src/../Src/init_LB2.c ****     CLEAR_BIT(RCC->CR, RCC_CR_PLLON); 
+ 127              		.loc 2 29 5 is_stmt 1 view .LVU20
+ 128 001c 344A     		ldr	r2, .L10
+ 129 001e 1368     		ldr	r3, [r2]
+ 130 0020 23F08073 		bic	r3, r3, #16777216
+ 131 0024 1360     		str	r3, [r2]
+  30:Core/Src/../Src/init_LB2.c ****     while (READ_BIT(RCC->CR, RCC_CR_PLLRDY) != RESET); 
+ 132              		.loc 2 30 5 view .LVU21
+ 133              	.L6:
+ 134              		.loc 2 30 45 discriminator 1 view .LVU22
+ 135              		.loc 2 30 12 is_stmt 0 discriminator 1 view .LVU23
+ 136 0026 324B     		ldr	r3, .L10
+ 137 0028 1B68     		ldr	r3, [r3]
+ 138              		.loc 2 30 45 discriminator 1 view .LVU24
+ 139 002a 13F0007F 		tst	r3, #33554432
+ 140 002e FAD1     		bne	.L6
+  31:Core/Src/../Src/init_LB2.c ****     CLEAR_BIT(RCC->CR, RCC_CR_HSEON | RCC_CR_CSSON); 
+ 141              		.loc 2 31 5 is_stmt 1 view .LVU25
+ 142 0030 2F4A     		ldr	r2, .L10
+ 143 0032 1368     		ldr	r3, [r2]
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc35pgA5.s 			page 4
+
+
+ 144 0034 23F41023 		bic	r3, r3, #589824
+ 145 0038 1360     		str	r3, [r2]
+  32:Core/Src/../Src/init_LB2.c ****     while (READ_BIT(RCC->CR, RCC_CR_HSERDY) != RESET); 
+ 146              		.loc 2 32 5 view .LVU26
+ 147              	.L7:
+ 148              		.loc 2 32 45 discriminator 1 view .LVU27
+ 149              		.loc 2 32 12 is_stmt 0 discriminator 1 view .LVU28
+ 150 003a 2D4B     		ldr	r3, .L10
+ 151 003c 1B68     		ldr	r3, [r3]
+ 152              		.loc 2 32 45 discriminator 1 view .LVU29
+ 153 003e 13F4003F 		tst	r3, #131072
+ 154 0042 FAD1     		bne	.L7
+  33:Core/Src/../Src/init_LB2.c ****     CLEAR_BIT(RCC->CR, RCC_CR_HSEBYP);
+ 155              		.loc 2 33 5 is_stmt 1 view .LVU30
+ 156 0044 2A4B     		ldr	r3, .L10
+ 157 0046 1A68     		ldr	r2, [r3]
+ 158 0048 22F48022 		bic	r2, r2, #262144
+ 159 004c 1A60     		str	r2, [r3]
+  34:Core/Src/../Src/init_LB2.c **** 
+  35:Core/Src/../Src/init_LB2.c ****     // SET_BIT(RCC->CR, RCC_CR_HSEON); //Запускаем внешний кварцевый ре�
+  36:Core/Src/../Src/init_LB2.c ****     // while(READ_BIT(RCC->CR, RCC_CR_HSERDY) == RESET); //Ждём пока он запустит�
+  37:Core/Src/../Src/init_LB2.c ****     // CLEAR_BIT(RCC->CR, RCC_CR_HSEBYP); //Сбросим бит байпаса в 0, если в�
+  38:Core/Src/../Src/init_LB2.c ****     // SET_BIT(RCC->CR, RCC_CR_CSSON); //Запустим Clock detector 
+  39:Core/Src/../Src/init_LB2.c **** 
+  40:Core/Src/../Src/init_LB2.c ****     SET_BIT(RCC->CR, RCC_CR_HSEON);
+ 160              		.loc 2 40 5 view .LVU31
+ 161 004e 1A68     		ldr	r2, [r3]
+ 162 0050 42F48032 		orr	r2, r2, #65536
+ 163 0054 1A60     		str	r2, [r3]
+  41:Core/Src/../Src/init_LB2.c ****     while(READ_BIT(RCC->CR, RCC_CR_HSERDY) == RESET);
+ 164              		.loc 2 41 5 view .LVU32
+ 165              	.L8:
+ 166              		.loc 2 41 44 discriminator 1 view .LVU33
+ 167              		.loc 2 41 11 is_stmt 0 discriminator 1 view .LVU34
+ 168 0056 264B     		ldr	r3, .L10
+ 169 0058 1B68     		ldr	r3, [r3]
+ 170              		.loc 2 41 44 discriminator 1 view .LVU35
+ 171 005a 13F4003F 		tst	r3, #131072
+ 172 005e FAD0     		beq	.L8
+  42:Core/Src/../Src/init_LB2.c ****     SET_BIT(RCC->CR, RCC_CR_CSSON);
+ 173              		.loc 2 42 5 is_stmt 1 view .LVU36
+ 174 0060 234B     		ldr	r3, .L10
+ 175 0062 1A68     		ldr	r2, [r3]
+ 176 0064 42F40022 		orr	r2, r2, #524288
+ 177 0068 1A60     		str	r2, [r3]
+  43:Core/Src/../Src/init_LB2.c **** 
+  44:Core/Src/../Src/init_LB2.c ****     CLEAR_REG(RCC->PLLCFGR);
+ 178              		.loc 2 44 5 view .LVU37
+ 179 006a 0022     		movs	r2, #0
+ 180 006c 5A60     		str	r2, [r3, #4]
+  45:Core/Src/../Src/init_LB2.c ****     SET_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLLSRC_HSE);
+ 181              		.loc 2 45 5 view .LVU38
+ 182 006e 5A68     		ldr	r2, [r3, #4]
+ 183 0070 42F48002 		orr	r2, r2, #4194304
+ 184 0074 5A60     		str	r2, [r3, #4]
+  46:Core/Src/../Src/init_LB2.c ****     SET_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLLM_2);
+ 185              		.loc 2 46 5 view .LVU39
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc35pgA5.s 			page 5
+
+
+ 186 0076 5A68     		ldr	r2, [r3, #4]
+ 187 0078 42F00402 		orr	r2, r2, #4
+ 188 007c 5A60     		str	r2, [r3, #4]
+  47:Core/Src/../Src/init_LB2.c ****     SET_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLLN_3 | RCC_PLLCFGR_PLLN_5 |
+ 189              		.loc 2 47 5 view .LVU40
+ 190 007e 5A68     		ldr	r2, [r3, #4]
+ 191 0080 42F4B442 		orr	r2, r2, #23040
+ 192 0084 5A60     		str	r2, [r3, #4]
+  48:Core/Src/../Src/init_LB2.c ****                           RCC_PLLCFGR_PLLN_6 | RCC_PLLCFGR_PLLN_8);
+  49:Core/Src/../Src/init_LB2.c ****     SET_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLLP_0);
+ 193              		.loc 2 49 5 view .LVU41
+ 194 0086 5A68     		ldr	r2, [r3, #4]
+ 195 0088 42F48032 		orr	r2, r2, #65536
+ 196 008c 5A60     		str	r2, [r3, #4]
+  50:Core/Src/../Src/init_LB2.c ****     SET_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLLQ_0 | RCC_PLLCFGR_PLLQ_1 |
+ 197              		.loc 2 50 5 view .LVU42
+ 198 008e 5A68     		ldr	r2, [r3, #4]
+ 199 0090 42F07062 		orr	r2, r2, #251658240
+ 200 0094 5A60     		str	r2, [r3, #4]
+  51:Core/Src/../Src/init_LB2.c ****                             RCC_PLLCFGR_PLLQ_2 | RCC_PLLCFGR_PLLQ_3);
+  52:Core/Src/../Src/init_LB2.c **** 
+  53:Core/Src/../Src/init_LB2.c ****     SET_BIT(RCC->CFGR, RCC_CFGR_SW_1);
+ 201              		.loc 2 53 5 view .LVU43
+ 202 0096 9A68     		ldr	r2, [r3, #8]
+ 203 0098 42F00202 		orr	r2, r2, #2
+ 204 009c 9A60     		str	r2, [r3, #8]
+  54:Core/Src/../Src/init_LB2.c ****     SET_BIT(RCC->CFGR, RCC_CFGR_HPRE_DIV1);
+ 205              		.loc 2 54 5 view .LVU44
+ 206 009e 9A68     		ldr	r2, [r3, #8]
+ 207 00a0 9A60     		str	r2, [r3, #8]
+  55:Core/Src/../Src/init_LB2.c ****     SET_BIT(RCC->CFGR, RCC_CFGR_PPRE1_DIV4);
+ 208              		.loc 2 55 5 view .LVU45
+ 209 00a2 9A68     		ldr	r2, [r3, #8]
+ 210 00a4 42F4A052 		orr	r2, r2, #5120
+ 211 00a8 9A60     		str	r2, [r3, #8]
+  56:Core/Src/../Src/init_LB2.c ****     SET_BIT(RCC->CFGR, RCC_CFGR_PPRE2_DIV2);
+ 212              		.loc 2 56 5 view .LVU46
+ 213 00aa 9A68     		ldr	r2, [r3, #8]
+ 214 00ac 42F40042 		orr	r2, r2, #32768
+ 215 00b0 9A60     		str	r2, [r3, #8]
+  57:Core/Src/../Src/init_LB2.c ****     SET_BIT(RCC->CFGR, RCC_CFGR_MCO1);
+ 216              		.loc 2 57 5 view .LVU47
+ 217 00b2 9A68     		ldr	r2, [r3, #8]
+ 218 00b4 42F4C002 		orr	r2, r2, #6291456
+ 219 00b8 9A60     		str	r2, [r3, #8]
+  58:Core/Src/../Src/init_LB2.c ****     SET_BIT(RCC->CFGR, RCC_CFGR_MCO1PRE_2 | RCC_CFGR_MCO1PRE_1);
+ 220              		.loc 2 58 5 view .LVU48
+ 221 00ba 9A68     		ldr	r2, [r3, #8]
+ 222 00bc 42F0C062 		orr	r2, r2, #100663296
+ 223 00c0 9A60     		str	r2, [r3, #8]
+  59:Core/Src/../Src/init_LB2.c ****     CLEAR_BIT(RCC->CFGR, RCC_CFGR_MCO2);
+ 224              		.loc 2 59 5 view .LVU49
+ 225 00c2 9A68     		ldr	r2, [r3, #8]
+ 226 00c4 22F04042 		bic	r2, r2, #-1073741824
+ 227 00c8 9A60     		str	r2, [r3, #8]
+  60:Core/Src/../Src/init_LB2.c ****     SET_BIT(RCC->CFGR, RCC_CFGR_MCO2PRE_2 | RCC_CFGR_MCO2PRE_1);
+ 228              		.loc 2 60 5 view .LVU50
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc35pgA5.s 			page 6
+
+
+ 229 00ca 9A68     		ldr	r2, [r3, #8]
+ 230 00cc 42F04052 		orr	r2, r2, #805306368
+ 231 00d0 9A60     		str	r2, [r3, #8]
+  61:Core/Src/../Src/init_LB2.c **** 
+  62:Core/Src/../Src/init_LB2.c **** 
+  63:Core/Src/../Src/init_LB2.c ****     SET_BIT(FLASH->ACR, FLASH_ACR_LATENCY_5WS); 
+ 232              		.loc 2 63 5 view .LVU51
+ 233 00d2 0849     		ldr	r1, .L10+4
+ 234 00d4 0A68     		ldr	r2, [r1]
+ 235 00d6 42F00502 		orr	r2, r2, #5
+ 236 00da 0A60     		str	r2, [r1]
+  64:Core/Src/../Src/init_LB2.c **** 
+  65:Core/Src/../Src/init_LB2.c ****     SET_BIT(RCC->CR, RCC_CR_PLLON);
+ 237              		.loc 2 65 5 view .LVU52
+ 238 00dc 1A68     		ldr	r2, [r3]
+ 239 00de 42F08072 		orr	r2, r2, #16777216
+ 240 00e2 1A60     		str	r2, [r3]
+  66:Core/Src/../Src/init_LB2.c ****     while(READ_BIT(RCC->CR, RCC_CR_PLLRDY) == RESET);
+ 241              		.loc 2 66 5 view .LVU53
+ 242              	.L9:
+ 243              		.loc 2 66 44 discriminator 1 view .LVU54
+ 244              		.loc 2 66 11 is_stmt 0 discriminator 1 view .LVU55
+ 245 00e4 024B     		ldr	r3, .L10
+ 246 00e6 1B68     		ldr	r3, [r3]
+ 247              		.loc 2 66 44 discriminator 1 view .LVU56
+ 248 00e8 13F0007F 		tst	r3, #33554432
+ 249 00ec FAD0     		beq	.L9
+  67:Core/Src/../Src/init_LB2.c **** 
+  68:Core/Src/../Src/init_LB2.c **** }...
+ 250              		.loc 2 68 1 view .LVU57
+ 251 00ee 7047     		bx	lr
+ 252              	.L11:
+ 253              		.align	2
+ 254              	.L10:
+ 255 00f0 00380240 		.word	1073887232
+ 256 00f4 003C0240 		.word	1073888256
+ 257              		.cfi_endproc
+ 258              	.LFE131:
+ 260              		.section	.text.main,"ax",%progbits
+ 261              		.align	1
+ 262              		.global	main
+ 263              		.syntax unified
+ 264              		.thumb
+ 265              		.thumb_func
+ 267              	main:
+ 268              	.LFB132:
+   1:Core/Src/main.c **** #include "../Src/init_LB2.c"
    2:Core/Src/main.c **** 
-   3:Core/Src/main.c **** #define TIME_DELAY 1000000
-   4:Core/Src/main.c **** #define TIME_DELAY1 5000
-   5:Core/Src/main.c **** 
-   6:Core/Src/main.c **** int pressedButton1(void){
-  29              		.loc 1 6 25 view -0
-  30              		.cfi_startproc
-  31              		@ args = 0, pretend = 0, frame = 0
-  32              		@ frame_needed = 0, uses_anonymous_args = 0
-  33              		@ link register save eliminated.
-   7:Core/Src/main.c ****     if(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) != 0){
-  34              		.loc 1 7 5 view .LVU1
-  35              		.loc 1 7 8 is_stmt 0 view .LVU2
-  36 0000 0D4B     		ldr	r3, .L8
-  37 0002 1B69     		ldr	r3, [r3, #16]
-  38              		.loc 1 7 7 view .LVU3
-  39 0004 13F0040F 		tst	r3, #4
-  40 0008 0DD1     		bne	.L6
-   8:Core/Src/main.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
-   9:Core/Src/main.c ****         if(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) != 0){
-  10:Core/Src/main.c ****             while(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) != 0){
-  11:Core/Src/main.c ****             }
-  12:Core/Src/main.c ****             return 1;
-  13:Core/Src/main.c ****         }
-  14:Core/Src/main.c **** 
-  15:Core/Src/main.c ****     }
-  16:Core/Src/main.c ****     return 0;
-  41              		.loc 1 16 12 view .LVU4
-  42 000a 0020     		movs	r0, #0
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s 			page 2
+   3:Core/Src/main.c **** 
+   4:Core/Src/main.c **** int main(void){
+ 269              		.loc 1 4 15 is_stmt 1 view -0
+ 270              		.cfi_startproc
+ 271              		@ Volatile: function does not return.
+ 272              		@ args = 0, pretend = 0, frame = 0
+ 273              		@ frame_needed = 0, uses_anonymous_args = 0
+ 274 0000 08B5     		push	{r3, lr}
+ 275              	.LCFI0:
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc35pgA5.s 			page 7
 
 
-  43 000c 7047     		bx	lr
-  44              	.LVL0:
-  45              	.L4:
-  46              	.LBB2:
-   8:Core/Src/main.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
-  47              		.loc 1 8 46 is_stmt 1 discriminator 3 view .LVU5
-   8:Core/Src/main.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
-  48              		.loc 1 8 42 discriminator 3 view .LVU6
-  49 000e 0133     		adds	r3, r3, #1
-  50              	.LVL1:
-  51              	.L2:
-   8:Core/Src/main.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
-  52              		.loc 1 8 26 discriminator 1 view .LVU7
-  53 0010 41F28732 		movw	r2, #4999
-  54 0014 9342     		cmp	r3, r2
-  55 0016 FADD     		ble	.L4
-  56              	.LBE2:
-   9:Core/Src/main.c ****             while(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) != 0){
-  57              		.loc 1 9 9 view .LVU8
-   9:Core/Src/main.c ****             while(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) != 0){
-  58              		.loc 1 9 12 is_stmt 0 view .LVU9
-  59 0018 074B     		ldr	r3, .L8
-  60              	.LVL2:
-   9:Core/Src/main.c ****             while(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) != 0){
-  61              		.loc 1 9 12 view .LVU10
-  62 001a 1B69     		ldr	r3, [r3, #16]
-   9:Core/Src/main.c ****             while(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) != 0){
-  63              		.loc 1 9 11 view .LVU11
-  64 001c 13F0040F 		tst	r3, #4
-  65 0020 03D1     		bne	.L5
-  66              		.loc 1 16 12 view .LVU12
-  67 0022 0020     		movs	r0, #0
-  17:Core/Src/main.c **** }
-  68              		.loc 1 17 1 view .LVU13
-  69 0024 7047     		bx	lr
-  70              	.LVL3:
-  71              	.L6:
-  72              	.LBB3:
-   8:Core/Src/main.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
-  73              		.loc 1 8 17 view .LVU14
-  74 0026 0023     		movs	r3, #0
-  75 0028 F2E7     		b	.L2
-  76              	.LVL4:
-  77              	.L5:
-   8:Core/Src/main.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
-  78              		.loc 1 8 17 view .LVU15
-  79              	.LBE3:
-  11:Core/Src/main.c ****             return 1;
-  80              		.loc 1 11 13 is_stmt 1 view .LVU16
-  10:Core/Src/main.c ****             }
-  81              		.loc 1 10 57 discriminator 1 view .LVU17
-  10:Core/Src/main.c ****             }
-  82              		.loc 1 10 19 is_stmt 0 discriminator 1 view .LVU18
-  83 002a 034B     		ldr	r3, .L8
-  84 002c 1B69     		ldr	r3, [r3, #16]
-  10:Core/Src/main.c ****             }
-  85              		.loc 1 10 57 discriminator 1 view .LVU19
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s 			page 3
-
-
-  86 002e 13F0040F 		tst	r3, #4
-  87 0032 FAD1     		bne	.L5
-  12:Core/Src/main.c ****         }
-  88              		.loc 1 12 20 view .LVU20
-  89 0034 0120     		movs	r0, #1
-  90 0036 7047     		bx	lr
-  91              	.L9:
-  92              		.align	2
-  93              	.L8:
-  94 0038 000C0240 		.word	1073875968
-  95              		.cfi_endproc
-  96              	.LFE130:
-  98              		.section	.text.pressedButton2,"ax",%progbits
-  99              		.align	1
- 100              		.global	pressedButton2
- 101              		.syntax unified
- 102              		.thumb
- 103              		.thumb_func
- 105              	pressedButton2:
- 106              	.LFB131:
-  18:Core/Src/main.c **** 
-  19:Core/Src/main.c **** int pressedButton2(void){
- 107              		.loc 1 19 25 is_stmt 1 view -0
- 108              		.cfi_startproc
- 109              		@ args = 0, pretend = 0, frame = 0
- 110              		@ frame_needed = 0, uses_anonymous_args = 0
- 111              		@ link register save eliminated.
-  20:Core/Src/main.c ****     if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) != 0){
- 112              		.loc 1 20 5 view .LVU22
- 113              		.loc 1 20 8 is_stmt 0 view .LVU23
- 114 0000 0D4B     		ldr	r3, .L17
- 115 0002 1B69     		ldr	r3, [r3, #16]
- 116              		.loc 1 20 7 view .LVU24
- 117 0004 13F0040F 		tst	r3, #4
- 118 0008 0DD1     		bne	.L15
-  21:Core/Src/main.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
-  22:Core/Src/main.c ****         if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) != 0){
-  23:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) != 0){
-  24:Core/Src/main.c ****             }
-  25:Core/Src/main.c ****             return 1;
-  26:Core/Src/main.c ****         }
-  27:Core/Src/main.c **** 
-  28:Core/Src/main.c ****     }
-  29:Core/Src/main.c ****     return 0;
- 119              		.loc 1 29 12 view .LVU25
- 120 000a 0020     		movs	r0, #0
- 121 000c 7047     		bx	lr
- 122              	.LVL5:
- 123              	.L13:
- 124              	.LBB4:
-  21:Core/Src/main.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
- 125              		.loc 1 21 46 is_stmt 1 discriminator 3 view .LVU26
-  21:Core/Src/main.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
- 126              		.loc 1 21 42 discriminator 3 view .LVU27
- 127 000e 0133     		adds	r3, r3, #1
- 128              	.LVL6:
- 129              	.L11:
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s 			page 4
-
-
-  21:Core/Src/main.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
- 130              		.loc 1 21 26 discriminator 1 view .LVU28
- 131 0010 41F28732 		movw	r2, #4999
- 132 0014 9342     		cmp	r3, r2
- 133 0016 FADD     		ble	.L13
- 134              	.LBE4:
-  22:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) != 0){
- 135              		.loc 1 22 9 view .LVU29
-  22:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) != 0){
- 136              		.loc 1 22 12 is_stmt 0 view .LVU30
- 137 0018 074B     		ldr	r3, .L17
- 138              	.LVL7:
-  22:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) != 0){
- 139              		.loc 1 22 12 view .LVU31
- 140 001a 1B69     		ldr	r3, [r3, #16]
-  22:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) != 0){
- 141              		.loc 1 22 11 view .LVU32
- 142 001c 13F0040F 		tst	r3, #4
- 143 0020 03D1     		bne	.L14
- 144              		.loc 1 29 12 view .LVU33
- 145 0022 0020     		movs	r0, #0
-  30:Core/Src/main.c **** }
- 146              		.loc 1 30 1 view .LVU34
- 147 0024 7047     		bx	lr
- 148              	.LVL8:
- 149              	.L15:
- 150              	.LBB5:
-  21:Core/Src/main.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
- 151              		.loc 1 21 17 view .LVU35
- 152 0026 0023     		movs	r3, #0
- 153 0028 F2E7     		b	.L11
- 154              	.LVL9:
- 155              	.L14:
-  21:Core/Src/main.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
- 156              		.loc 1 21 17 view .LVU36
- 157              	.LBE5:
-  24:Core/Src/main.c ****             return 1;
- 158              		.loc 1 24 13 is_stmt 1 view .LVU37
-  23:Core/Src/main.c ****             }
- 159              		.loc 1 23 57 discriminator 1 view .LVU38
-  23:Core/Src/main.c ****             }
- 160              		.loc 1 23 19 is_stmt 0 discriminator 1 view .LVU39
- 161 002a 034B     		ldr	r3, .L17
- 162 002c 1B69     		ldr	r3, [r3, #16]
-  23:Core/Src/main.c ****             }
- 163              		.loc 1 23 57 discriminator 1 view .LVU40
- 164 002e 13F0040F 		tst	r3, #4
- 165 0032 FAD1     		bne	.L14
-  25:Core/Src/main.c ****         }
- 166              		.loc 1 25 20 view .LVU41
- 167 0034 0120     		movs	r0, #1
- 168 0036 7047     		bx	lr
- 169              	.L18:
- 170              		.align	2
- 171              	.L17:
- 172 0038 00180240 		.word	1073879040
- 173              		.cfi_endproc
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s 			page 5
-
-
- 174              	.LFE131:
- 176              		.section	.text.TurningOnState,"ax",%progbits
- 177              		.align	1
- 178              		.global	TurningOnState
- 179              		.syntax unified
- 180              		.thumb
- 181              		.thumb_func
- 183              	TurningOnState:
- 184              	.LFB132:
-  31:Core/Src/main.c **** 
-  32:Core/Src/main.c **** void TurningOnState(void){
- 185              		.loc 1 32 26 is_stmt 1 view -0
- 186              		.cfi_startproc
- 187              		@ args = 0, pretend = 0, frame = 0
- 188              		@ frame_needed = 0, uses_anonymous_args = 0
- 189              		@ link register save eliminated.
-  33:Core/Src/main.c ****     if(SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR13)){
- 190              		.loc 1 33 5 view .LVU43
- 191              		.loc 1 33 8 is_stmt 0 view .LVU44
- 192 0000 044B     		ldr	r3, .L20
- 193 0002 9A69     		ldr	r2, [r3, #24]
- 194 0004 42F00052 		orr	r2, r2, #536870912
- 195 0008 9A61     		str	r2, [r3, #24]
-  34:Core/Src/main.c ****         SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS13);
- 196              		.loc 1 34 9 is_stmt 1 view .LVU45
- 197 000a 9A69     		ldr	r2, [r3, #24]
- 198 000c 42F40052 		orr	r2, r2, #8192
- 199 0010 9A61     		str	r2, [r3, #24]
-  35:Core/Src/main.c ****     }
-  36:Core/Src/main.c **** 
-  37:Core/Src/main.c ****     else if(SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR9)){
-  38:Core/Src/main.c ****         SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS9);
-  39:Core/Src/main.c ****     }
-  40:Core/Src/main.c **** 
-  41:Core/Src/main.c ****     else if(SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR11)){
-  42:Core/Src/main.c ****         SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS11);
-  43:Core/Src/main.c ****     }
-  44:Core/Src/main.c **** 
-  45:Core/Src/main.c ****     else if(SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR14)){
-  46:Core/Src/main.c ****         SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS14);
-  47:Core/Src/main.c ****     }
-  48:Core/Src/main.c **** 
-  49:Core/Src/main.c ****     else if(SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR13)){
-  50:Core/Src/main.c ****         SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS13);
-  51:Core/Src/main.c ****     }
-  52:Core/Src/main.c **** 
-  53:Core/Src/main.c ****     else if(SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR15)){
-  54:Core/Src/main.c ****         SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS15);
-  55:Core/Src/main.c ****     }
-  56:Core/Src/main.c **** 
-  57:Core/Src/main.c **** }
- 200              		.loc 1 57 1 is_stmt 0 view .LVU46
- 201 0012 7047     		bx	lr
- 202              	.L21:
- 203              		.align	2
- 204              	.L20:
- 205 0014 00140240 		.word	1073878016
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s 			page 6
-
-
- 206              		.cfi_endproc
- 207              	.LFE132:
- 209              		.section	.text.TurningOffState,"ax",%progbits
- 210              		.align	1
- 211              		.global	TurningOffState
- 212              		.syntax unified
- 213              		.thumb
- 214              		.thumb_func
- 216              	TurningOffState:
- 217              	.LFB133:
-  58:Core/Src/main.c **** 
-  59:Core/Src/main.c **** void TurningOffState(){
- 218              		.loc 1 59 23 is_stmt 1 view -0
- 219              		.cfi_startproc
- 220              		@ args = 0, pretend = 0, frame = 0
- 221              		@ frame_needed = 0, uses_anonymous_args = 0
- 222              		@ link register save eliminated.
-  60:Core/Src/main.c ****     if(SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS15)){
- 223              		.loc 1 60 5 view .LVU48
- 224              		.loc 1 60 8 is_stmt 0 view .LVU49
- 225 0000 044B     		ldr	r3, .L23
- 226 0002 9A69     		ldr	r2, [r3, #24]
- 227 0004 42F40042 		orr	r2, r2, #32768
- 228 0008 9A61     		str	r2, [r3, #24]
-  61:Core/Src/main.c ****         SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR15);
- 229              		.loc 1 61 9 is_stmt 1 view .LVU50
- 230 000a 9A69     		ldr	r2, [r3, #24]
- 231 000c 42F00042 		orr	r2, r2, #-2147483648
- 232 0010 9A61     		str	r2, [r3, #24]
-  62:Core/Src/main.c ****     }
-  63:Core/Src/main.c **** 
-  64:Core/Src/main.c ****     else if(SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS13)){
-  65:Core/Src/main.c ****         SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR13);
-  66:Core/Src/main.c ****     }
-  67:Core/Src/main.c **** 
-  68:Core/Src/main.c ****     else if(SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS14)){
-  69:Core/Src/main.c ****         SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR14);
-  70:Core/Src/main.c ****     }
-  71:Core/Src/main.c ****     else if(SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS11)){
-  72:Core/Src/main.c ****         SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR11);
-  73:Core/Src/main.c ****     }
-  74:Core/Src/main.c ****     else if(SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS9)){
-  75:Core/Src/main.c ****         SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR9);
-  76:Core/Src/main.c ****     }
-  77:Core/Src/main.c **** 
-  78:Core/Src/main.c ****     else if(SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS13)){
-  79:Core/Src/main.c ****         SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR13);
-  80:Core/Src/main.c ****     }
-  81:Core/Src/main.c **** 
-  82:Core/Src/main.c **** }
- 233              		.loc 1 82 1 is_stmt 0 view .LVU51
- 234 0012 7047     		bx	lr
- 235              	.L24:
- 236              		.align	2
- 237              	.L23:
- 238 0014 00140240 		.word	1073878016
- 239              		.cfi_endproc
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s 			page 7
-
-
- 240              	.LFE133:
- 242              		.section	.text.TheSwitcher,"ax",%progbits
- 243              		.align	1
- 244              		.global	TheSwitcher
- 245              		.syntax unified
- 246              		.thumb
- 247              		.thumb_func
- 249              	TheSwitcher:
- 250              	.LVL10:
- 251              	.LFB134:
-  83:Core/Src/main.c **** 
-  84:Core/Src/main.c **** int TheSwitcher(int count){
- 252              		.loc 1 84 27 is_stmt 1 view -0
- 253              		.cfi_startproc
- 254              		@ args = 0, pretend = 0, frame = 0
- 255              		@ frame_needed = 0, uses_anonymous_args = 0
- 256              		@ link register save eliminated.
-  85:Core/Src/main.c ****     int key;
- 257              		.loc 1 85 5 view .LVU53
-  86:Core/Src/main.c ****     if(count % 2 == 0){
- 258              		.loc 1 86 5 view .LVU54
- 259              		.loc 1 86 7 is_stmt 0 view .LVU55
- 260 0000 10F00100 		ands	r0, r0, #1
- 261              	.LVL11:
- 262              		.loc 1 86 7 view .LVU56
- 263 0004 00D0     		beq	.L25
-  87:Core/Src/main.c ****         key = 0;
-  88:Core/Src/main.c ****     }else{
-  89:Core/Src/main.c ****         key = 1;
- 264              		.loc 1 89 13 view .LVU57
- 265 0006 0120     		movs	r0, #1
- 266              	.LVL12:
-  90:Core/Src/main.c ****     }
-  91:Core/Src/main.c ****     return key;
- 267              		.loc 1 91 5 is_stmt 1 view .LVU58
- 268              	.L25:
-  92:Core/Src/main.c **** }
- 269              		.loc 1 92 1 is_stmt 0 view .LVU59
- 270 0008 7047     		bx	lr
- 271              		.cfi_endproc
- 272              	.LFE134:
- 274              		.section	.text.main,"ax",%progbits
- 275              		.align	1
- 276              		.global	main
- 277              		.syntax unified
- 278              		.thumb
- 279              		.thumb_func
- 281              	main:
- 282              	.LFB135:
-  93:Core/Src/main.c **** 
-  94:Core/Src/main.c **** int main(void){
- 283              		.loc 1 94 15 is_stmt 1 view -0
- 284              		.cfi_startproc
- 285              		@ args = 0, pretend = 0, frame = 0
- 286              		@ frame_needed = 0, uses_anonymous_args = 0
- 287 0000 10B5     		push	{r4, lr}
- 288              	.LCFI0:
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s 			page 8
-
-
- 289              		.cfi_def_cfa_offset 8
- 290              		.cfi_offset 4, -8
- 291              		.cfi_offset 14, -4
-  95:Core/Src/main.c ****     
-  96:Core/Src/main.c ****     GPIO_Init_CMSIS_LB1();
- 292              		.loc 1 96 5 view .LVU61
- 293 0002 FFF7FEFF 		bl	GPIO_Init_CMSIS_LB1
- 294              	.LVL13:
-  97:Core/Src/main.c ****     int count = 0;
- 295              		.loc 1 97 5 view .LVU62
- 296              		.loc 1 97 9 is_stmt 0 view .LVU63
- 297 0006 0024     		movs	r4, #0
- 298 0008 11E0     		b	.L29
- 299              	.LVL14:
- 300              	.L32:
- 301              	.LBB6:
- 302              	.LBB7:
-  98:Core/Src/main.c **** 
-  99:Core/Src/main.c ****     while(1){
- 100:Core/Src/main.c ****         int key = TheSwitcher(count);
- 101:Core/Src/main.c **** 
- 102:Core/Src/main.c ****         if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) != 0){
- 103:Core/Src/main.c ****             for(int i = 1; i <= TIME_DELAY1; i++){}
- 303              		.loc 1 103 51 is_stmt 1 discriminator 3 view .LVU64
- 304              		.loc 1 103 47 discriminator 3 view .LVU65
- 305 000a 0133     		adds	r3, r3, #1
- 306              	.LVL15:
- 307              	.L30:
- 308              		.loc 1 103 30 discriminator 1 view .LVU66
- 309 000c 41F28832 		movw	r2, #5000
- 310 0010 9342     		cmp	r3, r2
- 311 0012 FADD     		ble	.L32
- 312              	.LBE7:
- 104:Core/Src/main.c ****             count++;
- 313              		.loc 1 104 13 view .LVU67
- 314              		.loc 1 104 18 is_stmt 0 view .LVU68
- 315 0014 0134     		adds	r4, r4, #1
- 316              	.LVL16:
- 317              		.loc 1 104 18 view .LVU69
- 318 0016 12E0     		b	.L31
- 319              	.LVL17:
- 320              	.L40:
- 321              	.LBB8:
- 103:Core/Src/main.c ****             count++;
- 322              		.loc 1 103 21 view .LVU70
- 323 0018 0123     		movs	r3, #1
- 324 001a F7E7     		b	.L30
- 325              	.LVL18:
- 326              	.L34:
- 103:Core/Src/main.c ****             count++;
- 327              		.loc 1 103 21 view .LVU71
- 328              	.LBE8:
- 105:Core/Src/main.c ****         }
- 106:Core/Src/main.c **** 
- 107:Core/Src/main.c ****         if (key == 0){
- 108:Core/Src/main.c ****             if(pressedButton1() == 1){
- 109:Core/Src/main.c ****                 TurningOnState();
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s 			page 9
-
-
- 110:Core/Src/main.c **** 
- 111:Core/Src/main.c ****             }
- 112:Core/Src/main.c ****             else if(pressedButton2() == 1){
- 329              		.loc 1 112 18 is_stmt 1 view .LVU72
- 330              		.loc 1 112 21 is_stmt 0 view .LVU73
- 331 001c FFF7FEFF 		bl	pressedButton2
- 332              	.LVL19:
- 333              		.loc 1 112 20 discriminator 1 view .LVU74
- 334 0020 0128     		cmp	r0, #1
- 335 0022 04D1     		bne	.L29
- 113:Core/Src/main.c ****                 TurningOffState();
- 336              		.loc 1 113 17 is_stmt 1 view .LVU75
- 337 0024 FFF7FEFF 		bl	TurningOffState
- 338              	.LVL20:
- 339 0028 01E0     		b	.L29
- 340              	.LVL21:
- 341              	.L33:
- 114:Core/Src/main.c **** 
- 115:Core/Src/main.c ****             }
- 116:Core/Src/main.c ****         }
- 117:Core/Src/main.c ****         else if(key == 1){
- 342              		.loc 1 117 14 view .LVU76
- 343              		.loc 1 117 16 is_stmt 0 view .LVU77
- 344 002a 0128     		cmp	r0, #1
- 345 002c 10D0     		beq	.L39
- 346              	.LVL22:
- 347              	.L29:
- 348              		.loc 1 117 16 view .LVU78
- 349              	.LBE6:
-  99:Core/Src/main.c ****         int key = TheSwitcher(count);
- 350              		.loc 1 99 5 is_stmt 1 view .LVU79
- 351              	.LBB9:
- 100:Core/Src/main.c **** 
- 352              		.loc 1 100 9 view .LVU80
- 100:Core/Src/main.c **** 
- 353              		.loc 1 100 19 is_stmt 0 view .LVU81
- 354 002e 2046     		mov	r0, r4
- 355 0030 FFF7FEFF 		bl	TheSwitcher
- 356              	.LVL23:
- 102:Core/Src/main.c ****             for(int i = 1; i <= TIME_DELAY1; i++){}
- 357              		.loc 1 102 9 is_stmt 1 view .LVU82
- 102:Core/Src/main.c ****             for(int i = 1; i <= TIME_DELAY1; i++){}
- 358              		.loc 1 102 12 is_stmt 0 view .LVU83
- 359 0034 0D4B     		ldr	r3, .L42
- 360 0036 1B69     		ldr	r3, [r3, #16]
- 102:Core/Src/main.c ****             for(int i = 1; i <= TIME_DELAY1; i++){}
- 361              		.loc 1 102 11 view .LVU84
- 362 0038 13F0080F 		tst	r3, #8
- 363 003c ECD1     		bne	.L40
- 364              	.L31:
- 107:Core/Src/main.c ****             if(pressedButton1() == 1){
- 365              		.loc 1 107 9 is_stmt 1 view .LVU85
- 107:Core/Src/main.c ****             if(pressedButton1() == 1){
- 366              		.loc 1 107 12 is_stmt 0 view .LVU86
- 367 003e 0028     		cmp	r0, #0
- 368 0040 F3D1     		bne	.L33
- 108:Core/Src/main.c ****                 TurningOnState();
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s 			page 10
-
-
- 369              		.loc 1 108 13 is_stmt 1 view .LVU87
- 108:Core/Src/main.c ****                 TurningOnState();
- 370              		.loc 1 108 16 is_stmt 0 view .LVU88
- 371 0042 FFF7FEFF 		bl	pressedButton1
- 372              	.LVL24:
- 108:Core/Src/main.c ****                 TurningOnState();
- 373              		.loc 1 108 15 discriminator 1 view .LVU89
- 374 0046 0128     		cmp	r0, #1
- 375 0048 E8D1     		bne	.L34
- 109:Core/Src/main.c **** 
- 376              		.loc 1 109 17 is_stmt 1 view .LVU90
- 377 004a FFF7FEFF 		bl	TurningOnState
- 378              	.LVL25:
- 379 004e EEE7     		b	.L29
- 380              	.LVL26:
- 381              	.L39:
- 118:Core/Src/main.c ****             if(pressedButton1() == 1){
- 382              		.loc 1 118 13 view .LVU91
- 383              		.loc 1 118 16 is_stmt 0 view .LVU92
- 384 0050 FFF7FEFF 		bl	pressedButton1
- 385              	.LVL27:
- 386              		.loc 1 118 15 discriminator 1 view .LVU93
- 387 0054 0128     		cmp	r0, #1
- 388 0056 06D0     		beq	.L41
- 119:Core/Src/main.c ****                 TurningOffState();
- 120:Core/Src/main.c **** 
- 121:Core/Src/main.c ****             }
- 122:Core/Src/main.c ****             else if(pressedButton2() == 1){
- 389              		.loc 1 122 18 is_stmt 1 view .LVU94
- 390              		.loc 1 122 21 is_stmt 0 view .LVU95
- 391 0058 FFF7FEFF 		bl	pressedButton2
- 392              	.LVL28:
- 393              		.loc 1 122 20 discriminator 1 view .LVU96
- 394 005c 0128     		cmp	r0, #1
- 395 005e E6D1     		bne	.L29
- 123:Core/Src/main.c ****                 TurningOnState();
- 396              		.loc 1 123 17 is_stmt 1 view .LVU97
- 397 0060 FFF7FEFF 		bl	TurningOnState
- 398              	.LVL29:
- 399 0064 E3E7     		b	.L29
- 400              	.L41:
- 119:Core/Src/main.c ****                 TurningOffState();
- 401              		.loc 1 119 17 view .LVU98
- 402 0066 FFF7FEFF 		bl	TurningOffState
- 403              	.LVL30:
- 404 006a E0E7     		b	.L29
- 405              	.L43:
- 406              		.align	2
- 407              	.L42:
- 408 006c 00180240 		.word	1073879040
- 409              	.LBE9:
- 410              		.cfi_endproc
- 411              	.LFE135:
- 413              		.text
- 414              	.Letext0:
- 415              		.file 2 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/machine/_default_types.
- 416              		.file 3 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/sys/_stdint.h"
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s 			page 11
-
-
- 417              		.file 4 "CMSIS/Devices/STM32F4xx/Inc/STM32F429ZI/stm32f429xx.h"
- 418              		.file 5 "Core/Src/../Inc/init_LB1.h"
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s 			page 12
+ 276              		.cfi_def_cfa_offset 8
+ 277              		.cfi_offset 3, -8
+ 278              		.cfi_offset 14, -4
+   5:Core/Src/main.c ****     
+   6:Core/Src/main.c ****     RCC_Init();
+ 279              		.loc 1 6 5 view .LVU59
+ 280 0002 FFF7FEFF 		bl	RCC_Init
+ 281              	.LVL0:
+   7:Core/Src/main.c ****     GPIO_Init_CMSIS_LB2();
+ 282              		.loc 1 7 5 view .LVU60
+ 283 0006 FFF7FEFF 		bl	GPIO_Init_CMSIS_LB2
+ 284              	.LVL1:
+ 285              	.L13:
+   8:Core/Src/main.c **** 
+   9:Core/Src/main.c ****     while(1){
+ 286              		.loc 1 9 5 view .LVU61
+  10:Core/Src/main.c ****         SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS7);
+ 287              		.loc 1 10 9 discriminator 1 view .LVU62
+ 288 000a 034A     		ldr	r2, .L15
+ 289 000c 9369     		ldr	r3, [r2, #24]
+ 290 000e 43F08003 		orr	r3, r3, #128
+ 291 0012 9361     		str	r3, [r2, #24]
+   9:Core/Src/main.c ****         SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS7);
+ 292              		.loc 1 9 10 view .LVU63
+ 293 0014 F9E7     		b	.L13
+ 294              	.L16:
+ 295 0016 00BF     		.align	2
+ 296              	.L15:
+ 297 0018 00040240 		.word	1073873920
+ 298              		.cfi_endproc
+ 299              	.LFE132:
+ 301              		.text
+ 302              	.Letext0:
+ 303              		.file 3 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/machine/_default_types.
+ 304              		.file 4 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/sys/_stdint.h"
+ 305              		.file 5 "CMSIS/Devices/STM32F4xx/Inc/STM32F429ZI/stm32f429xx.h"
+ 306              		.file 6 "Core/Src/../Src/../../CMSIS/Devices/STM32F4xx/Inc/stm32f4xx.h"
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc35pgA5.s 			page 8
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 main.c
-C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s:21     .text.pressedButton1:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s:27     .text.pressedButton1:00000000 pressedButton1
-C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s:94     .text.pressedButton1:00000038 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s:99     .text.pressedButton2:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s:105    .text.pressedButton2:00000000 pressedButton2
-C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s:172    .text.pressedButton2:00000038 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s:177    .text.TurningOnState:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s:183    .text.TurningOnState:00000000 TurningOnState
-C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s:205    .text.TurningOnState:00000014 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s:210    .text.TurningOffState:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s:216    .text.TurningOffState:00000000 TurningOffState
-C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s:238    .text.TurningOffState:00000014 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s:243    .text.TheSwitcher:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s:249    .text.TheSwitcher:00000000 TheSwitcher
-C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s:275    .text.main:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s:281    .text.main:00000000 main
-C:\Users\VICTUS\AppData\Local\Temp\ccrxwoXd.s:408    .text.main:0000006c $d
+C:\Users\VICTUS\AppData\Local\Temp\cc35pgA5.s:21     .text.GPIO_Init_CMSIS_LB2:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\cc35pgA5.s:27     .text.GPIO_Init_CMSIS_LB2:00000000 GPIO_Init_CMSIS_LB2
+C:\Users\VICTUS\AppData\Local\Temp\cc35pgA5.s:88     .text.GPIO_Init_CMSIS_LB2:00000064 $d
+C:\Users\VICTUS\AppData\Local\Temp\cc35pgA5.s:96     .text.RCC_Init:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\cc35pgA5.s:102    .text.RCC_Init:00000000 RCC_Init
+C:\Users\VICTUS\AppData\Local\Temp\cc35pgA5.s:255    .text.RCC_Init:000000f0 $d
+C:\Users\VICTUS\AppData\Local\Temp\cc35pgA5.s:261    .text.main:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\cc35pgA5.s:267    .text.main:00000000 main
+C:\Users\VICTUS\AppData\Local\Temp\cc35pgA5.s:297    .text.main:00000018 $d
 
-UNDEFINED SYMBOLS
-GPIO_Init_CMSIS_LB1
+NO UNDEFINED SYMBOLS
