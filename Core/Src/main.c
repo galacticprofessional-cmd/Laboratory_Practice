@@ -1,13 +1,21 @@
-#include "../Src/init_LB2.c"
+#include "init_LB2.h"
+#include "interrupt.h"
+
 
 
 int main(void){
     
     RCC_Init();
+    ITR_Init();
     GPIO_Init_CMSIS_LB2();
 
+
     while(1){
-        SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS7);
+        if(flag){
+            SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS7);
+        }else{
+            SET_BIT(GPIOB->BSRR, GPIO_BSRR_BR7);
+        }
     }
 }
 
@@ -129,7 +137,7 @@ int main(void){
 //     while(1){
 //         int key = TheSwitcher(count);
 
-//         if(pressedButton3 == 1){
+//         if(pressedButton3() == 1){
 //             for(int i = 1; i <= TIME_DELAY1; i++){}
 //             count++;
 //         }

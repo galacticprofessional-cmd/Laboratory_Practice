@@ -1,0 +1,106 @@
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc04rcRK.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"interrupt.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Core/Src/interrupt.c"
+  20              		.section	.text.EXTI15_10_IRQHandler,"ax",%progbits
+  21              		.align	1
+  22              		.global	EXTI15_10_IRQHandler
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	EXTI15_10_IRQHandler:
+  28              	.LFB130:
+   1:Core/Src/interrupt.c **** #include "interrupt.h"
+   2:Core/Src/interrupt.c **** 
+   3:Core/Src/interrupt.c **** extern volatile uint8_t btnCount = 0, flag = 0;
+   4:Core/Src/interrupt.c **** 
+   5:Core/Src/interrupt.c **** void EXTI15_10_IRQHandler(){
+  29              		.loc 1 5 28 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+   6:Core/Src/interrupt.c ****     SET_BIT(EXTI->PR, EXTI_PR_PR12);
+  34              		.loc 1 6 5 view .LVU1
+  35 0000 084A     		ldr	r2, .L2
+  36 0002 5369     		ldr	r3, [r2, #20]
+  37 0004 43F48053 		orr	r3, r3, #4096
+  38 0008 5361     		str	r3, [r2, #20]
+   7:Core/Src/interrupt.c ****     btnCount++;
+  39              		.loc 1 7 5 view .LVU2
+  40              		.loc 1 7 13 is_stmt 0 view .LVU3
+  41 000a 074A     		ldr	r2, .L2+4
+  42 000c 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+  43 000e 0133     		adds	r3, r3, #1
+  44 0010 DBB2     		uxtb	r3, r3
+  45 0012 1370     		strb	r3, [r2]
+   8:Core/Src/interrupt.c ****     flag = !flag;
+  46              		.loc 1 8 5 is_stmt 1 view .LVU4
+  47              		.loc 1 8 12 is_stmt 0 view .LVU5
+  48 0014 054A     		ldr	r2, .L2+8
+  49 0016 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+  50 0018 B3FA83F3 		clz	r3, r3
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc04rcRK.s 			page 2
+
+
+  51 001c 5B09     		lsrs	r3, r3, #5
+  52              		.loc 1 8 10 view .LVU6
+  53 001e 1370     		strb	r3, [r2]
+   9:Core/Src/interrupt.c **** 
+  10:Core/Src/interrupt.c **** }...
+  54              		.loc 1 10 1 view .LVU7
+  55 0020 7047     		bx	lr
+  56              	.L3:
+  57 0022 00BF     		.align	2
+  58              	.L2:
+  59 0024 003C0140 		.word	1073822720
+  60 0028 00000000 		.word	btnCount
+  61 002c 00000000 		.word	flag
+  62              		.cfi_endproc
+  63              	.LFE130:
+  65              		.global	flag
+  66              		.section	.bss.flag,"aw",%nobits
+  69              	flag:
+  70 0000 00       		.space	1
+  71              		.global	btnCount
+  72              		.section	.bss.btnCount,"aw",%nobits
+  75              	btnCount:
+  76 0000 00       		.space	1
+  77              		.text
+  78              	.Letext0:
+  79              		.file 2 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/machine/_default_types.
+  80              		.file 3 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/sys/_stdint.h"
+  81              		.file 4 "CMSIS/Devices/STM32F4xx/Inc/STM32F429ZI/stm32f429xx.h"
+  82              		.file 5 "Core/Inc/interrupt.h"
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc04rcRK.s 			page 3
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 interrupt.c
+C:\Users\VICTUS\AppData\Local\Temp\cc04rcRK.s:21     .text.EXTI15_10_IRQHandler:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\cc04rcRK.s:27     .text.EXTI15_10_IRQHandler:00000000 EXTI15_10_IRQHandler
+C:\Users\VICTUS\AppData\Local\Temp\cc04rcRK.s:59     .text.EXTI15_10_IRQHandler:00000024 $d
+C:\Users\VICTUS\AppData\Local\Temp\cc04rcRK.s:75     .bss.btnCount:00000000 btnCount
+C:\Users\VICTUS\AppData\Local\Temp\cc04rcRK.s:69     .bss.flag:00000000 flag
+C:\Users\VICTUS\AppData\Local\Temp\cc04rcRK.s:70     .bss.flag:00000000 $d
+C:\Users\VICTUS\AppData\Local\Temp\cc04rcRK.s:76     .bss.btnCount:00000000 $d
+
+NO UNDEFINED SYMBOLS

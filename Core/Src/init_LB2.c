@@ -1,5 +1,16 @@
-#include "../../CMSIS/Devices/STM32F4xx/Inc/stm32f4xx.h"
-#include "../../CMSIS/Devices/STM32F4xx/Inc/STM32F429ZI/stm32f429xx.h"
+#include "init_LB2.h"
+
+void ITR_Init(void){
+    SET_BIT(RCC->APB2ENR, RCC_APB2ENR_SYSCFGEN);
+
+    SET_BIT(SYSCFG->EXTICR[3], SYSCFG_EXTICR4_EXTI12_PC);
+    SET_BIT(EXTI->IMR, EXTI_IMR_IM12);
+    SET_BIT(EXTI->RTSR, EXTI_RTSR_TR12);
+    CLEAR_BIT(EXTI->FTSR, EXTI_FTSR_TR12);
+    NVIC_SetPriority(EXTI15_10_IRQn, 
+                        NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0)); 
+    NVIC_EnableIRQ(EXTI15_10_IRQn); 
+}
 
 void GPIO_Init_CMSIS_LB2(void){
     SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOCEN | RCC_AHB1ENR_GPIOAEN | RCC_AHB1ENR_GPIOBEN);
