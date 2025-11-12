@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc04rcRK.s 			page 1
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccMrgqeK.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -30,43 +30,46 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc04rcRK.s 			page 1
   28              	.LFB130:
    1:Core/Src/interrupt.c **** #include "interrupt.h"
    2:Core/Src/interrupt.c **** 
-   3:Core/Src/interrupt.c **** extern volatile uint8_t btnCount = 0, flag = 0;
-   4:Core/Src/interrupt.c **** 
-   5:Core/Src/interrupt.c **** void EXTI15_10_IRQHandler(){
-  29              		.loc 1 5 28 view -0
+   3:Core/Src/interrupt.c **** uint8_t FLAG_DELAY;
+   4:Core/Src/interrupt.c **** uint32_t delay_count;
+   5:Core/Src/interrupt.c **** 
+   6:Core/Src/interrupt.c **** // volatile uint8_t btnCount = 0, flag = 0;
+   7:Core/Src/interrupt.c **** 
+   8:Core/Src/interrupt.c **** void EXTI15_10_IRQHandler(){
+  29              		.loc 1 8 28 view -0
   30              		.cfi_startproc
   31              		@ args = 0, pretend = 0, frame = 0
   32              		@ frame_needed = 0, uses_anonymous_args = 0
   33              		@ link register save eliminated.
-   6:Core/Src/interrupt.c ****     SET_BIT(EXTI->PR, EXTI_PR_PR12);
-  34              		.loc 1 6 5 view .LVU1
+   9:Core/Src/interrupt.c ****     SET_BIT(EXTI->PR, EXTI_PR_PR12);
+  34              		.loc 1 9 5 view .LVU1
   35 0000 084A     		ldr	r2, .L2
   36 0002 5369     		ldr	r3, [r2, #20]
   37 0004 43F48053 		orr	r3, r3, #4096
   38 0008 5361     		str	r3, [r2, #20]
-   7:Core/Src/interrupt.c ****     btnCount++;
-  39              		.loc 1 7 5 view .LVU2
-  40              		.loc 1 7 13 is_stmt 0 view .LVU3
+  10:Core/Src/interrupt.c ****     btnCount++;
+  39              		.loc 1 10 5 view .LVU2
+  40              		.loc 1 10 13 is_stmt 0 view .LVU3
   41 000a 074A     		ldr	r2, .L2+4
   42 000c 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
   43 000e 0133     		adds	r3, r3, #1
   44 0010 DBB2     		uxtb	r3, r3
   45 0012 1370     		strb	r3, [r2]
-   8:Core/Src/interrupt.c ****     flag = !flag;
-  46              		.loc 1 8 5 is_stmt 1 view .LVU4
-  47              		.loc 1 8 12 is_stmt 0 view .LVU5
+  11:Core/Src/interrupt.c ****     flag = !flag;
+  46              		.loc 1 11 5 is_stmt 1 view .LVU4
+  47              		.loc 1 11 12 is_stmt 0 view .LVU5
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccMrgqeK.s 			page 2
+
+
   48 0014 054A     		ldr	r2, .L2+8
   49 0016 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
   50 0018 B3FA83F3 		clz	r3, r3
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc04rcRK.s 			page 2
-
-
   51 001c 5B09     		lsrs	r3, r3, #5
-  52              		.loc 1 8 10 view .LVU6
+  52              		.loc 1 11 10 view .LVU6
   53 001e 1370     		strb	r3, [r2]
-   9:Core/Src/interrupt.c **** 
-  10:Core/Src/interrupt.c **** }...
-  54              		.loc 1 10 1 view .LVU7
+  12:Core/Src/interrupt.c **** 
+  13:Core/Src/interrupt.c **** }
+  54              		.loc 1 13 1 view .LVU7
   55 0020 7047     		bx	lr
   56              	.L3:
   57 0022 00BF     		.align	2
@@ -76,31 +79,155 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc04rcRK.s 			page 1
   61 002c 00000000 		.word	flag
   62              		.cfi_endproc
   63              	.LFE130:
-  65              		.global	flag
-  66              		.section	.bss.flag,"aw",%nobits
-  69              	flag:
-  70 0000 00       		.space	1
-  71              		.global	btnCount
-  72              		.section	.bss.btnCount,"aw",%nobits
-  75              	btnCount:
-  76 0000 00       		.space	1
-  77              		.text
-  78              	.Letext0:
-  79              		.file 2 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/machine/_default_types.
-  80              		.file 3 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/sys/_stdint.h"
-  81              		.file 4 "CMSIS/Devices/STM32F4xx/Inc/STM32F429ZI/stm32f429xx.h"
-  82              		.file 5 "Core/Inc/interrupt.h"
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc04rcRK.s 			page 3
+  65              		.section	.text.Systick_Handler,"ax",%progbits
+  66              		.align	1
+  67              		.global	Systick_Handler
+  68              		.syntax unified
+  69              		.thumb
+  70              		.thumb_func
+  72              	Systick_Handler:
+  73              	.LFB131:
+  14:Core/Src/interrupt.c **** 
+  15:Core/Src/interrupt.c **** void Systick_Handler(void){
+  74              		.loc 1 15 27 is_stmt 1 view -0
+  75              		.cfi_startproc
+  76              		@ args = 0, pretend = 0, frame = 0
+  77              		@ frame_needed = 0, uses_anonymous_args = 0
+  78              		@ link register save eliminated.
+  16:Core/Src/interrupt.c ****     global_systick_tim_count++;
+  79              		.loc 1 16 5 view .LVU9
+  80              		.loc 1 16 29 is_stmt 0 view .LVU10
+  81 0000 064A     		ldr	r2, .L6
+  82 0002 1368     		ldr	r3, [r2]
+  83 0004 0133     		adds	r3, r3, #1
+  84 0006 1360     		str	r3, [r2]
+  17:Core/Src/interrupt.c ****     second_tim_count;
+  85              		.loc 1 17 5 is_stmt 1 view .LVU11
+  86 0008 054B     		ldr	r3, .L6+4
+  87 000a 1B88     		ldrh	r3, [r3]
+  18:Core/Src/interrupt.c ****     if (FLAG_DELAY){
+  88              		.loc 1 18 5 view .LVU12
+  89              		.loc 1 18 9 is_stmt 0 view .LVU13
+  90 000c 054B     		ldr	r3, .L6+8
+  91 000e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  92              		.loc 1 18 8 view .LVU14
+  93 0010 1BB1     		cbz	r3, .L4
+  19:Core/Src/interrupt.c ****     delay_count++;
+  94              		.loc 1 19 5 is_stmt 1 view .LVU15
+  95              		.loc 1 19 16 is_stmt 0 view .LVU16
+  96 0012 054A     		ldr	r2, .L6+12
+  97 0014 1368     		ldr	r3, [r2]
+  98 0016 0133     		adds	r3, r3, #1
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccMrgqeK.s 			page 3
+
+
+  99 0018 1360     		str	r3, [r2]
+ 100              	.L4:
+  20:Core/Src/interrupt.c **** 
+  21:Core/Src/interrupt.c ****     }
+  22:Core/Src/interrupt.c **** }
+ 101              		.loc 1 22 1 view .LVU17
+ 102 001a 7047     		bx	lr
+ 103              	.L7:
+ 104              		.align	2
+ 105              	.L6:
+ 106 001c 00000000 		.word	global_systick_tim_count
+ 107 0020 00000000 		.word	second_tim_count
+ 108 0024 00000000 		.word	FLAG_DELAY
+ 109 0028 00000000 		.word	delay_count
+ 110              		.cfi_endproc
+ 111              	.LFE131:
+ 113              		.section	.text.delay,"ax",%progbits
+ 114              		.align	1
+ 115              		.global	delay
+ 116              		.syntax unified
+ 117              		.thumb
+ 118              		.thumb_func
+ 120              	delay:
+ 121              	.LVL0:
+ 122              	.LFB132:
+  23:Core/Src/interrupt.c **** 
+  24:Core/Src/interrupt.c **** void delay(uint32_t del){
+ 123              		.loc 1 24 25 is_stmt 1 view -0
+ 124              		.cfi_startproc
+ 125              		@ args = 0, pretend = 0, frame = 0
+ 126              		@ frame_needed = 0, uses_anonymous_args = 0
+ 127              		@ link register save eliminated.
+  25:Core/Src/interrupt.c ****     FLAG_DELAY = 1;
+ 128              		.loc 1 25 5 view .LVU19
+ 129              		.loc 1 25 16 is_stmt 0 view .LVU20
+ 130 0000 064B     		ldr	r3, .L10
+ 131 0002 0122     		movs	r2, #1
+ 132 0004 1A70     		strb	r2, [r3]
+  26:Core/Src/interrupt.c ****     while(del >= delay_count){}
+ 133              		.loc 1 26 5 is_stmt 1 view .LVU21
+ 134              	.L9:
+ 135              		.loc 1 26 31 discriminator 1 view .LVU22
+ 136              		.loc 1 26 15 discriminator 1 view .LVU23
+ 137 0006 064B     		ldr	r3, .L10+4
+ 138 0008 1B68     		ldr	r3, [r3]
+ 139 000a 8342     		cmp	r3, r0
+ 140 000c FBD9     		bls	.L9
+  27:Core/Src/interrupt.c ****     delay_count = 0;
+ 141              		.loc 1 27 5 view .LVU24
+ 142              		.loc 1 27 17 is_stmt 0 view .LVU25
+ 143 000e 0023     		movs	r3, #0
+ 144 0010 034A     		ldr	r2, .L10+4
+ 145 0012 1360     		str	r3, [r2]
+  28:Core/Src/interrupt.c ****     FLAG_DELAY =0;
+ 146              		.loc 1 28 5 is_stmt 1 view .LVU26
+ 147              		.loc 1 28 16 is_stmt 0 view .LVU27
+ 148 0014 014A     		ldr	r2, .L10
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccMrgqeK.s 			page 4
+
+
+ 149 0016 1370     		strb	r3, [r2]
+  29:Core/Src/interrupt.c **** }...
+ 150              		.loc 1 29 1 view .LVU28
+ 151 0018 7047     		bx	lr
+ 152              	.L11:
+ 153 001a 00BF     		.align	2
+ 154              	.L10:
+ 155 001c 00000000 		.word	FLAG_DELAY
+ 156 0020 00000000 		.word	delay_count
+ 157              		.cfi_endproc
+ 158              	.LFE132:
+ 160              		.global	delay_count
+ 161              		.section	.bss.delay_count,"aw",%nobits
+ 162              		.align	2
+ 165              	delay_count:
+ 166 0000 00000000 		.space	4
+ 167              		.global	FLAG_DELAY
+ 168              		.section	.bss.FLAG_DELAY,"aw",%nobits
+ 171              	FLAG_DELAY:
+ 172 0000 00       		.space	1
+ 173              		.text
+ 174              	.Letext0:
+ 175              		.file 2 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/machine/_default_types.
+ 176              		.file 3 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/sys/_stdint.h"
+ 177              		.file 4 "CMSIS/Devices/STM32F4xx/Inc/STM32F429ZI/stm32f429xx.h"
+ 178              		.file 5 "Core/Inc/interrupt.h"
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccMrgqeK.s 			page 5
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 interrupt.c
-C:\Users\VICTUS\AppData\Local\Temp\cc04rcRK.s:21     .text.EXTI15_10_IRQHandler:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\cc04rcRK.s:27     .text.EXTI15_10_IRQHandler:00000000 EXTI15_10_IRQHandler
-C:\Users\VICTUS\AppData\Local\Temp\cc04rcRK.s:59     .text.EXTI15_10_IRQHandler:00000024 $d
-C:\Users\VICTUS\AppData\Local\Temp\cc04rcRK.s:75     .bss.btnCount:00000000 btnCount
-C:\Users\VICTUS\AppData\Local\Temp\cc04rcRK.s:69     .bss.flag:00000000 flag
-C:\Users\VICTUS\AppData\Local\Temp\cc04rcRK.s:70     .bss.flag:00000000 $d
-C:\Users\VICTUS\AppData\Local\Temp\cc04rcRK.s:76     .bss.btnCount:00000000 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccMrgqeK.s:21     .text.EXTI15_10_IRQHandler:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccMrgqeK.s:27     .text.EXTI15_10_IRQHandler:00000000 EXTI15_10_IRQHandler
+C:\Users\VICTUS\AppData\Local\Temp\ccMrgqeK.s:59     .text.EXTI15_10_IRQHandler:00000024 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccMrgqeK.s:66     .text.Systick_Handler:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccMrgqeK.s:72     .text.Systick_Handler:00000000 Systick_Handler
+C:\Users\VICTUS\AppData\Local\Temp\ccMrgqeK.s:106    .text.Systick_Handler:0000001c $d
+C:\Users\VICTUS\AppData\Local\Temp\ccMrgqeK.s:171    .bss.FLAG_DELAY:00000000 FLAG_DELAY
+C:\Users\VICTUS\AppData\Local\Temp\ccMrgqeK.s:165    .bss.delay_count:00000000 delay_count
+C:\Users\VICTUS\AppData\Local\Temp\ccMrgqeK.s:114    .text.delay:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccMrgqeK.s:120    .text.delay:00000000 delay
+C:\Users\VICTUS\AppData\Local\Temp\ccMrgqeK.s:155    .text.delay:0000001c $d
+C:\Users\VICTUS\AppData\Local\Temp\ccMrgqeK.s:162    .bss.delay_count:00000000 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccMrgqeK.s:172    .bss.FLAG_DELAY:00000000 $d
 
-NO UNDEFINED SYMBOLS
+UNDEFINED SYMBOLS
+btnCount
+flag
+global_systick_tim_count
+second_tim_count

@@ -20,7 +20,7 @@ void GPIO_Init_Using_My_Macros(void){
 
 void GPIO_Init_CMSIS_LB1(void){
 
-    SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIODEN | RCC_AHB1ENR_GPIOGEN | RCC_AHB1ENR_GPIOEEN | RCC_AHB1ENR_GPIOFEN);
+    SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIODEN | RCC_AHB1ENR_GPIOGEN | RCC_AHB1ENR_GPIOEEN | RCC_AHB1ENR_GPIOFEN | RCC_AHB1ENR_GPIOBEN);
 
     SET_BIT     (GPIOF->MODER,      GPIO_MODER_MODER13_0);          //Настройка пина PF13 на вывод, регистр MODER
     CLEAR_BIT   (GPIOF->OTYPER,     GPIO_OTYPER_OT13);              //Настройка режима работы выxода на push-pull, регистр OTYPER
