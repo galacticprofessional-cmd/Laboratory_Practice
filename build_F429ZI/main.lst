@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 1
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 1
   28:Core/Src/main.c **** 
   29:Core/Src/main.c **** //         // if(flag){
   30:Core/Src/main.c **** //         //     SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS7);
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 2
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s 			page 2
 
 
   31:Core/Src/main.c **** //         // }else{
@@ -82,17 +82,17 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 1
   31              		@ args = 0, pretend = 0, frame = 0
   32              		@ frame_needed = 0, uses_anonymous_args = 0
   33              		@ link register save eliminated.
-  47:Core/Src/main.c ****     if(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) != 0){
+  47:Core/Src/main.c ****     if(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) == 0){
   34              		.loc 1 47 5 view .LVU1
   35              		.loc 1 47 8 is_stmt 0 view .LVU2
   36 0000 0D4B     		ldr	r3, .L8
   37 0002 1B69     		ldr	r3, [r3, #16]
   38              		.loc 1 47 7 view .LVU3
   39 0004 13F0040F 		tst	r3, #4
-  40 0008 0DD1     		bne	.L6
+  40 0008 0DD0     		beq	.L6
   48:Core/Src/main.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
-  49:Core/Src/main.c ****         if(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) != 0){
-  50:Core/Src/main.c ****             while(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) != 0){
+  49:Core/Src/main.c ****         if(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) == 0){
+  50:Core/Src/main.c ****             while(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) == 0){
   51:Core/Src/main.c ****             }
   52:Core/Src/main.c ****             return 1;
   53:Core/Src/main.c ****         }
@@ -118,22 +118,22 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 1
   54 0014 9342     		cmp	r3, r2
   55 0016 FADD     		ble	.L4
   56              	.LBE2:
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 3
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s 			page 3
 
 
-  49:Core/Src/main.c ****             while(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) != 0){
+  49:Core/Src/main.c ****             while(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) == 0){
   57              		.loc 1 49 9 view .LVU8
-  49:Core/Src/main.c ****             while(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) != 0){
+  49:Core/Src/main.c ****             while(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) == 0){
   58              		.loc 1 49 12 is_stmt 0 view .LVU9
   59 0018 074B     		ldr	r3, .L8
   60              	.LVL2:
-  49:Core/Src/main.c ****             while(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) != 0){
+  49:Core/Src/main.c ****             while(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) == 0){
   61              		.loc 1 49 12 view .LVU10
   62 001a 1B69     		ldr	r3, [r3, #16]
-  49:Core/Src/main.c ****             while(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) != 0){
+  49:Core/Src/main.c ****             while(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) == 0){
   63              		.loc 1 49 11 view .LVU11
   64 001c 13F0040F 		tst	r3, #4
-  65 0020 03D1     		bne	.L5
+  65 0020 03D0     		beq	.L5
   66              		.loc 1 56 12 view .LVU12
   67 0022 0020     		movs	r0, #0
   57:Core/Src/main.c **** }
@@ -162,7 +162,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 1
   50:Core/Src/main.c ****             }
   85              		.loc 1 50 57 discriminator 1 view .LVU19
   86 002e 13F0040F 		tst	r3, #4
-  87 0032 FAD1     		bne	.L5
+  87 0032 FAD0     		beq	.L5
   52:Core/Src/main.c ****         }
   88              		.loc 1 52 20 view .LVU20
   89 0034 0120     		movs	r0, #1
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 1
  100              		.global	pressedButton2
  101              		.syntax unified
  102              		.thumb
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 4
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s 			page 4
 
 
  103              		.thumb_func
@@ -191,17 +191,17 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 1
  109              		@ args = 0, pretend = 0, frame = 0
  110              		@ frame_needed = 0, uses_anonymous_args = 0
  111              		@ link register save eliminated.
-  60:Core/Src/main.c ****     if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) != 0){
+  60:Core/Src/main.c ****     if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){
  112              		.loc 1 60 5 view .LVU22
  113              		.loc 1 60 8 is_stmt 0 view .LVU23
  114 0000 0D4B     		ldr	r3, .L17
  115 0002 1B69     		ldr	r3, [r3, #16]
  116              		.loc 1 60 7 view .LVU24
  117 0004 13F0040F 		tst	r3, #4
- 118 0008 0DD1     		bne	.L15
+ 118 0008 0DD0     		beq	.L15
   61:Core/Src/main.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
-  62:Core/Src/main.c ****         if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) != 0){
-  63:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) != 0){
+  62:Core/Src/main.c ****         if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){
+  63:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){
   64:Core/Src/main.c ****             }
   65:Core/Src/main.c ****             return 1;
   66:Core/Src/main.c ****         }
@@ -227,22 +227,22 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 1
  132 0014 9342     		cmp	r3, r2
  133 0016 FADD     		ble	.L13
  134              	.LBE4:
-  62:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) != 0){
+  62:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){
  135              		.loc 1 62 9 view .LVU29
-  62:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) != 0){
+  62:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){
  136              		.loc 1 62 12 is_stmt 0 view .LVU30
  137 0018 074B     		ldr	r3, .L17
  138              	.LVL7:
-  62:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) != 0){
+  62:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){
  139              		.loc 1 62 12 view .LVU31
  140 001a 1B69     		ldr	r3, [r3, #16]
-  62:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) != 0){
+  62:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){
  141              		.loc 1 62 11 view .LVU32
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 5
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s 			page 5
 
 
  142 001c 13F0040F 		tst	r3, #4
- 143 0020 03D1     		bne	.L14
+ 143 0020 03D0     		beq	.L14
  144              		.loc 1 69 12 view .LVU33
  145 0022 0020     		movs	r0, #0
   70:Core/Src/main.c **** }
@@ -271,7 +271,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 1
   63:Core/Src/main.c ****             }
  163              		.loc 1 63 57 discriminator 1 view .LVU40
  164 002e 13F0040F 		tst	r3, #4
- 165 0032 FAD1     		bne	.L14
+ 165 0032 FAD0     		beq	.L14
   65:Core/Src/main.c ****         }
  166              		.loc 1 65 20 view .LVU41
  167 0034 0120     		movs	r0, #1
@@ -297,8 +297,8 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 1
  187              		@ args = 0, pretend = 0, frame = 0
  188              		@ frame_needed = 0, uses_anonymous_args = 0
  189              		@ link register save eliminated.
-  73:Core/Src/main.c ****     if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) != 0){
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 6
+  73:Core/Src/main.c ****     if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) == 0){
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s 			page 6
 
 
  190              		.loc 1 73 5 view .LVU43
@@ -307,10 +307,10 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 1
  193 0002 1B69     		ldr	r3, [r3, #16]
  194              		.loc 1 73 7 view .LVU45
  195 0004 13F0080F 		tst	r3, #8
- 196 0008 0DD1     		bne	.L24
+ 196 0008 0DD0     		beq	.L24
   74:Core/Src/main.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
-  75:Core/Src/main.c ****         if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) != 0){
-  76:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) != 0){
+  75:Core/Src/main.c ****         if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) == 0){
+  76:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) == 0){
   77:Core/Src/main.c ****             }
   78:Core/Src/main.c ****             return 1;
   79:Core/Src/main.c ****         }
@@ -336,19 +336,19 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 1
  210 0014 9342     		cmp	r3, r2
  211 0016 FADD     		ble	.L22
  212              	.LBE6:
-  75:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) != 0){
+  75:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) == 0){
  213              		.loc 1 75 9 view .LVU50
-  75:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) != 0){
+  75:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) == 0){
  214              		.loc 1 75 12 is_stmt 0 view .LVU51
  215 0018 074B     		ldr	r3, .L26
  216              	.LVL12:
-  75:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) != 0){
+  75:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) == 0){
  217              		.loc 1 75 12 view .LVU52
  218 001a 1B69     		ldr	r3, [r3, #16]
-  75:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) != 0){
+  75:Core/Src/main.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) == 0){
  219              		.loc 1 75 11 view .LVU53
  220 001c 13F0080F 		tst	r3, #8
- 221 0020 03D1     		bne	.L23
+ 221 0020 03D0     		beq	.L23
  222              		.loc 1 82 12 view .LVU54
  223 0022 0020     		movs	r0, #0
   83:Core/Src/main.c **** }
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 1
  227              	.L24:
  228              	.LBB7:
   74:Core/Src/main.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 7
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s 			page 7
 
 
  229              		.loc 1 74 17 view .LVU56
@@ -380,7 +380,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 1
   76:Core/Src/main.c ****             }
  241              		.loc 1 76 57 discriminator 1 view .LVU61
  242 002e 13F0080F 		tst	r3, #8
- 243 0032 FAD1     		bne	.L23
+ 243 0032 FAD0     		beq	.L23
   78:Core/Src/main.c ****         }
  244              		.loc 1 78 20 view .LVU62
  245 0034 0120     		movs	r0, #1
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 1
  275              		.loc 1 87 9 is_stmt 1 view .LVU67
  276 000a 1E4A     		ldr	r2, .L35
  277 000c 9369     		ldr	r3, [r2, #24]
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 8
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s 			page 8
 
 
  278 000e 43F40053 		orr	r3, r3, #8192
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 1
  320 0050 43F48043 		orr	r3, r3, #16384
  321 0054 9361     		str	r3, [r2, #24]
  322 0056 7047     		bx	lr
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 9
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s 			page 9
 
 
  323              	.L33:
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 1
  368              	TurningOffState:
  369              	.LFB134:
  111:Core/Src/main.c **** 
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 10
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s 			page 10
 
 
  112:Core/Src/main.c **** void TurningOffState(){
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 1
  413 003a 43F08043 		orr	r3, r3, #1073741824
  414 003e 9361     		str	r3, [r2, #24]
  415 0040 7047     		bx	lr
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 11
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s 			page 11
 
 
  416              	.L41:
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 1
  135:Core/Src/main.c **** }
  458              		.loc 1 135 1 is_stmt 0 view .LVU114
  459 0082 7047     		bx	lr
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 12
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s 			page 12
 
 
  460              	.L45:
@@ -684,226 +684,212 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 1
  480              		@ args = 0, pretend = 0, frame = 0
  481              		@ frame_needed = 0, uses_anonymous_args = 0
  482              		@ link register save eliminated.
- 138:Core/Src/main.c ****     int key;
+ 138:Core/Src/main.c ****     return count & 1;
  483              		.loc 1 138 5 view .LVU116
- 139:Core/Src/main.c ****     if(count % 2 == 0){
- 484              		.loc 1 139 5 view .LVU117
- 485              		.loc 1 139 7 is_stmt 0 view .LVU118
- 486 0000 10F00100 		ands	r0, r0, #1
- 487              	.LVL16:
- 488              		.loc 1 139 7 view .LVU119
- 489 0004 00D0     		beq	.L46
- 140:Core/Src/main.c ****         key = 0;
- 141:Core/Src/main.c ****     }else{
- 142:Core/Src/main.c ****         key = 1;
- 490              		.loc 1 142 13 view .LVU120
- 491 0006 0120     		movs	r0, #1
- 492              	.LVL17:
- 143:Core/Src/main.c ****     }
- 144:Core/Src/main.c ****     return key;
- 493              		.loc 1 144 5 is_stmt 1 view .LVU121
- 494              	.L46:
- 145:Core/Src/main.c **** }
- 495              		.loc 1 145 1 is_stmt 0 view .LVU122
- 496 0008 7047     		bx	lr
- 497              		.cfi_endproc
- 498              	.LFE135:
- 500              		.section	.text.main,"ax",%progbits
- 501              		.align	1
- 502              		.global	main
- 503              		.syntax unified
- 504              		.thumb
- 505              		.thumb_func
- 507              	main:
- 508              	.LFB136:
+ 139:Core/Src/main.c **** }
+ 484              		.loc 1 139 1 is_stmt 0 view .LVU117
+ 485 0000 00F00100 		and	r0, r0, #1
+ 486              	.LVL16:
+ 487              		.loc 1 139 1 view .LVU118
+ 488 0004 7047     		bx	lr
+ 489              		.cfi_endproc
+ 490              	.LFE135:
+ 492              		.section	.text.main,"ax",%progbits
+ 493              		.align	1
+ 494              		.global	main
+ 495              		.syntax unified
+ 496              		.thumb
+ 497              		.thumb_func
+ 499              	main:
+ 500              	.LFB136:
+ 140:Core/Src/main.c **** 
+ 141:Core/Src/main.c **** int main(void){
+ 501              		.loc 1 141 15 is_stmt 1 view -0
+ 502              		.cfi_startproc
+ 503              		@ args = 0, pretend = 0, frame = 0
+ 504              		@ frame_needed = 0, uses_anonymous_args = 0
+ 505 0000 10B5     		push	{r4, lr}
+ 506              	.LCFI0:
+ 507              		.cfi_def_cfa_offset 8
+ 508              		.cfi_offset 4, -8
+ 509              		.cfi_offset 14, -4
+ 142:Core/Src/main.c ****     
+ 143:Core/Src/main.c ****     GPIO_Init_CMSIS_LB1();
+ 510              		.loc 1 143 5 view .LVU120
+ 511 0002 FFF7FEFF 		bl	GPIO_Init_CMSIS_LB1
+ 512              	.LVL17:
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s 			page 13
+
+
+ 144:Core/Src/main.c ****     int count = 0;
+ 513              		.loc 1 144 5 view .LVU121
+ 514              		.loc 1 144 9 is_stmt 0 view .LVU122
+ 515 0006 0024     		movs	r4, #0
+ 516 0008 0AE0     		b	.L48
+ 517              	.LVL18:
+ 518              	.L56:
+ 519              	.LBB8:
+ 145:Core/Src/main.c **** 
+ 146:Core/Src/main.c ****     while(1){
+ 147:Core/Src/main.c **** 
+ 148:Core/Src/main.c ****         if(pressedButton3() == 1){
+ 149:Core/Src/main.c ****             count++;
+ 520              		.loc 1 149 13 is_stmt 1 view .LVU123
+ 521              		.loc 1 149 18 is_stmt 0 view .LVU124
+ 522 000a 0134     		adds	r4, r4, #1
+ 523              	.LVL19:
+ 524              		.loc 1 149 18 view .LVU125
+ 525 000c 0CE0     		b	.L49
+ 526              	.LVL20:
+ 527              	.L51:
+ 150:Core/Src/main.c ****         }
+ 151:Core/Src/main.c ****         
+ 152:Core/Src/main.c ****         int key = TheSwitcher(count);
+ 153:Core/Src/main.c ****      
+ 154:Core/Src/main.c ****         if (key == 0){
+ 155:Core/Src/main.c ****             if(pressedButton1() == 1){
+ 156:Core/Src/main.c ****                 TurningOnState();
+ 157:Core/Src/main.c ****             }
+ 158:Core/Src/main.c ****             else if(pressedButton2() == 1){
+ 528              		.loc 1 158 18 is_stmt 1 view .LVU126
+ 529              		.loc 1 158 21 is_stmt 0 view .LVU127
+ 530 000e FFF7FEFF 		bl	pressedButton2
+ 531              	.LVL21:
+ 532              		.loc 1 158 20 discriminator 1 view .LVU128
+ 533 0012 0128     		cmp	r0, #1
+ 534 0014 04D1     		bne	.L48
+ 159:Core/Src/main.c ****                 TurningOffState();
+ 535              		.loc 1 159 17 is_stmt 1 view .LVU129
+ 536 0016 FFF7FEFF 		bl	TurningOffState
+ 537              	.LVL22:
+ 538 001a 01E0     		b	.L48
+ 539              	.LVL23:
+ 540              	.L50:
+ 160:Core/Src/main.c **** 
+ 161:Core/Src/main.c ****             }
+ 162:Core/Src/main.c ****         }
+ 163:Core/Src/main.c ****         else if(key == 1){
+ 541              		.loc 1 163 14 view .LVU130
+ 542              		.loc 1 163 16 is_stmt 0 view .LVU131
+ 543 001c 0128     		cmp	r0, #1
+ 544 001e 0FD0     		beq	.L55
+ 545              	.LVL24:
+ 546              	.L48:
+ 547              		.loc 1 163 16 view .LVU132
+ 548              	.LBE8:
  146:Core/Src/main.c **** 
- 147:Core/Src/main.c **** int main(void){
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 13
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s 			page 14
 
 
- 509              		.loc 1 147 15 is_stmt 1 view -0
- 510              		.cfi_startproc
- 511              		@ args = 0, pretend = 0, frame = 0
- 512              		@ frame_needed = 0, uses_anonymous_args = 0
- 513 0000 10B5     		push	{r4, lr}
- 514              	.LCFI0:
- 515              		.cfi_def_cfa_offset 8
- 516              		.cfi_offset 4, -8
- 517              		.cfi_offset 14, -4
- 148:Core/Src/main.c ****     
- 149:Core/Src/main.c ****     GPIO_Init_CMSIS_LB1();
- 518              		.loc 1 149 5 view .LVU124
- 519 0002 FFF7FEFF 		bl	GPIO_Init_CMSIS_LB1
- 520              	.LVL18:
- 150:Core/Src/main.c ****     int count = 0;
- 521              		.loc 1 150 5 view .LVU125
- 522              		.loc 1 150 9 is_stmt 0 view .LVU126
- 523 0006 0024     		movs	r4, #0
- 524 0008 0AE0     		b	.L50
- 525              	.LVL19:
- 526              	.L58:
- 527              	.LBB8:
- 151:Core/Src/main.c **** 
- 152:Core/Src/main.c ****     while(1){
- 153:Core/Src/main.c **** 
- 154:Core/Src/main.c ****         if(pressedButton3() == 1){
- 155:Core/Src/main.c ****             count++;
- 528              		.loc 1 155 13 is_stmt 1 view .LVU127
- 529              		.loc 1 155 18 is_stmt 0 view .LVU128
- 530 000a 0134     		adds	r4, r4, #1
- 531              	.LVL20:
- 532              		.loc 1 155 18 view .LVU129
- 533 000c 0CE0     		b	.L51
- 534              	.LVL21:
- 535              	.L53:
- 156:Core/Src/main.c ****         }
- 157:Core/Src/main.c ****         
- 158:Core/Src/main.c ****         int key = TheSwitcher(count);
- 159:Core/Src/main.c ****      
- 160:Core/Src/main.c ****         if (key == 0){
- 161:Core/Src/main.c ****             if(pressedButton1() == 1){
- 162:Core/Src/main.c ****                 TurningOnState();
- 163:Core/Src/main.c ****             }
- 164:Core/Src/main.c ****             else if(pressedButton2() == 1){
- 536              		.loc 1 164 18 is_stmt 1 view .LVU130
- 537              		.loc 1 164 21 is_stmt 0 view .LVU131
- 538 000e FFF7FEFF 		bl	pressedButton2
- 539              	.LVL22:
- 540              		.loc 1 164 20 discriminator 1 view .LVU132
- 541 0012 0128     		cmp	r0, #1
- 542 0014 04D1     		bne	.L50
+ 549              		.loc 1 146 5 is_stmt 1 view .LVU133
+ 550              	.LBB9:
+ 148:Core/Src/main.c ****             count++;
+ 551              		.loc 1 148 9 view .LVU134
+ 148:Core/Src/main.c ****             count++;
+ 552              		.loc 1 148 12 is_stmt 0 view .LVU135
+ 553 0020 FFF7FEFF 		bl	pressedButton3
+ 554              	.LVL25:
+ 148:Core/Src/main.c ****             count++;
+ 555              		.loc 1 148 11 discriminator 1 view .LVU136
+ 556 0024 0128     		cmp	r0, #1
+ 557 0026 F0D0     		beq	.L56
+ 558              	.L49:
+ 152:Core/Src/main.c ****      
+ 559              		.loc 1 152 9 is_stmt 1 view .LVU137
+ 152:Core/Src/main.c ****      
+ 560              		.loc 1 152 19 is_stmt 0 view .LVU138
+ 561 0028 2046     		mov	r0, r4
+ 562 002a FFF7FEFF 		bl	TheSwitcher
+ 563              	.LVL26:
+ 154:Core/Src/main.c ****             if(pressedButton1() == 1){
+ 564              		.loc 1 154 9 is_stmt 1 view .LVU139
+ 154:Core/Src/main.c ****             if(pressedButton1() == 1){
+ 565              		.loc 1 154 12 is_stmt 0 view .LVU140
+ 566 002e 0028     		cmp	r0, #0
+ 567 0030 F4D1     		bne	.L50
+ 155:Core/Src/main.c ****                 TurningOnState();
+ 568              		.loc 1 155 13 is_stmt 1 view .LVU141
+ 155:Core/Src/main.c ****                 TurningOnState();
+ 569              		.loc 1 155 16 is_stmt 0 view .LVU142
+ 570 0032 FFF7FEFF 		bl	pressedButton1
+ 571              	.LVL27:
+ 155:Core/Src/main.c ****                 TurningOnState();
+ 572              		.loc 1 155 15 discriminator 1 view .LVU143
+ 573 0036 0128     		cmp	r0, #1
+ 574 0038 E9D1     		bne	.L51
+ 156:Core/Src/main.c ****             }
+ 575              		.loc 1 156 17 is_stmt 1 view .LVU144
+ 576 003a FFF7FEFF 		bl	TurningOnState
+ 577              	.LVL28:
+ 578 003e EFE7     		b	.L48
+ 579              	.LVL29:
+ 580              	.L55:
+ 164:Core/Src/main.c ****             if(pressedButton1() == 1){
+ 581              		.loc 1 164 13 view .LVU145
+ 582              		.loc 1 164 16 is_stmt 0 view .LVU146
+ 583 0040 FFF7FEFF 		bl	pressedButton1
+ 584              	.LVL30:
+ 585              		.loc 1 164 15 discriminator 1 view .LVU147
+ 586 0044 0128     		cmp	r0, #1
+ 587 0046 06D0     		beq	.L57
  165:Core/Src/main.c ****                 TurningOffState();
- 543              		.loc 1 165 17 is_stmt 1 view .LVU133
- 544 0016 FFF7FEFF 		bl	TurningOffState
- 545              	.LVL23:
- 546 001a 01E0     		b	.L50
- 547              	.LVL24:
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 14
-
-
- 548              	.L52:
  166:Core/Src/main.c **** 
  167:Core/Src/main.c ****             }
- 168:Core/Src/main.c ****         }
- 169:Core/Src/main.c ****         else if(key == 1){
- 549              		.loc 1 169 14 view .LVU134
- 550              		.loc 1 169 16 is_stmt 0 view .LVU135
- 551 001c 0128     		cmp	r0, #1
- 552 001e 0FD0     		beq	.L57
- 553              	.LVL25:
- 554              	.L50:
- 555              		.loc 1 169 16 view .LVU136
- 556              	.LBE8:
- 152:Core/Src/main.c **** 
- 557              		.loc 1 152 5 is_stmt 1 view .LVU137
- 558              	.LBB9:
- 154:Core/Src/main.c ****             count++;
- 559              		.loc 1 154 9 view .LVU138
- 154:Core/Src/main.c ****             count++;
- 560              		.loc 1 154 12 is_stmt 0 view .LVU139
- 561 0020 FFF7FEFF 		bl	pressedButton3
- 562              	.LVL26:
- 154:Core/Src/main.c ****             count++;
- 563              		.loc 1 154 11 discriminator 1 view .LVU140
- 564 0024 0128     		cmp	r0, #1
- 565 0026 F0D0     		beq	.L58
- 566              	.L51:
- 158:Core/Src/main.c ****      
- 567              		.loc 1 158 9 is_stmt 1 view .LVU141
- 158:Core/Src/main.c ****      
- 568              		.loc 1 158 19 is_stmt 0 view .LVU142
- 569 0028 2046     		mov	r0, r4
- 570 002a FFF7FEFF 		bl	TheSwitcher
- 571              	.LVL27:
- 160:Core/Src/main.c ****             if(pressedButton1() == 1){
- 572              		.loc 1 160 9 is_stmt 1 view .LVU143
- 160:Core/Src/main.c ****             if(pressedButton1() == 1){
- 573              		.loc 1 160 12 is_stmt 0 view .LVU144
- 574 002e 0028     		cmp	r0, #0
- 575 0030 F4D1     		bne	.L52
- 161:Core/Src/main.c ****                 TurningOnState();
- 576              		.loc 1 161 13 is_stmt 1 view .LVU145
- 161:Core/Src/main.c ****                 TurningOnState();
- 577              		.loc 1 161 16 is_stmt 0 view .LVU146
- 578 0032 FFF7FEFF 		bl	pressedButton1
- 579              	.LVL28:
- 161:Core/Src/main.c ****                 TurningOnState();
- 580              		.loc 1 161 15 discriminator 1 view .LVU147
- 581 0036 0128     		cmp	r0, #1
- 582 0038 E9D1     		bne	.L53
- 162:Core/Src/main.c ****             }
- 583              		.loc 1 162 17 is_stmt 1 view .LVU148
- 584 003a FFF7FEFF 		bl	TurningOnState
- 585              	.LVL29:
- 586 003e EFE7     		b	.L50
- 587              	.LVL30:
- 588              	.L57:
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 15
+ 168:Core/Src/main.c ****             else if(pressedButton2() == 1){
+ 588              		.loc 1 168 18 is_stmt 1 view .LVU148
+ 589              		.loc 1 168 21 is_stmt 0 view .LVU149
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s 			page 15
 
 
- 170:Core/Src/main.c ****             if(pressedButton1() == 1){
- 589              		.loc 1 170 13 view .LVU149
- 590              		.loc 1 170 16 is_stmt 0 view .LVU150
- 591 0040 FFF7FEFF 		bl	pressedButton1
- 592              	.LVL31:
- 593              		.loc 1 170 15 discriminator 1 view .LVU151
- 594 0044 0128     		cmp	r0, #1
- 595 0046 06D0     		beq	.L59
- 171:Core/Src/main.c ****                 TurningOffState();
- 172:Core/Src/main.c **** 
- 173:Core/Src/main.c ****             }
- 174:Core/Src/main.c ****             else if(pressedButton2() == 1){
- 596              		.loc 1 174 18 is_stmt 1 view .LVU152
- 597              		.loc 1 174 21 is_stmt 0 view .LVU153
- 598 0048 FFF7FEFF 		bl	pressedButton2
- 599              	.LVL32:
- 600              		.loc 1 174 20 discriminator 1 view .LVU154
- 601 004c 0128     		cmp	r0, #1
- 602 004e E7D1     		bne	.L50
- 175:Core/Src/main.c ****                 TurningOnState();
- 603              		.loc 1 175 17 is_stmt 1 view .LVU155
- 604 0050 FFF7FEFF 		bl	TurningOnState
- 605              	.LVL33:
- 606 0054 E4E7     		b	.L50
- 607              	.L59:
- 171:Core/Src/main.c ****                 TurningOffState();
- 608              		.loc 1 171 17 view .LVU156
- 609 0056 FFF7FEFF 		bl	TurningOffState
- 610              	.LVL34:
- 611 005a E1E7     		b	.L50
- 612              	.LBE9:
- 613              		.cfi_endproc
- 614              	.LFE136:
- 616              		.text
- 617              	.Letext0:
- 618              		.file 2 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/machine/_default_types.
- 619              		.file 3 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/sys/_stdint.h"
- 620              		.file 4 "CMSIS/Devices/STM32F4xx/Inc/STM32F429ZI/stm32f429xx.h"
- 621              		.file 5 "Core/Src/../Inc/init_LB1.h"
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s 			page 16
+ 590 0048 FFF7FEFF 		bl	pressedButton2
+ 591              	.LVL31:
+ 592              		.loc 1 168 20 discriminator 1 view .LVU150
+ 593 004c 0128     		cmp	r0, #1
+ 594 004e E7D1     		bne	.L48
+ 169:Core/Src/main.c ****                 TurningOnState();
+ 595              		.loc 1 169 17 is_stmt 1 view .LVU151
+ 596 0050 FFF7FEFF 		bl	TurningOnState
+ 597              	.LVL32:
+ 598 0054 E4E7     		b	.L48
+ 599              	.L57:
+ 165:Core/Src/main.c ****                 TurningOffState();
+ 600              		.loc 1 165 17 view .LVU152
+ 601 0056 FFF7FEFF 		bl	TurningOffState
+ 602              	.LVL33:
+ 603 005a E1E7     		b	.L48
+ 604              	.LBE9:
+ 605              		.cfi_endproc
+ 606              	.LFE136:
+ 608              		.text
+ 609              	.Letext0:
+ 610              		.file 2 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/machine/_default_types.
+ 611              		.file 3 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/sys/_stdint.h"
+ 612              		.file 4 "CMSIS/Devices/STM32F4xx/Inc/STM32F429ZI/stm32f429xx.h"
+ 613              		.file 5 "Core/Src/../Inc/init_LB1.h"
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s 			page 16
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 main.c
-C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s:21     .text.pressedButton1:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s:27     .text.pressedButton1:00000000 pressedButton1
-C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s:94     .text.pressedButton1:00000038 $d
-C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s:99     .text.pressedButton2:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s:105    .text.pressedButton2:00000000 pressedButton2
-C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s:172    .text.pressedButton2:00000038 $d
-C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s:177    .text.pressedButton3:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s:183    .text.pressedButton3:00000000 pressedButton3
-C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s:250    .text.pressedButton3:00000038 $d
-C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s:255    .text.TurningOnState:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s:261    .text.TurningOnState:00000000 TurningOnState
-C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s:356    .text.TurningOnState:00000084 $d
-C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s:362    .text.TurningOffState:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s:368    .text.TurningOffState:00000000 TurningOffState
-C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s:463    .text.TurningOffState:00000084 $d
-C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s:469    .text.TheSwitcher:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s:475    .text.TheSwitcher:00000000 TheSwitcher
-C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s:501    .text.main:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\cc0QX3hX.s:507    .text.main:00000000 main
+C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s:21     .text.pressedButton1:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s:27     .text.pressedButton1:00000000 pressedButton1
+C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s:94     .text.pressedButton1:00000038 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s:99     .text.pressedButton2:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s:105    .text.pressedButton2:00000000 pressedButton2
+C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s:172    .text.pressedButton2:00000038 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s:177    .text.pressedButton3:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s:183    .text.pressedButton3:00000000 pressedButton3
+C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s:250    .text.pressedButton3:00000038 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s:255    .text.TurningOnState:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s:261    .text.TurningOnState:00000000 TurningOnState
+C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s:356    .text.TurningOnState:00000084 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s:362    .text.TurningOffState:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s:368    .text.TurningOffState:00000000 TurningOffState
+C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s:463    .text.TurningOffState:00000084 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s:469    .text.TheSwitcher:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s:475    .text.TheSwitcher:00000000 TheSwitcher
+C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s:493    .text.main:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccj3aNhu.s:499    .text.main:00000000 main
 
 UNDEFINED SYMBOLS
 GPIO_Init_CMSIS_LB1
