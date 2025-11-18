@@ -150,3 +150,84 @@ int TheSwitcher(int count){
     return count & 1;
 }
 
+
+// Extra task functions
+
+
+void ledOn(int n){
+    switch(n){
+        case 0:
+            SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS13); // PF13 ON
+            break;
+        case 1:
+            SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS9);  // PE9 ON
+            break;
+        case 2:
+            SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS11); // PE11 ON
+            break;
+        case 3:
+            SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS14); // PF14 ON
+            break;
+        case 4:
+            SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS13); // PE13 ON
+            break;
+        case 5:
+            SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS15); // PF15 ON
+            break;
+    }
+}
+
+void ledOff(int n){
+    switch(n){
+        case 0:
+            SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR13); // PF13 OFF
+            break;
+        case 1:
+            SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR9);  // PE9 OFF
+            break;
+        case 2:
+            SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR11); // PE11 OFF
+            break;
+        case 3:
+            SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR14); // PF14 OFF
+            break;
+        case 4:
+            SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR13); // PE13 OFF
+            break;
+        case 5:
+            SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR15); // PF15 OFF
+            break;
+    }
+}
+
+int changeSpeed(int speedIndex){
+    switch(speedIndex){
+        case 0:
+            return 0;
+
+        case 1:
+            return 500000;
+
+        case 2:
+            return 200000;
+
+        case 3:
+            return 80000;
+
+        case 4:
+            return 30000;
+    }
+
+    return 0;
+}
+
+void blinkLed(int ledNum, int *ledState){
+    if (*ledState == 1){
+        ledOff(ledNum);
+        *ledState = 0;
+    } else {
+        ledOn(ledNum);
+        *ledState = 1;
+    }
+}
+

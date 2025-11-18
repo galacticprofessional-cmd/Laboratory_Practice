@@ -39,4 +39,11 @@ void TurningOnState(void);
 void TurningOffState(void);
 int TheSwitcher(int count);
 
+// Extra task functions
+
+void ledOn(int n);
+void ledOff(int n);
+int changeSpeed(int speedIndex);
+void blinkLed(int ledNum, int *ledState);
+
 #endif 

@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s 			page 1
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccW2etoV.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -20,15 +20,14 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s 			page 1
   17              	.Ltext0:
   18              		.cfi_sections	.debug_frame
   19              		.file 1 "Core/Src/main.c"
-  20              		.section	.text.ledOn,"ax",%progbits
+  20              		.section	.text.main,"ax",%progbits
   21              		.align	1
-  22              		.global	ledOn
+  22              		.global	main
   23              		.syntax unified
   24              		.thumb
   25              		.thumb_func
-  27              	ledOn:
-  28              	.LVL0:
-  29              	.LFB130:
+  27              	main:
+  28              	.LFB130:
    1:Core/Src/main.c **** // #include "init_LB2.h"
    2:Core/Src/main.c **** // #include "interrupt.h"
    3:Core/Src/main.c **** 
@@ -58,10 +57,10 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s 			page 1
   27:Core/Src/main.c **** //         }
   28:Core/Src/main.c **** 
   29:Core/Src/main.c **** //         // if(flag){
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s 			page 2
-
-
   30:Core/Src/main.c **** //         //     SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS7);
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccW2etoV.s 			page 2
+
+
   31:Core/Src/main.c **** //         // }else{
   32:Core/Src/main.c **** //         //     SET_BIT(GPIOB->BSRR, GPIO_BSRR_BR7);
   33:Core/Src/main.c **** //         // }
@@ -76,779 +75,391 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s 			page 1
   42:Core/Src/main.c **** 
   43:Core/Src/main.c **** 
   44:Core/Src/main.c **** 
-  45:Core/Src/main.c **** void ledOn(int n){
-  30              		.loc 1 45 18 view -0
-  31              		.cfi_startproc
-  32              		@ args = 0, pretend = 0, frame = 0
-  33              		@ frame_needed = 0, uses_anonymous_args = 0
-  34              		@ link register save eliminated.
-  46:Core/Src/main.c ****     switch(n){
-  35              		.loc 1 46 5 view .LVU1
-  36 0000 0528     		cmp	r0, #5
-  37 0002 27D8     		bhi	.L1
-  38 0004 DFE800F0 		tbb	[pc, r0]
-  39              	.L4:
-  40 0008 03       		.byte	(.L9-.L4)/2
-  41 0009 09       		.byte	(.L8-.L4)/2
-  42 000a 0F       		.byte	(.L7-.L4)/2
-  43 000b 15       		.byte	(.L6-.L4)/2
-  44 000c 1B       		.byte	(.L5-.L4)/2
-  45 000d 21       		.byte	(.L3-.L4)/2
-  46              		.p2align 1
-  47              	.L9:
-  47:Core/Src/main.c ****         case 0:
-  48:Core/Src/main.c ****             SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS13); // PF13 ON
-  48              		.loc 1 48 13 view .LVU2
-  49 000e 124A     		ldr	r2, .L11
-  50 0010 9369     		ldr	r3, [r2, #24]
-  51 0012 43F40053 		orr	r3, r3, #8192
-  52 0016 9361     		str	r3, [r2, #24]
-  49:Core/Src/main.c ****             break;
-  53              		.loc 1 49 13 view .LVU3
-  54 0018 7047     		bx	lr
-  55              	.L8:
-  50:Core/Src/main.c ****         case 1:
-  51:Core/Src/main.c ****             SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS9);  // PE9 ON
-  56              		.loc 1 51 13 view .LVU4
-  57 001a 104A     		ldr	r2, .L11+4
-  58 001c 9369     		ldr	r3, [r2, #24]
-  59 001e 43F40073 		orr	r3, r3, #512
-  60 0022 9361     		str	r3, [r2, #24]
-  52:Core/Src/main.c ****             break;
-  61              		.loc 1 52 13 view .LVU5
-  62 0024 7047     		bx	lr
-  63              	.L7:
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s 			page 3
+  45:Core/Src/main.c **** int main(void){
+  29              		.loc 1 45 15 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 8
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 70B5     		push	{r4, r5, r6, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 16
+  36              		.cfi_offset 4, -16
+  37              		.cfi_offset 5, -12
+  38              		.cfi_offset 6, -8
+  39              		.cfi_offset 14, -4
+  40 0002 82B0     		sub	sp, sp, #8
+  41              	.LCFI1:
+  42              		.cfi_def_cfa_offset 24
+  46:Core/Src/main.c ****     
+  47:Core/Src/main.c ****     GPIO_Init_CMSIS_LB1();
+  43              		.loc 1 47 5 view .LVU1
+  44 0004 FFF7FEFF 		bl	GPIO_Init_CMSIS_LB1
+  45              	.LVL0:
+  48:Core/Src/main.c **** 
+  49:Core/Src/main.c ****     // LB1 main task 
+  50:Core/Src/main.c ****     // int count = 0;
+  51:Core/Src/main.c **** 
+  52:Core/Src/main.c ****     // while(1){
+  53:Core/Src/main.c **** 
+  54:Core/Src/main.c ****     //     if(pressedButton3() == 1){
+  55:Core/Src/main.c ****     //         count++;
+  56:Core/Src/main.c ****     //     }
+  57:Core/Src/main.c ****         
+  58:Core/Src/main.c ****     //     int key = TheSwitcher(count);
+  59:Core/Src/main.c ****      
+  60:Core/Src/main.c ****     //     if (key == 0){
+  61:Core/Src/main.c ****     //         if(pressedButton1() == 1){
+  62:Core/Src/main.c ****     //             TurningOnState();
+  63:Core/Src/main.c ****     //         }
+  64:Core/Src/main.c ****     //         else if(pressedButton2() == 1){
+  65:Core/Src/main.c ****     //             TurningOffState();
+  66:Core/Src/main.c **** 
+  67:Core/Src/main.c ****     //         }
+  68:Core/Src/main.c ****     //     }
+  69:Core/Src/main.c ****     //     else if(key == 1){
+  70:Core/Src/main.c ****     //         if(pressedButton1() == 1){
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccW2etoV.s 			page 3
 
 
-  53:Core/Src/main.c ****         case 2:
-  54:Core/Src/main.c ****             SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS11); // PE11 ON
-  64              		.loc 1 54 13 view .LVU6
-  65 0026 0D4A     		ldr	r2, .L11+4
-  66 0028 9369     		ldr	r3, [r2, #24]
-  67 002a 43F40063 		orr	r3, r3, #2048
-  68 002e 9361     		str	r3, [r2, #24]
-  55:Core/Src/main.c ****             break;
-  69              		.loc 1 55 13 view .LVU7
-  70 0030 7047     		bx	lr
-  71              	.L6:
-  56:Core/Src/main.c ****         case 3:
-  57:Core/Src/main.c ****             SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS14); // PF14 ON
-  72              		.loc 1 57 13 view .LVU8
-  73 0032 094A     		ldr	r2, .L11
-  74 0034 9369     		ldr	r3, [r2, #24]
-  75 0036 43F48043 		orr	r3, r3, #16384
-  76 003a 9361     		str	r3, [r2, #24]
-  58:Core/Src/main.c ****             break;
-  77              		.loc 1 58 13 view .LVU9
-  78 003c 7047     		bx	lr
-  79              	.L5:
-  59:Core/Src/main.c ****         case 4:
-  60:Core/Src/main.c ****             SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS13); // PE13 ON
-  80              		.loc 1 60 13 view .LVU10
-  81 003e 074A     		ldr	r2, .L11+4
-  82 0040 9369     		ldr	r3, [r2, #24]
-  83 0042 43F40053 		orr	r3, r3, #8192
-  84 0046 9361     		str	r3, [r2, #24]
-  61:Core/Src/main.c ****             break;
-  85              		.loc 1 61 13 view .LVU11
-  86 0048 7047     		bx	lr
-  87              	.L3:
-  62:Core/Src/main.c ****         case 5:
-  63:Core/Src/main.c ****             SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS15); // PF15 ON
-  88              		.loc 1 63 13 view .LVU12
-  89 004a 034A     		ldr	r2, .L11
-  90 004c 9369     		ldr	r3, [r2, #24]
-  91 004e 43F40043 		orr	r3, r3, #32768
-  92 0052 9361     		str	r3, [r2, #24]
-  64:Core/Src/main.c ****             break;
-  93              		.loc 1 64 13 view .LVU13
-  94              	.L1:
-  65:Core/Src/main.c ****     }
-  66:Core/Src/main.c **** }
-  95              		.loc 1 66 1 is_stmt 0 view .LVU14
-  96 0054 7047     		bx	lr
-  97              	.L12:
-  98 0056 00BF     		.align	2
-  99              	.L11:
- 100 0058 00140240 		.word	1073878016
- 101 005c 00100240 		.word	1073876992
- 102              		.cfi_endproc
- 103              	.LFE130:
- 105              		.section	.text.ledOff,"ax",%progbits
- 106              		.align	1
- 107              		.global	ledOff
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s 			page 4
+  71:Core/Src/main.c ****     //             TurningOffState();
+  72:Core/Src/main.c **** 
+  73:Core/Src/main.c ****     //         }
+  74:Core/Src/main.c ****     //         else if(pressedButton2() == 1){
+  75:Core/Src/main.c ****     //             TurningOnState();
+  76:Core/Src/main.c **** 
+  77:Core/Src/main.c ****     //         }
+  78:Core/Src/main.c ****     //     }
+  79:Core/Src/main.c **** 
+  80:Core/Src/main.c ****     // }
+  81:Core/Src/main.c **** 
+  82:Core/Src/main.c ****     // LB1 extra task 
+  83:Core/Src/main.c **** 
+  84:Core/Src/main.c ****     int currentLed = -1;
+  46              		.loc 1 84 5 view .LVU2
+  85:Core/Src/main.c ****     int ledState   = 1;       
+  47              		.loc 1 85 5 view .LVU3
+  48              		.loc 1 85 9 is_stmt 0 view .LVU4
+  49 0008 0123     		movs	r3, #1
+  50 000a 0193     		str	r3, [sp, #4]
+  86:Core/Src/main.c ****     int speedIndex = 0;        
+  51              		.loc 1 86 5 is_stmt 1 view .LVU5
+  52              	.LVL1:
+  87:Core/Src/main.c ****     int delayValue = 0;
+  53              		.loc 1 87 5 view .LVU6
+  54              		.loc 1 87 9 is_stmt 0 view .LVU7
+  55 000c 0025     		movs	r5, #0
+  86:Core/Src/main.c ****     int speedIndex = 0;        
+  56              		.loc 1 86 9 view .LVU8
+  57 000e 2E46     		mov	r6, r5
+  84:Core/Src/main.c ****     int ledState   = 1;       
+  58              		.loc 1 84 9 view .LVU9
+  59 0010 4FF0FF34 		mov	r4, #-1
+  60 0014 3CE0     		b	.L2
+  61              	.LVL2:
+  62              	.L20:
+  88:Core/Src/main.c **** 
+  89:Core/Src/main.c ****     while(1){
+  90:Core/Src/main.c ****         if (pressedButton1() == 1) {  
+  91:Core/Src/main.c ****             if (currentLed != -1) {
+  63              		.loc 1 91 13 is_stmt 1 view .LVU10
+  64              		.loc 1 91 16 is_stmt 0 view .LVU11
+  65 0016 B4F1FF3F 		cmp	r4, #-1
+  66 001a 08D1     		bne	.L4
+  92:Core/Src/main.c ****                 ledOff(currentLed);
+  93:Core/Src/main.c ****             }
+  94:Core/Src/main.c **** 
+  95:Core/Src/main.c ****             currentLed++;          
+  67              		.loc 1 95 13 is_stmt 1 view .LVU12
+  68              		.loc 1 95 23 is_stmt 0 view .LVU13
+  69 001c 0134     		adds	r4, r4, #1
+  70              	.LVL3:
+  96:Core/Src/main.c ****             if (currentLed >= 6) { 
+  71              		.loc 1 96 13 is_stmt 1 view .LVU14
+  72              	.L5:
+  97:Core/Src/main.c ****                 currentLed = 0;    
+  98:Core/Src/main.c ****             }
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccW2etoV.s 			page 4
 
 
- 108              		.syntax unified
- 109              		.thumb
- 110              		.thumb_func
- 112              	ledOff:
- 113              	.LVL1:
- 114              	.LFB131:
-  67:Core/Src/main.c **** 
-  68:Core/Src/main.c **** void ledOff(int n){
- 115              		.loc 1 68 19 is_stmt 1 view -0
- 116              		.cfi_startproc
- 117              		@ args = 0, pretend = 0, frame = 0
- 118              		@ frame_needed = 0, uses_anonymous_args = 0
- 119              		@ link register save eliminated.
-  69:Core/Src/main.c ****     switch(n){
- 120              		.loc 1 69 5 view .LVU16
- 121 0000 0528     		cmp	r0, #5
- 122 0002 27D8     		bhi	.L13
- 123 0004 DFE800F0 		tbb	[pc, r0]
- 124              	.L16:
- 125 0008 03       		.byte	(.L21-.L16)/2
- 126 0009 09       		.byte	(.L20-.L16)/2
- 127 000a 0F       		.byte	(.L19-.L16)/2
- 128 000b 15       		.byte	(.L18-.L16)/2
- 129 000c 1B       		.byte	(.L17-.L16)/2
- 130 000d 21       		.byte	(.L15-.L16)/2
- 131              		.p2align 1
- 132              	.L21:
-  70:Core/Src/main.c ****         case 0:
-  71:Core/Src/main.c ****             SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR13); // PF13 OFF
- 133              		.loc 1 71 13 view .LVU17
- 134 000e 124A     		ldr	r2, .L23
- 135 0010 9369     		ldr	r3, [r2, #24]
- 136 0012 43F00053 		orr	r3, r3, #536870912
- 137 0016 9361     		str	r3, [r2, #24]
-  72:Core/Src/main.c ****             break;
- 138              		.loc 1 72 13 view .LVU18
- 139 0018 7047     		bx	lr
- 140              	.L20:
-  73:Core/Src/main.c ****         case 1:
-  74:Core/Src/main.c ****             SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR9);  // PE9 OFF
- 141              		.loc 1 74 13 view .LVU19
- 142 001a 104A     		ldr	r2, .L23+4
- 143 001c 9369     		ldr	r3, [r2, #24]
- 144 001e 43F00073 		orr	r3, r3, #33554432
- 145 0022 9361     		str	r3, [r2, #24]
-  75:Core/Src/main.c ****             break;
- 146              		.loc 1 75 13 view .LVU20
- 147 0024 7047     		bx	lr
- 148              	.L19:
-  76:Core/Src/main.c ****         case 2:
-  77:Core/Src/main.c ****             SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR11); // PE11 OFF
- 149              		.loc 1 77 13 view .LVU21
- 150 0026 0D4A     		ldr	r2, .L23+4
- 151 0028 9369     		ldr	r3, [r2, #24]
- 152 002a 43F00063 		orr	r3, r3, #134217728
- 153 002e 9361     		str	r3, [r2, #24]
-  78:Core/Src/main.c ****             break;
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s 			page 5
+  99:Core/Src/main.c **** 
+ 100:Core/Src/main.c ****             ledOn(currentLed);
+  73              		.loc 1 100 13 view .LVU15
+  74 001e 2046     		mov	r0, r4
+  75 0020 FFF7FEFF 		bl	ledOn
+  76              	.LVL4:
+ 101:Core/Src/main.c ****             ledState = 1;
+  77              		.loc 1 101 13 view .LVU16
+  78              		.loc 1 101 22 is_stmt 0 view .LVU17
+  79 0024 0123     		movs	r3, #1
+  80 0026 0193     		str	r3, [sp, #4]
+ 102:Core/Src/main.c ****             speedIndex = 0;
+  81              		.loc 1 102 13 is_stmt 1 view .LVU18
+  82              	.LVL5:
+ 103:Core/Src/main.c ****             delayValue = 0;
+  83              		.loc 1 103 13 view .LVU19
+  84              		.loc 1 103 24 is_stmt 0 view .LVU20
+  85 0028 0025     		movs	r5, #0
+ 102:Core/Src/main.c ****             speedIndex = 0;
+  86              		.loc 1 102 24 view .LVU21
+  87 002a 2E46     		mov	r6, r5
+  88 002c 34E0     		b	.L3
+  89              	.LVL6:
+  90              	.L4:
+  92:Core/Src/main.c ****             }
+  91              		.loc 1 92 17 is_stmt 1 view .LVU22
+  92 002e 2046     		mov	r0, r4
+  93 0030 FFF7FEFF 		bl	ledOff
+  94              	.LVL7:
+  95:Core/Src/main.c ****             if (currentLed >= 6) { 
+  95              		.loc 1 95 13 view .LVU23
+  95:Core/Src/main.c ****             if (currentLed >= 6) { 
+  96              		.loc 1 95 23 is_stmt 0 view .LVU24
+  97 0034 0134     		adds	r4, r4, #1
+  98              	.LVL8:
+  96:Core/Src/main.c ****                 currentLed = 0;    
+  99              		.loc 1 96 13 is_stmt 1 view .LVU25
+  96:Core/Src/main.c ****                 currentLed = 0;    
+ 100              		.loc 1 96 16 is_stmt 0 view .LVU26
+ 101 0036 052C     		cmp	r4, #5
+ 102 0038 F1DD     		ble	.L5
+  97:Core/Src/main.c ****             }
+ 103              		.loc 1 97 28 view .LVU27
+ 104 003a 0024     		movs	r4, #0
+ 105              	.LVL9:
+  97:Core/Src/main.c ****             }
+ 106              		.loc 1 97 28 view .LVU28
+ 107 003c EFE7     		b	.L5
+ 108              	.LVL10:
+ 109              	.L21:
+ 104:Core/Src/main.c ****         }
+ 105:Core/Src/main.c **** 
+ 106:Core/Src/main.c ****         if (pressedButton2() == 1) {  
+ 107:Core/Src/main.c ****             if (currentLed != -1) {
+ 110              		.loc 1 107 13 is_stmt 1 view .LVU29
+ 111              		.loc 1 107 16 is_stmt 0 view .LVU30
+ 112 003e B4F1FF3F 		cmp	r4, #-1
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccW2etoV.s 			page 5
 
 
- 154              		.loc 1 78 13 view .LVU22
- 155 0030 7047     		bx	lr
- 156              	.L18:
-  79:Core/Src/main.c ****         case 3:
-  80:Core/Src/main.c ****             SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR14); // PF14 OFF
- 157              		.loc 1 80 13 view .LVU23
- 158 0032 094A     		ldr	r2, .L23
- 159 0034 9369     		ldr	r3, [r2, #24]
- 160 0036 43F08043 		orr	r3, r3, #1073741824
- 161 003a 9361     		str	r3, [r2, #24]
-  81:Core/Src/main.c ****             break;
- 162              		.loc 1 81 13 view .LVU24
- 163 003c 7047     		bx	lr
- 164              	.L17:
-  82:Core/Src/main.c ****         case 4:
-  83:Core/Src/main.c ****             SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR13); // PE13 OFF
- 165              		.loc 1 83 13 view .LVU25
- 166 003e 074A     		ldr	r2, .L23+4
- 167 0040 9369     		ldr	r3, [r2, #24]
- 168 0042 43F00053 		orr	r3, r3, #536870912
- 169 0046 9361     		str	r3, [r2, #24]
-  84:Core/Src/main.c ****             break;
- 170              		.loc 1 84 13 view .LVU26
- 171 0048 7047     		bx	lr
- 172              	.L15:
-  85:Core/Src/main.c ****         case 5:
-  86:Core/Src/main.c ****             SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR15); // PF15 OFF
- 173              		.loc 1 86 13 view .LVU27
- 174 004a 034A     		ldr	r2, .L23
- 175 004c 9369     		ldr	r3, [r2, #24]
- 176 004e 43F00043 		orr	r3, r3, #-2147483648
- 177 0052 9361     		str	r3, [r2, #24]
-  87:Core/Src/main.c ****             break;
- 178              		.loc 1 87 13 view .LVU28
- 179              	.L13:
-  88:Core/Src/main.c ****     }
-  89:Core/Src/main.c **** }
- 180              		.loc 1 89 1 is_stmt 0 view .LVU29
- 181 0054 7047     		bx	lr
- 182              	.L24:
- 183 0056 00BF     		.align	2
- 184              	.L23:
- 185 0058 00140240 		.word	1073878016
- 186 005c 00100240 		.word	1073876992
- 187              		.cfi_endproc
- 188              	.LFE131:
- 190              		.section	.text.changeSpeed,"ax",%progbits
- 191              		.align	1
- 192              		.global	changeSpeed
- 193              		.syntax unified
- 194              		.thumb
- 195              		.thumb_func
- 197              	changeSpeed:
- 198              	.LVL2:
- 199              	.LFB132:
-  90:Core/Src/main.c **** 
-  91:Core/Src/main.c **** int changeSpeed(int speedIndex){
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s 			page 6
+ 113 0042 08D1     		bne	.L19
+ 108:Core/Src/main.c ****                 ledOff(currentLed);
+ 109:Core/Src/main.c ****             }
+ 110:Core/Src/main.c **** 
+ 111:Core/Src/main.c ****             currentLed--;          
+ 112:Core/Src/main.c ****             if (currentLed < 0) { 
+ 113:Core/Src/main.c ****                 currentLed = 5;    
+ 114              		.loc 1 113 28 view .LVU31
+ 115 0044 0524     		movs	r4, #5
+ 116              	.LVL11:
+ 117              	.L7:
+ 114:Core/Src/main.c ****             }
+ 115:Core/Src/main.c **** 
+ 116:Core/Src/main.c ****             ledOn(currentLed);
+ 118              		.loc 1 116 13 is_stmt 1 view .LVU32
+ 119 0046 2046     		mov	r0, r4
+ 120 0048 FFF7FEFF 		bl	ledOn
+ 121              	.LVL12:
+ 117:Core/Src/main.c ****             ledState = 1;
+ 122              		.loc 1 117 13 view .LVU33
+ 123              		.loc 1 117 22 is_stmt 0 view .LVU34
+ 124 004c 0123     		movs	r3, #1
+ 125 004e 0193     		str	r3, [sp, #4]
+ 118:Core/Src/main.c ****             speedIndex = 0;
+ 126              		.loc 1 118 13 is_stmt 1 view .LVU35
+ 127              	.LVL13:
+ 119:Core/Src/main.c ****             delayValue = 0;
+ 128              		.loc 1 119 13 view .LVU36
+ 129              		.loc 1 119 24 is_stmt 0 view .LVU37
+ 130 0050 0025     		movs	r5, #0
+ 118:Core/Src/main.c ****             speedIndex = 0;
+ 131              		.loc 1 118 24 view .LVU38
+ 132 0052 2E46     		mov	r6, r5
+ 133 0054 24E0     		b	.L6
+ 134              	.LVL14:
+ 135              	.L19:
+ 108:Core/Src/main.c ****             }
+ 136              		.loc 1 108 17 is_stmt 1 view .LVU39
+ 137 0056 2046     		mov	r0, r4
+ 138 0058 FFF7FEFF 		bl	ledOff
+ 139              	.LVL15:
+ 111:Core/Src/main.c ****             if (currentLed < 0) { 
+ 140              		.loc 1 111 13 view .LVU40
+ 112:Core/Src/main.c ****                 currentLed = 5;    
+ 141              		.loc 1 112 13 view .LVU41
+ 112:Core/Src/main.c ****                 currentLed = 5;    
+ 142              		.loc 1 112 16 is_stmt 0 view .LVU42
+ 143 005c 013C     		subs	r4, r4, #1
+ 144              	.LVL16:
+ 112:Core/Src/main.c ****                 currentLed = 5;    
+ 145              		.loc 1 112 16 view .LVU43
+ 146 005e F2D5     		bpl	.L7
+ 113:Core/Src/main.c ****             }
+ 147              		.loc 1 113 28 view .LVU44
+ 148 0060 0524     		movs	r4, #5
+ 149              	.LVL17:
+ 113:Core/Src/main.c ****             }
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccW2etoV.s 			page 6
 
 
- 200              		.loc 1 91 32 is_stmt 1 view -0
- 201              		.cfi_startproc
- 202              		@ args = 0, pretend = 0, frame = 0
- 203              		@ frame_needed = 0, uses_anonymous_args = 0
- 204              		@ link register save eliminated.
-  92:Core/Src/main.c ****     switch(speedIndex){
- 205              		.loc 1 92 5 view .LVU31
- 206 0000 0138     		subs	r0, r0, #1
- 207              	.LVL3:
- 208              		.loc 1 92 5 is_stmt 0 view .LVU32
- 209 0002 0328     		cmp	r0, #3
- 210 0004 03D8     		bhi	.L26
- 211 0006 DFE800F0 		tbb	[pc, r0]
- 212              	.L28:
- 213 000a 0B       		.byte	(.L32-.L28)/2
- 214 000b 04       		.byte	(.L30-.L28)/2
- 215 000c 06       		.byte	(.L29-.L28)/2
- 216 000d 08       		.byte	(.L27-.L28)/2
- 217              		.p2align 1
- 218              	.L26:
- 219 000e 0020     		movs	r0, #0
- 220              	.LVL4:
- 221              		.loc 1 92 5 view .LVU33
- 222 0010 7047     		bx	lr
- 223              	.L30:
-  93:Core/Src/main.c ****         case 0:
-  94:Core/Src/main.c ****             return 0;
-  95:Core/Src/main.c **** 
-  96:Core/Src/main.c ****         case 1:
-  97:Core/Src/main.c ****             return 500000;
-  98:Core/Src/main.c **** 
-  99:Core/Src/main.c ****         case 2:
- 100:Core/Src/main.c ****             return 200000;
- 224              		.loc 1 100 13 is_stmt 1 view .LVU34
- 225              		.loc 1 100 20 is_stmt 0 view .LVU35
- 226 0012 0448     		ldr	r0, .L33
- 227 0014 7047     		bx	lr
- 228              	.L29:
- 101:Core/Src/main.c **** 
- 102:Core/Src/main.c ****         case 3:
- 103:Core/Src/main.c ****             return 80000;
- 229              		.loc 1 103 13 is_stmt 1 view .LVU36
- 230              		.loc 1 103 20 is_stmt 0 view .LVU37
- 231 0016 0448     		ldr	r0, .L33+4
- 232 0018 7047     		bx	lr
- 233              	.L27:
- 104:Core/Src/main.c **** 
- 105:Core/Src/main.c ****         case 4:
- 106:Core/Src/main.c ****             return 30000;
- 234              		.loc 1 106 13 is_stmt 1 view .LVU38
- 235              		.loc 1 106 20 is_stmt 0 view .LVU39
- 236 001a 47F23050 		movw	r0, #30000
- 237 001e 7047     		bx	lr
- 238              	.L32:
-  97:Core/Src/main.c **** 
- 239              		.loc 1 97 20 view .LVU40
- 240 0020 0248     		ldr	r0, .L33+8
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s 			page 7
-
-
- 107:Core/Src/main.c ****     }
- 108:Core/Src/main.c **** 
- 109:Core/Src/main.c ****     return 0;
- 110:Core/Src/main.c **** }
- 241              		.loc 1 110 1 view .LVU41
- 242 0022 7047     		bx	lr
- 243              	.L34:
- 244              		.align	2
- 245              	.L33:
- 246 0024 400D0300 		.word	200000
- 247 0028 80380100 		.word	80000
- 248 002c 20A10700 		.word	500000
- 249              		.cfi_endproc
- 250              	.LFE132:
- 252              		.section	.text.blinkLed,"ax",%progbits
- 253              		.align	1
- 254              		.global	blinkLed
- 255              		.syntax unified
- 256              		.thumb
- 257              		.thumb_func
- 259              	blinkLed:
- 260              	.LVL5:
- 261              	.LFB133:
- 111:Core/Src/main.c **** 
- 112:Core/Src/main.c **** void blinkLed(int ledNum, int *ledState){
- 262              		.loc 1 112 41 is_stmt 1 view -0
- 263              		.cfi_startproc
- 264              		@ args = 0, pretend = 0, frame = 0
- 265              		@ frame_needed = 0, uses_anonymous_args = 0
- 266              		.loc 1 112 41 is_stmt 0 view .LVU43
- 267 0000 10B5     		push	{r4, lr}
- 268              	.LCFI0:
- 269              		.cfi_def_cfa_offset 8
- 270              		.cfi_offset 4, -8
- 271              		.cfi_offset 14, -4
- 272 0002 0C46     		mov	r4, r1
- 113:Core/Src/main.c ****     if (*ledState == 1){
- 273              		.loc 1 113 5 is_stmt 1 view .LVU44
- 274              		.loc 1 113 9 is_stmt 0 view .LVU45
- 275 0004 0B68     		ldr	r3, [r1]
- 276              		.loc 1 113 8 view .LVU46
- 277 0006 012B     		cmp	r3, #1
- 278 0008 04D0     		beq	.L39
- 114:Core/Src/main.c ****         ledOff(ledNum);
- 115:Core/Src/main.c ****         *ledState = 0;
- 116:Core/Src/main.c ****     } else {
- 117:Core/Src/main.c ****         ledOn(ledNum);
- 279              		.loc 1 117 9 is_stmt 1 view .LVU47
- 280 000a FFF7FEFF 		bl	ledOn
- 281              	.LVL6:
- 118:Core/Src/main.c ****         *ledState = 1;
- 282              		.loc 1 118 9 view .LVU48
- 283              		.loc 1 118 19 is_stmt 0 view .LVU49
- 284 000e 0123     		movs	r3, #1
- 285 0010 2360     		str	r3, [r4]
- 286              	.L35:
- 119:Core/Src/main.c ****     }
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s 			page 8
-
-
- 120:Core/Src/main.c **** }
- 287              		.loc 1 120 1 view .LVU50
- 288 0012 10BD     		pop	{r4, pc}
- 289              	.LVL7:
- 290              	.L39:
- 114:Core/Src/main.c ****         *ledState = 0;
- 291              		.loc 1 114 9 is_stmt 1 view .LVU51
- 292 0014 FFF7FEFF 		bl	ledOff
- 293              	.LVL8:
- 115:Core/Src/main.c ****     } else {
- 294              		.loc 1 115 9 view .LVU52
- 115:Core/Src/main.c ****     } else {
- 295              		.loc 1 115 19 is_stmt 0 view .LVU53
- 296 0018 0023     		movs	r3, #0
- 297 001a 2360     		str	r3, [r4]
- 298 001c F9E7     		b	.L35
- 299              		.cfi_endproc
- 300              	.LFE133:
- 302              		.section	.text.main,"ax",%progbits
- 303              		.align	1
- 304              		.global	main
- 305              		.syntax unified
- 306              		.thumb
- 307              		.thumb_func
- 309              	main:
- 310              	.LFB134:
+ 150              		.loc 1 113 28 view .LVU45
+ 151 0062 F0E7     		b	.L7
+ 152              	.LVL18:
+ 153              	.L22:
+ 120:Core/Src/main.c ****         }
  121:Core/Src/main.c **** 
- 122:Core/Src/main.c **** int main(void){
- 311              		.loc 1 122 15 is_stmt 1 view -0
- 312              		.cfi_startproc
- 313              		@ args = 0, pretend = 0, frame = 8
- 314              		@ frame_needed = 0, uses_anonymous_args = 0
- 315 0000 70B5     		push	{r4, r5, r6, lr}
- 316              	.LCFI1:
- 317              		.cfi_def_cfa_offset 16
- 318              		.cfi_offset 4, -16
- 319              		.cfi_offset 5, -12
- 320              		.cfi_offset 6, -8
- 321              		.cfi_offset 14, -4
- 322 0002 82B0     		sub	sp, sp, #8
- 323              	.LCFI2:
- 324              		.cfi_def_cfa_offset 24
- 123:Core/Src/main.c ****     
- 124:Core/Src/main.c ****     GPIO_Init_CMSIS_LB1();
- 325              		.loc 1 124 5 view .LVU55
- 326 0004 FFF7FEFF 		bl	GPIO_Init_CMSIS_LB1
- 327              	.LVL9:
+ 122:Core/Src/main.c ****     if (pressedButton3() == 1) {
+ 123:Core/Src/main.c ****         speedIndex++;
+ 154              		.loc 1 123 9 is_stmt 1 view .LVU46
+ 155              		.loc 1 123 19 is_stmt 0 view .LVU47
+ 156 0064 0136     		adds	r6, r6, #1
+ 157              	.LVL19:
+ 124:Core/Src/main.c ****         if (speedIndex > 4) speedIndex = 0;  
+ 158              		.loc 1 124 9 is_stmt 1 view .LVU48
+ 159              		.loc 1 124 12 is_stmt 0 view .LVU49
+ 160 0066 042E     		cmp	r6, #4
+ 161 0068 00DD     		ble	.L9
+ 162              		.loc 1 124 40 discriminator 1 view .LVU50
+ 163 006a 0026     		movs	r6, #0
+ 164              	.LVL20:
+ 165              	.L9:
  125:Core/Src/main.c **** 
- 126:Core/Src/main.c ****     // LB1 main task 
- 127:Core/Src/main.c ****     // int count = 0;
+ 126:Core/Src/main.c ****         delayValue = changeSpeed(speedIndex);
+ 166              		.loc 1 126 9 is_stmt 1 view .LVU51
+ 167              		.loc 1 126 22 is_stmt 0 view .LVU52
+ 168 006c 3046     		mov	r0, r6
+ 169 006e FFF7FEFF 		bl	changeSpeed
+ 170              	.LVL21:
+ 171 0072 0546     		mov	r5, r0
+ 172              	.LVL22:
+ 173              		.loc 1 126 22 view .LVU53
+ 174 0074 18E0     		b	.L8
+ 175              	.LVL23:
+ 176              	.L11:
+ 127:Core/Src/main.c ****     }
  128:Core/Src/main.c **** 
- 129:Core/Src/main.c ****     // while(1){
- 130:Core/Src/main.c **** 
- 131:Core/Src/main.c ****     //     if(pressedButton3() == 1){
- 132:Core/Src/main.c ****     //         count++;
- 133:Core/Src/main.c ****     //     }
- 134:Core/Src/main.c ****         
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s 			page 9
+ 129:Core/Src/main.c **** 
+ 130:Core/Src/main.c ****     if (currentLed != -1) {
+ 131:Core/Src/main.c ****         if (speedIndex == 0) {
+ 132:Core/Src/main.c ****             ledOn(currentLed);
+ 133:Core/Src/main.c ****             ledState = 1;
+ 134:Core/Src/main.c ****         } else {
+ 135:Core/Src/main.c ****             blinkLed(currentLed, &ledState);
+ 177              		.loc 1 135 13 is_stmt 1 view .LVU54
+ 178 0076 01A9     		add	r1, sp, #4
+ 179 0078 2046     		mov	r0, r4
+ 180 007a FFF7FEFF 		bl	blinkLed
+ 181              	.LVL24:
+ 136:Core/Src/main.c **** 
+ 137:Core/Src/main.c ****             for (volatile int i = 0; i < delayValue; i++){}
+ 182              		.loc 1 137 13 view .LVU55
+ 183              	.LBB2:
+ 184              		.loc 1 137 18 view .LVU56
+ 185              		.loc 1 137 31 is_stmt 0 view .LVU57
+ 186 007e 0023     		movs	r3, #0
+ 187 0080 0093     		str	r3, [sp]
+ 188              		.loc 1 137 13 view .LVU58
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccW2etoV.s 			page 7
 
 
- 135:Core/Src/main.c ****     //     int key = TheSwitcher(count);
- 136:Core/Src/main.c ****      
- 137:Core/Src/main.c ****     //     if (key == 0){
- 138:Core/Src/main.c ****     //         if(pressedButton1() == 1){
- 139:Core/Src/main.c ****     //             TurningOnState();
- 140:Core/Src/main.c ****     //         }
- 141:Core/Src/main.c ****     //         else if(pressedButton2() == 1){
- 142:Core/Src/main.c ****     //             TurningOffState();
- 143:Core/Src/main.c **** 
- 144:Core/Src/main.c ****     //         }
- 145:Core/Src/main.c ****     //     }
- 146:Core/Src/main.c ****     //     else if(key == 1){
- 147:Core/Src/main.c ****     //         if(pressedButton1() == 1){
- 148:Core/Src/main.c ****     //             TurningOffState();
- 149:Core/Src/main.c **** 
- 150:Core/Src/main.c ****     //         }
- 151:Core/Src/main.c ****     //         else if(pressedButton2() == 1){
- 152:Core/Src/main.c ****     //             TurningOnState();
- 153:Core/Src/main.c **** 
- 154:Core/Src/main.c ****     //         }
- 155:Core/Src/main.c ****     //     }
- 156:Core/Src/main.c **** 
- 157:Core/Src/main.c ****     // }
- 158:Core/Src/main.c **** 
- 159:Core/Src/main.c ****     // LB1 extra task 
- 160:Core/Src/main.c **** 
- 161:Core/Src/main.c ****     int currentLed = -1;
- 328              		.loc 1 161 5 view .LVU56
- 162:Core/Src/main.c ****     int ledState   = 1;       
- 329              		.loc 1 162 5 view .LVU57
- 330              		.loc 1 162 9 is_stmt 0 view .LVU58
- 331 0008 0123     		movs	r3, #1
- 332 000a 0193     		str	r3, [sp, #4]
- 163:Core/Src/main.c ****     int speedIndex = 0;        
- 333              		.loc 1 163 5 is_stmt 1 view .LVU59
- 334              	.LVL10:
- 164:Core/Src/main.c ****     int delayValue = 0;
- 335              		.loc 1 164 5 view .LVU60
- 336              		.loc 1 164 9 is_stmt 0 view .LVU61
- 337 000c 0025     		movs	r5, #0
- 163:Core/Src/main.c ****     int speedIndex = 0;        
- 338              		.loc 1 163 9 view .LVU62
- 339 000e 2E46     		mov	r6, r5
- 161:Core/Src/main.c ****     int ledState   = 1;       
- 340              		.loc 1 161 9 view .LVU63
- 341 0010 4FF0FF34 		mov	r4, #-1
- 342 0014 3CE0     		b	.L41
- 343              	.LVL11:
- 344              	.L59:
- 165:Core/Src/main.c **** 
- 166:Core/Src/main.c ****     while(1){
- 167:Core/Src/main.c ****         if (pressedButton1() == 1) {  
- 168:Core/Src/main.c ****             if (currentLed != -1) {
- 345              		.loc 1 168 13 is_stmt 1 view .LVU64
- 346              		.loc 1 168 16 is_stmt 0 view .LVU65
- 347 0016 B4F1FF3F 		cmp	r4, #-1
- 348 001a 08D1     		bne	.L43
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s 			page 10
+ 189 0082 02E0     		b	.L12
+ 190              	.L13:
+ 191              		.loc 1 137 59 is_stmt 1 discriminator 3 view .LVU59
+ 192              		.loc 1 137 55 discriminator 3 view .LVU60
+ 193 0084 009B     		ldr	r3, [sp]
+ 194 0086 0133     		adds	r3, r3, #1
+ 195 0088 0093     		str	r3, [sp]
+ 196              	.L12:
+ 197              		.loc 1 137 40 discriminator 1 view .LVU61
+ 198 008a 009B     		ldr	r3, [sp]
+ 199 008c AB42     		cmp	r3, r5
+ 200 008e F9DB     		blt	.L13
+ 201              	.LVL25:
+ 202              	.L2:
+ 203              		.loc 1 137 40 is_stmt 0 discriminator 1 view .LVU62
+ 204              	.LBE2:
+  89:Core/Src/main.c ****         if (pressedButton1() == 1) {  
+ 205              		.loc 1 89 5 is_stmt 1 view .LVU63
+  90:Core/Src/main.c ****             if (currentLed != -1) {
+ 206              		.loc 1 90 9 view .LVU64
+  90:Core/Src/main.c ****             if (currentLed != -1) {
+ 207              		.loc 1 90 13 is_stmt 0 view .LVU65
+ 208 0090 FFF7FEFF 		bl	pressedButton1
+ 209              	.LVL26:
+  90:Core/Src/main.c ****             if (currentLed != -1) {
+ 210              		.loc 1 90 12 discriminator 1 view .LVU66
+ 211 0094 0128     		cmp	r0, #1
+ 212 0096 BED0     		beq	.L20
+ 213              	.LVL27:
+ 214              	.L3:
+ 106:Core/Src/main.c ****             if (currentLed != -1) {
+ 215              		.loc 1 106 9 is_stmt 1 view .LVU67
+ 106:Core/Src/main.c ****             if (currentLed != -1) {
+ 216              		.loc 1 106 13 is_stmt 0 view .LVU68
+ 217 0098 FFF7FEFF 		bl	pressedButton2
+ 218              	.LVL28:
+ 106:Core/Src/main.c ****             if (currentLed != -1) {
+ 219              		.loc 1 106 12 discriminator 1 view .LVU69
+ 220 009c 0128     		cmp	r0, #1
+ 221 009e CED0     		beq	.L21
+ 222              	.LVL29:
+ 223              	.L6:
+ 122:Core/Src/main.c ****         speedIndex++;
+ 224              		.loc 1 122 5 is_stmt 1 view .LVU70
+ 122:Core/Src/main.c ****         speedIndex++;
+ 225              		.loc 1 122 9 is_stmt 0 view .LVU71
+ 226 00a0 FFF7FEFF 		bl	pressedButton3
+ 227              	.LVL30:
+ 122:Core/Src/main.c ****         speedIndex++;
+ 228              		.loc 1 122 8 discriminator 1 view .LVU72
+ 229 00a4 0128     		cmp	r0, #1
+ 230 00a6 DDD0     		beq	.L22
+ 231              	.L8:
+ 130:Core/Src/main.c ****         if (speedIndex == 0) {
+ 232              		.loc 1 130 5 is_stmt 1 view .LVU73
+ 130:Core/Src/main.c ****         if (speedIndex == 0) {
+ 233              		.loc 1 130 8 is_stmt 0 view .LVU74
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccW2etoV.s 			page 8
 
 
- 169:Core/Src/main.c ****                 ledOff(currentLed);
- 170:Core/Src/main.c ****             }
- 171:Core/Src/main.c **** 
- 172:Core/Src/main.c ****             currentLed++;          
- 349              		.loc 1 172 13 is_stmt 1 view .LVU66
- 350              		.loc 1 172 23 is_stmt 0 view .LVU67
- 351 001c 0134     		adds	r4, r4, #1
- 352              	.LVL12:
- 173:Core/Src/main.c ****             if (currentLed >= 6) { 
- 353              		.loc 1 173 13 is_stmt 1 view .LVU68
- 354              	.L44:
- 174:Core/Src/main.c ****                 currentLed = 0;    
- 175:Core/Src/main.c ****             }
- 176:Core/Src/main.c **** 
- 177:Core/Src/main.c ****             ledOn(currentLed);
- 355              		.loc 1 177 13 view .LVU69
- 356 001e 2046     		mov	r0, r4
- 357 0020 FFF7FEFF 		bl	ledOn
- 358              	.LVL13:
- 178:Core/Src/main.c ****             ledState = 1;
- 359              		.loc 1 178 13 view .LVU70
- 360              		.loc 1 178 22 is_stmt 0 view .LVU71
- 361 0024 0123     		movs	r3, #1
- 362 0026 0193     		str	r3, [sp, #4]
- 179:Core/Src/main.c ****             speedIndex = 0;
- 363              		.loc 1 179 13 is_stmt 1 view .LVU72
- 364              	.LVL14:
- 180:Core/Src/main.c ****             delayValue = 0;
- 365              		.loc 1 180 13 view .LVU73
- 366              		.loc 1 180 24 is_stmt 0 view .LVU74
- 367 0028 0025     		movs	r5, #0
- 179:Core/Src/main.c ****             speedIndex = 0;
- 368              		.loc 1 179 24 view .LVU75
- 369 002a 2E46     		mov	r6, r5
- 370 002c 34E0     		b	.L42
- 371              	.LVL15:
- 372              	.L43:
- 169:Core/Src/main.c ****             }
- 373              		.loc 1 169 17 is_stmt 1 view .LVU76
- 374 002e 2046     		mov	r0, r4
- 375 0030 FFF7FEFF 		bl	ledOff
- 376              	.LVL16:
- 172:Core/Src/main.c ****             if (currentLed >= 6) { 
- 377              		.loc 1 172 13 view .LVU77
- 172:Core/Src/main.c ****             if (currentLed >= 6) { 
- 378              		.loc 1 172 23 is_stmt 0 view .LVU78
- 379 0034 0134     		adds	r4, r4, #1
- 380              	.LVL17:
- 173:Core/Src/main.c ****                 currentLed = 0;    
- 381              		.loc 1 173 13 is_stmt 1 view .LVU79
- 173:Core/Src/main.c ****                 currentLed = 0;    
- 382              		.loc 1 173 16 is_stmt 0 view .LVU80
- 383 0036 052C     		cmp	r4, #5
- 384 0038 F1DD     		ble	.L44
- 174:Core/Src/main.c ****             }
- 385              		.loc 1 174 28 view .LVU81
- 386 003a 0024     		movs	r4, #0
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s 			page 11
-
-
- 387              	.LVL18:
- 174:Core/Src/main.c ****             }
- 388              		.loc 1 174 28 view .LVU82
- 389 003c EFE7     		b	.L44
- 390              	.LVL19:
- 391              	.L60:
- 181:Core/Src/main.c ****         }
- 182:Core/Src/main.c **** 
- 183:Core/Src/main.c ****         if (pressedButton2() == 1) {  
- 184:Core/Src/main.c ****             if (currentLed != -1) {
- 392              		.loc 1 184 13 is_stmt 1 view .LVU83
- 393              		.loc 1 184 16 is_stmt 0 view .LVU84
- 394 003e B4F1FF3F 		cmp	r4, #-1
- 395 0042 08D1     		bne	.L58
- 185:Core/Src/main.c ****                 ledOff(currentLed);
- 186:Core/Src/main.c ****             }
- 187:Core/Src/main.c **** 
- 188:Core/Src/main.c ****             currentLed--;          
- 189:Core/Src/main.c ****             if (currentLed < 0) { 
- 190:Core/Src/main.c ****                 currentLed = 5;    
- 396              		.loc 1 190 28 view .LVU85
- 397 0044 0524     		movs	r4, #5
- 398              	.LVL20:
- 399              	.L46:
- 191:Core/Src/main.c ****             }
- 192:Core/Src/main.c **** 
- 193:Core/Src/main.c ****             ledOn(currentLed);
- 400              		.loc 1 193 13 is_stmt 1 view .LVU86
- 401 0046 2046     		mov	r0, r4
- 402 0048 FFF7FEFF 		bl	ledOn
- 403              	.LVL21:
- 194:Core/Src/main.c ****             ledState = 1;
- 404              		.loc 1 194 13 view .LVU87
- 405              		.loc 1 194 22 is_stmt 0 view .LVU88
- 406 004c 0123     		movs	r3, #1
- 407 004e 0193     		str	r3, [sp, #4]
- 195:Core/Src/main.c ****             speedIndex = 0;
- 408              		.loc 1 195 13 is_stmt 1 view .LVU89
- 409              	.LVL22:
- 196:Core/Src/main.c ****             delayValue = 0;
- 410              		.loc 1 196 13 view .LVU90
- 411              		.loc 1 196 24 is_stmt 0 view .LVU91
- 412 0050 0025     		movs	r5, #0
- 195:Core/Src/main.c ****             speedIndex = 0;
- 413              		.loc 1 195 24 view .LVU92
- 414 0052 2E46     		mov	r6, r5
- 415 0054 24E0     		b	.L45
- 416              	.LVL23:
- 417              	.L58:
- 185:Core/Src/main.c ****             }
- 418              		.loc 1 185 17 is_stmt 1 view .LVU93
- 419 0056 2046     		mov	r0, r4
- 420 0058 FFF7FEFF 		bl	ledOff
- 421              	.LVL24:
- 188:Core/Src/main.c ****             if (currentLed < 0) { 
- 422              		.loc 1 188 13 view .LVU94
- 189:Core/Src/main.c ****                 currentLed = 5;    
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s 			page 12
-
-
- 423              		.loc 1 189 13 view .LVU95
- 189:Core/Src/main.c ****                 currentLed = 5;    
- 424              		.loc 1 189 16 is_stmt 0 view .LVU96
- 425 005c 013C     		subs	r4, r4, #1
- 426              	.LVL25:
- 189:Core/Src/main.c ****                 currentLed = 5;    
- 427              		.loc 1 189 16 view .LVU97
- 428 005e F2D5     		bpl	.L46
- 190:Core/Src/main.c ****             }
- 429              		.loc 1 190 28 view .LVU98
- 430 0060 0524     		movs	r4, #5
- 431              	.LVL26:
- 190:Core/Src/main.c ****             }
- 432              		.loc 1 190 28 view .LVU99
- 433 0062 F0E7     		b	.L46
- 434              	.LVL27:
- 435              	.L61:
- 197:Core/Src/main.c ****         }
- 198:Core/Src/main.c **** 
- 199:Core/Src/main.c ****     if (pressedButton3() == 1) {
- 200:Core/Src/main.c ****         speedIndex++;
- 436              		.loc 1 200 9 is_stmt 1 view .LVU100
- 437              		.loc 1 200 19 is_stmt 0 view .LVU101
- 438 0064 0136     		adds	r6, r6, #1
- 439              	.LVL28:
- 201:Core/Src/main.c ****         if (speedIndex > 4) speedIndex = 0;  
- 440              		.loc 1 201 9 is_stmt 1 view .LVU102
- 441              		.loc 1 201 12 is_stmt 0 view .LVU103
- 442 0066 042E     		cmp	r6, #4
- 443 0068 00DD     		ble	.L48
- 444              		.loc 1 201 40 discriminator 1 view .LVU104
- 445 006a 0026     		movs	r6, #0
- 446              	.LVL29:
- 447              	.L48:
- 202:Core/Src/main.c **** 
- 203:Core/Src/main.c ****         delayValue = changeSpeed(speedIndex);
- 448              		.loc 1 203 9 is_stmt 1 view .LVU105
- 449              		.loc 1 203 22 is_stmt 0 view .LVU106
- 450 006c 3046     		mov	r0, r6
- 451 006e FFF7FEFF 		bl	changeSpeed
- 452              	.LVL30:
- 453 0072 0546     		mov	r5, r0
- 454              	.LVL31:
- 455              		.loc 1 203 22 view .LVU107
- 456 0074 18E0     		b	.L47
- 457              	.LVL32:
- 458              	.L50:
- 204:Core/Src/main.c ****     }
- 205:Core/Src/main.c **** 
- 206:Core/Src/main.c **** 
- 207:Core/Src/main.c ****     if (currentLed != -1) {
- 208:Core/Src/main.c ****         if (speedIndex == 0) {
- 209:Core/Src/main.c ****             ledOn(currentLed);
- 210:Core/Src/main.c ****             ledState = 1;
- 211:Core/Src/main.c ****         } else {
- 212:Core/Src/main.c ****             blinkLed(currentLed, &ledState);
- 459              		.loc 1 212 13 is_stmt 1 view .LVU108
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s 			page 13
-
-
- 460 0076 01A9     		add	r1, sp, #4
- 461 0078 2046     		mov	r0, r4
- 462 007a FFF7FEFF 		bl	blinkLed
- 463              	.LVL33:
- 213:Core/Src/main.c **** 
- 214:Core/Src/main.c ****             for (volatile int i = 0; i < delayValue; i++){}
- 464              		.loc 1 214 13 view .LVU109
- 465              	.LBB2:
- 466              		.loc 1 214 18 view .LVU110
- 467              		.loc 1 214 31 is_stmt 0 view .LVU111
- 468 007e 0023     		movs	r3, #0
- 469 0080 0093     		str	r3, [sp]
- 470              		.loc 1 214 13 view .LVU112
- 471 0082 02E0     		b	.L51
- 472              	.L52:
- 473              		.loc 1 214 59 is_stmt 1 discriminator 3 view .LVU113
- 474              		.loc 1 214 55 discriminator 3 view .LVU114
- 475 0084 009B     		ldr	r3, [sp]
- 476 0086 0133     		adds	r3, r3, #1
- 477 0088 0093     		str	r3, [sp]
- 478              	.L51:
- 479              		.loc 1 214 40 discriminator 1 view .LVU115
- 480 008a 009B     		ldr	r3, [sp]
- 481 008c AB42     		cmp	r3, r5
- 482 008e F9DB     		blt	.L52
- 483              	.LVL34:
- 484              	.L41:
- 485              		.loc 1 214 40 is_stmt 0 discriminator 1 view .LVU116
- 486              	.LBE2:
- 166:Core/Src/main.c ****         if (pressedButton1() == 1) {  
- 487              		.loc 1 166 5 is_stmt 1 view .LVU117
- 167:Core/Src/main.c ****             if (currentLed != -1) {
- 488              		.loc 1 167 9 view .LVU118
- 167:Core/Src/main.c ****             if (currentLed != -1) {
- 489              		.loc 1 167 13 is_stmt 0 view .LVU119
- 490 0090 FFF7FEFF 		bl	pressedButton1
- 491              	.LVL35:
- 167:Core/Src/main.c ****             if (currentLed != -1) {
- 492              		.loc 1 167 12 discriminator 1 view .LVU120
- 493 0094 0128     		cmp	r0, #1
- 494 0096 BED0     		beq	.L59
- 495              	.LVL36:
- 496              	.L42:
- 183:Core/Src/main.c ****             if (currentLed != -1) {
- 497              		.loc 1 183 9 is_stmt 1 view .LVU121
- 183:Core/Src/main.c ****             if (currentLed != -1) {
- 498              		.loc 1 183 13 is_stmt 0 view .LVU122
- 499 0098 FFF7FEFF 		bl	pressedButton2
- 500              	.LVL37:
- 183:Core/Src/main.c ****             if (currentLed != -1) {
- 501              		.loc 1 183 12 discriminator 1 view .LVU123
- 502 009c 0128     		cmp	r0, #1
- 503 009e CED0     		beq	.L60
- 504              	.LVL38:
- 505              	.L45:
- 199:Core/Src/main.c ****         speedIndex++;
- 506              		.loc 1 199 5 is_stmt 1 view .LVU124
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s 			page 14
-
-
- 199:Core/Src/main.c ****         speedIndex++;
- 507              		.loc 1 199 9 is_stmt 0 view .LVU125
- 508 00a0 FFF7FEFF 		bl	pressedButton3
- 509              	.LVL39:
- 199:Core/Src/main.c ****         speedIndex++;
- 510              		.loc 1 199 8 discriminator 1 view .LVU126
- 511 00a4 0128     		cmp	r0, #1
- 512 00a6 DDD0     		beq	.L61
- 513              	.L47:
- 207:Core/Src/main.c ****         if (speedIndex == 0) {
- 514              		.loc 1 207 5 is_stmt 1 view .LVU127
- 207:Core/Src/main.c ****         if (speedIndex == 0) {
- 515              		.loc 1 207 8 is_stmt 0 view .LVU128
- 516 00a8 B4F1FF3F 		cmp	r4, #-1
- 517 00ac F0D0     		beq	.L41
- 208:Core/Src/main.c ****             ledOn(currentLed);
- 518              		.loc 1 208 9 is_stmt 1 view .LVU129
- 208:Core/Src/main.c ****             ledOn(currentLed);
- 519              		.loc 1 208 12 is_stmt 0 view .LVU130
- 520 00ae 002E     		cmp	r6, #0
- 521 00b0 E1D1     		bne	.L50
- 209:Core/Src/main.c ****             ledState = 1;
- 522              		.loc 1 209 13 is_stmt 1 view .LVU131
- 523 00b2 2046     		mov	r0, r4
- 524 00b4 FFF7FEFF 		bl	ledOn
- 525              	.LVL40:
- 210:Core/Src/main.c ****         } else {
- 526              		.loc 1 210 13 view .LVU132
- 210:Core/Src/main.c ****         } else {
- 527              		.loc 1 210 22 is_stmt 0 view .LVU133
- 528 00b8 0123     		movs	r3, #1
- 529 00ba 0193     		str	r3, [sp, #4]
- 530 00bc E8E7     		b	.L41
- 531              		.cfi_endproc
- 532              	.LFE134:
- 534              		.text
- 535              	.Letext0:
- 536              		.file 2 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/machine/_default_types.
- 537              		.file 3 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/sys/_stdint.h"
- 538              		.file 4 "CMSIS/Devices/STM32F4xx/Inc/STM32F429ZI/stm32f429xx.h"
- 539              		.file 5 "Core/Src/../Inc/init_LB1.h"
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s 			page 15
+ 234 00a8 B4F1FF3F 		cmp	r4, #-1
+ 235 00ac F0D0     		beq	.L2
+ 131:Core/Src/main.c ****             ledOn(currentLed);
+ 236              		.loc 1 131 9 is_stmt 1 view .LVU75
+ 131:Core/Src/main.c ****             ledOn(currentLed);
+ 237              		.loc 1 131 12 is_stmt 0 view .LVU76
+ 238 00ae 002E     		cmp	r6, #0
+ 239 00b0 E1D1     		bne	.L11
+ 132:Core/Src/main.c ****             ledState = 1;
+ 240              		.loc 1 132 13 is_stmt 1 view .LVU77
+ 241 00b2 2046     		mov	r0, r4
+ 242 00b4 FFF7FEFF 		bl	ledOn
+ 243              	.LVL31:
+ 133:Core/Src/main.c ****         } else {
+ 244              		.loc 1 133 13 view .LVU78
+ 133:Core/Src/main.c ****         } else {
+ 245              		.loc 1 133 22 is_stmt 0 view .LVU79
+ 246 00b8 0123     		movs	r3, #1
+ 247 00ba 0193     		str	r3, [sp, #4]
+ 248 00bc E8E7     		b	.L2
+ 249              		.cfi_endproc
+ 250              	.LFE130:
+ 252              		.text
+ 253              	.Letext0:
+ 254              		.file 2 "Core/Src/../Inc/init_LB1.h"
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccW2etoV.s 			page 9
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 main.c
-C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s:21     .text.ledOn:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s:27     .text.ledOn:00000000 ledOn
-C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s:40     .text.ledOn:00000008 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s:46     .text.ledOn:0000000e $t
-C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s:100    .text.ledOn:00000058 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s:106    .text.ledOff:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s:112    .text.ledOff:00000000 ledOff
-C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s:125    .text.ledOff:00000008 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s:131    .text.ledOff:0000000e $t
-C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s:185    .text.ledOff:00000058 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s:191    .text.changeSpeed:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s:197    .text.changeSpeed:00000000 changeSpeed
-C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s:213    .text.changeSpeed:0000000a $d
-C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s:217    .text.changeSpeed:0000000e $t
-C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s:246    .text.changeSpeed:00000024 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s:253    .text.blinkLed:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s:259    .text.blinkLed:00000000 blinkLed
-C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s:303    .text.main:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccHotbAu.s:309    .text.main:00000000 main
+C:\Users\VICTUS\AppData\Local\Temp\ccW2etoV.s:21     .text.main:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccW2etoV.s:27     .text.main:00000000 main
 
 UNDEFINED SYMBOLS
 GPIO_Init_CMSIS_LB1
+ledOn
+ledOff
+changeSpeed
+blinkLed
 pressedButton1
 pressedButton2
 pressedButton3
