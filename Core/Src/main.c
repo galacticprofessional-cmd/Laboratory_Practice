@@ -40,136 +40,179 @@
 
 #include "../Inc/init_LB1.h"
 
-#define TIME_DELAY 100000
-#define TIME_DELAY1 3500
 
-int pressedButton1(void){
-    if(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) == 0){
-        for(int i = 0; i < TIME_DELAY1; i++){}
-        if(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) == 0){
-            while(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) == 0){
-            }
-            return 1;
-        }
 
+void ledOn(int n){
+    switch(n){
+        case 0:
+            SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS13); // PF13 ON
+            break;
+        case 1:
+            SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS9);  // PE9 ON
+            break;
+        case 2:
+            SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS11); // PE11 ON
+            break;
+        case 3:
+            SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS14); // PF14 ON
+            break;
+        case 4:
+            SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS13); // PE13 ON
+            break;
+        case 5:
+            SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS15); // PF15 ON
+            break;
     }
+}
+
+void ledOff(int n){
+    switch(n){
+        case 0:
+            SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR13); // PF13 OFF
+            break;
+        case 1:
+            SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR9);  // PE9 OFF
+            break;
+        case 2:
+            SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR11); // PE11 OFF
+            break;
+        case 3:
+            SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR14); // PF14 OFF
+            break;
+        case 4:
+            SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR13); // PE13 OFF
+            break;
+        case 5:
+            SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR15); // PF15 OFF
+            break;
+    }
+}
+
+int changeSpeed(int speedIndex){
+    switch(speedIndex){
+        case 0:
+            return 0;
+
+        case 1:
+            return 500000;
+
+        case 2:
+            return 200000;
+
+        case 3:
+            return 80000;
+
+        case 4:
+            return 30000;
+    }
+
     return 0;
 }
 
-int pressedButton2(void){
-    if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){
-        for(int i = 0; i < TIME_DELAY1; i++){}
-        if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){
-            while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){
-            }
-            return 1;
-        }
-
+void blinkLed(int ledNum, int *ledState){
+    if (*ledState == 1){
+        ledOff(ledNum);
+        *ledState = 0;
+    } else {
+        ledOn(ledNum);
+        *ledState = 1;
     }
-    return 0;
-}
-
-int pressedButton3(void){
-    if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) == 0){
-        for(int i = 0; i < TIME_DELAY1; i++){}
-        if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) == 0){
-            while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) == 0){
-            }
-            return 1;
-        }
-
-    }
-    return 0;
-}
-
-void TurningOnState(void){
-    if(READ_BIT(GPIOF->IDR , GPIO_IDR_IDR_13) == 0){
-        SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS13);
-    }
-
-    else if(READ_BIT(GPIOE->IDR , GPIO_IDR_IDR_9) == 0){
-        SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS9);
-    }
-
-    else if(READ_BIT(GPIOE->IDR , GPIO_IDR_IDR_11) == 0){
-        SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS11);
-    }
-
-    else if(READ_BIT(GPIOF->IDR , GPIO_IDR_IDR_14) == 0){
-        SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS14);
-    }
-
-    else if(READ_BIT(GPIOE->IDR , GPIO_IDR_IDR_13) == 0){
-        SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS13);
-    }
-
-    else if(READ_BIT(GPIOF->IDR , GPIO_IDR_IDR_15) == 0){
-        SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS15);
-    }
-
-}
-
-void TurningOffState(){
-    if(READ_BIT(GPIOF->IDR , GPIO_IDR_IDR_15) != 0){
-        SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR15);
-    }
-
-    else if(READ_BIT(GPIOE->IDR , GPIO_IDR_IDR_13) != 0){
-        SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR13);
-    }
-
-    else if(READ_BIT(GPIOF->IDR , GPIO_IDR_IDR_14) != 0){
-        SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR14);
-    }
-    else if(READ_BIT(GPIOE->IDR , GPIO_IDR_IDR_11) != 0){
-        SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR11);
-    }
-    else if(READ_BIT(GPIOE->IDR , GPIO_IDR_IDR_9) != 0){
-        SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR9);
-    }
-
-    else if(READ_BIT(GPIOF->IDR , GPIO_IDR_IDR_13) != 0){
-        SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR13);
-    }
-
-}
-
-int TheSwitcher(int count){
-    return count & 1;
 }
 
 int main(void){
     
     GPIO_Init_CMSIS_LB1();
-    int count = 0;
+
+    // LB1 main task 
+    // int count = 0;
+
+    // while(1){
+
+    //     if(pressedButton3() == 1){
+    //         count++;
+    //     }
+        
+    //     int key = TheSwitcher(count);
+     
+    //     if (key == 0){
+    //         if(pressedButton1() == 1){
+    //             TurningOnState();
+    //         }
+    //         else if(pressedButton2() == 1){
+    //             TurningOffState();
+
+    //         }
+    //     }
+    //     else if(key == 1){
+    //         if(pressedButton1() == 1){
+    //             TurningOffState();
+
+    //         }
+    //         else if(pressedButton2() == 1){
+    //             TurningOnState();
+
+    //         }
+    //     }
+
+    // }
+
+    // LB1 extra task 
+
+    int currentLed = -1;
+    int ledState   = 1;       
+    int speedIndex = 0;        
+    int delayValue = 0;
 
     while(1){
-
-        if(pressedButton3() == 1){
-            count++;
-        }
-        
-        int key = TheSwitcher(count);
-     
-        if (key == 0){
-            if(pressedButton1() == 1){
-                TurningOnState();
+        if (pressedButton1() == 1) {  
+            if (currentLed != -1) {
+                ledOff(currentLed);
             }
-            else if(pressedButton2() == 1){
-                TurningOffState();
 
+            currentLed++;          
+            if (currentLed >= 6) { 
+                currentLed = 0;    
             }
-        }
-        else if(key == 1){
-            if(pressedButton1() == 1){
-                TurningOffState();
 
-            }
-            else if(pressedButton2() == 1){
-                TurningOnState();
-
-            }
+            ledOn(currentLed);
+            ledState = 1;
+            speedIndex = 0;
+            delayValue = 0;
         }
 
+        if (pressedButton2() == 1) {  
+            if (currentLed != -1) {
+                ledOff(currentLed);
+            }
+
+            currentLed--;          
+            if (currentLed < 0) { 
+                currentLed = 5;    
+            }
+
+            ledOn(currentLed);
+            ledState = 1;
+            speedIndex = 0;
+            delayValue = 0;
+        }
+
+    if (pressedButton3() == 1) {
+        speedIndex++;
+        if (speedIndex > 4) speedIndex = 0;  
+
+        delayValue = changeSpeed(speedIndex);
+    }
+
+
+    if (currentLed != -1) {
+        if (speedIndex == 0) {
+            ledOn(currentLed);
+            ledState = 1;
+        } else {
+            blinkLed(currentLed, &ledState);
+
+            for (volatile int i = 0; i < delayValue; i++){}
+        }
+    }
     }
 }
