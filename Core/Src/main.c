@@ -2,12 +2,14 @@
 #include "init_LB2.h"
 #include "init_LB1.h"
 
+
+
 /* ------------------- Константы ------------------- */
 
 #define LED_COUNT           6U
 #define BTN_DEBOUNCE_MS     100U      // антидребезг
-#define PRESS_2S_MS         2000U     // граница 2 секунды
-#define PRESS_4S_MS         4000U     // для 3-й функции, позже
+#define PRESS_2S_MS         2000U     // граница ~2 секунд
+#define PRESS_4S_MS         4000U     // граница ~4 секунд
 
 /* Частоты мигания:
  * 0: 0.3 Гц  → T ≈ 3.33 c → T/2 ≈ 1667 мс
@@ -23,19 +25,19 @@ volatile uint32_t g_ms = 0;
 
 /* События от EXTI по кнопке PD2 */
 volatile uint32_t g_btn_last_irq_ms = 0;
-volatile uint8_t  g_btn_press_event  = 0;   // фронт нажатия (0->1)
-volatile uint8_t  g_btn_release_event = 0;  // фронт отпускания (1->0)
+volatile uint8_t  g_btn_press_event   = 0;   // фронт нажатия (0->1)
+volatile uint8_t  g_btn_release_event = 0;   // фронт отпускания (1->0)
 
 /* Состояние нажатия */
 volatile uint8_t  g_btn_is_pressed = 0;
 volatile uint32_t g_btn_press_start_ms = 0;
 
-/* Светодиоды */
-int currentLed = -1;            // 0..5, -1 = ещё не выбран
-uint8_t blinkModeEnabled = 1;   // пока всегда мигаем (3-ю функцию добавим позже)
-uint8_t blinkFreqIndex = 0;     // 0..2
-uint8_t blinkLedIsOn = 0;       // 0=выкл, 1=горит
-uint32_t lastBlinkTime_ms = 0;  // время последнего переключения
+/* Светодиоды и режимы */
+int      currentLed       = -1;  // 0..5, -1 = ещё не выбран
+uint8_t  blinkModeEnabled = 1;   // 1 = мигает, 0 = простое свечение
+uint8_t  blinkFreqIndex   = 0;   // 0..2
+uint8_t  blinkLedIsOn     = 0;   // 0 = выкл, 1 = горит
+uint32_t lastBlinkTime_ms = 0;   // время последнего переключения
 
 /* ------------------- SysTick ------------------- */
 
@@ -96,8 +98,8 @@ void LED_Next(void)
     }
 
     LED_On_Index(currentLed);
-    blinkLedIsOn = 1;
-    lastBlinkTime_ms = g_ms;      // старт отсчёта мигания для нового светодиода
+    blinkLedIsOn     = 1;
+    lastBlinkTime_ms = g_ms;   // начальная точка для мигания
 }
 
 /* ------------------- EXTI2 (PD2, pull-down) ------------------- */
@@ -114,10 +116,7 @@ void EXTI2_IRQHandler(void)
         {
             g_btn_last_irq_ms = now;
 
-            /* Смотрим текущее состояние PD2:
-             * 0 → отпущена, 1 → нажата.
-             * Pull-down: в покое 0, при нажатии 1.
-             */
+            /* Pull-down: 0 в покое, 1 при нажатии */
             if (READ_BIT(GPIOD->IDR, GPIO_IDR_IDR_2) != 0U)
             {
                 /* фронт 0->1: кнопку НАЖАЛИ */
@@ -179,14 +178,14 @@ void EXTI_Init_PD2(void)
                SYSCFG_EXTICR1_EXTI2,
                SYSCFG_EXTICR1_EXTI2_PD);
 
-    /* Линия 2 не маскирована */
+    /* Маску не закрываем */
     SET_BIT(EXTI->IMR, EXTI_IMR_MR2);
 
-    /* Срабатывание по обоим фронтам: 0->1 и 1->0 */
-    SET_BIT(EXTI->RTSR, EXTI_RTSR_TR2);  // rising
-    SET_BIT(EXTI->FTSR, EXTI_FTSR_TR2);  // falling
+    /* Оба фронта: 0->1 и 1->0 */
+    SET_BIT(EXTI->RTSR, EXTI_RTSR_TR2);
+    SET_BIT(EXTI->FTSR, EXTI_FTSR_TR2);
 
-    /* Очистить возможный старый флаг */
+    /* Сброс флага */
     SET_BIT(EXTI->PR, EXTI_PR_PR2);
 
     /* Разрешаем прерывание EXTI2 в NVIC */
@@ -195,10 +194,8 @@ void EXTI_Init_PD2(void)
 
 void SysTick_Init_1ms(void)
 {
-    /* Обновляем SystemCoreClock на всякий случай */
     SystemCoreClockUpdate();
 
-    /* Останавливаем SysTick */
     CLEAR_BIT(SysTick->CTRL, SysTick_CTRL_ENABLE_Msk);
 
     uint32_t reload = SystemCoreClock / 1000U - 1U;
@@ -206,27 +203,26 @@ void SysTick_Init_1ms(void)
     WRITE_REG(SysTick->LOAD, reload);
     WRITE_REG(SysTick->VAL, 0U);
 
-    /* Источник – такт ядра, прерывания включены, таймер включен */
     SET_BIT(SysTick->CTRL, SysTick_CTRL_CLKSOURCE_Msk);
     SET_BIT(SysTick->CTRL, SysTick_CTRL_TICKINT_Msk);
     SET_BIT(SysTick->CTRL, SysTick_CTRL_ENABLE_Msk);
 }
 
-/* ------------------- ОБРАБОТКА КНОПКИ (1-я + 2-я функции) ------------------- */
+/* ------------------- ОБРАБОТКА КНОПКИ (3 функции) ------------------- */
 
 void Button_Process(void)
 {
     uint32_t now = g_ms;
 
-    /* Событие: кнопку нажали */
+    /* Нажали */
     if (g_btn_press_event)
     {
-        g_btn_press_event = 0U;
-        g_btn_is_pressed = 1U;
+        g_btn_press_event   = 0U;
+        g_btn_is_pressed    = 1U;
         g_btn_press_start_ms = now;
     }
 
-    /* Событие: кнопку отпустили */
+    /* Отпустили */
     if (g_btn_release_event)
     {
         g_btn_release_event = 0U;
@@ -239,41 +235,68 @@ void Button_Process(void)
 
             if (press_time < PRESS_2S_MS)
             {
-                /* 1-я функция: кратковременное нажатие → следующий светодиод */
+                /* 1-я функция: короткое нажатие */
                 LED_Next();
             }
             else if (press_time < PRESS_4S_MS)
             {
-                /* 2-я функция: удержание около 2 секунд → смена частоты мигания */
+                /* 2-я функция: удержание ~2 секунд → смена частоты
+                   Работает только в режиме мигания */
                 if (blinkModeEnabled)
                 {
                     blinkFreqIndex++;
                     if (blinkFreqIndex >= 3)
                         blinkFreqIndex = 0;
 
-                    /* Чтобы смена частоты не давала "скачок" по фазе */
                     lastBlinkTime_ms = now;
                 }
             }
             else
             {
-                /* Здесь будет 3-я функция (4 секунды), пока ничего не делаем */
+                /* 3-я функция: удержание ~4 секунд → смена режима мигания/свечения */
+
+                if (blinkModeEnabled)
+                {
+                    /* Переход ИЗ режима мигания В режим простого свечения */
+                    blinkModeEnabled = 0;
+
+                    LED_AllOff();
+                    if (currentLed >= 0)
+                    {
+                        LED_On_Index(currentLed);  // просто горит
+                        blinkLedIsOn = 1;
+                    }
+                }
+                else
+                {
+                    /* Переход ИЗ режима свечения В режим мигания */
+                    blinkModeEnabled = 1;
+
+                    /* Оставим текущий светодиод включённым,
+                       мигание начнётся с инверсии этого состояния */
+                    if (currentLed >= 0)
+                    {
+                        LED_On_Index(currentLed);
+                        blinkLedIsOn     = 1;
+                        lastBlinkTime_ms = now;
+                    }
+                }
             }
         }
     }
 }
 
-/* ------------------- МИГАНИЕ (только если включен режим мигания) ------------------- */
+/* ------------------- МИГАНИЕ ------------------- */
 
 void Blink_Process(void)
 {
     if (!blinkModeEnabled)
-        return;
+        return;           // в режиме свечения не мигаем
 
     if (currentLed < 0)
-        return;  // ещё ни один светодиод не выбран
+        return;           // ещё не выбран светодиод
 
-    uint32_t now = g_ms;
+    uint32_t now      = g_ms;
     uint32_t interval = g_blinkHalfPeriods[blinkFreqIndex];
 
     if ((now - lastBlinkTime_ms) >= interval)
@@ -304,7 +327,7 @@ int main(void)
 
     while (1)
     {
-        Button_Process();  // обрабатываем 1-ю и 2-ю функции по кнопке
-        Blink_Process();   // мигаем с текущей частотой
+        Button_Process();  // 1-я, 2-я, 3-я функции по кнопке
+        Blink_Process();   // мигание, если режим мигания
     }
 }
