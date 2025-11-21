@@ -15,19 +15,19 @@ void ITR_Init(void){
 void GPIO_Init_CMSIS_LB2(void){
     SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOCEN | RCC_AHB1ENR_GPIOAEN | RCC_AHB1ENR_GPIOBEN);
 
-    SET_BIT(GPIOC->MODER, GPIO_MODER_MODER9_1);        //Настройка пина PC9 на вывод, на альтернативный режим
-    SET_BIT(GPIOC->OSPEEDR,GPIO_OSPEEDER_OSPEEDR9);  //Настройка скорости работы вывода PC, регистр OSPEEDR
+    SET_BIT(GPIOC->MODER, GPIO_MODER_MODER9_1);     
+    SET_BIT(GPIOC->OSPEEDR,GPIO_OSPEEDER_OSPEEDR9);  
     MODIFY_REG(GPIOC->AFR[1], GPIO_AFRH_AFSEL9_Msk, 0x00UL);     
     
 
-    SET_BIT(GPIOA->MODER, GPIO_MODER_MODER8_1);        //Настройка пина PC9 на вывод, на альтернативный режим
-    SET_BIT(GPIOC->OSPEEDR,GPIO_OSPEEDER_OSPEEDR8);  //Настройка скорости работы вывода PC, регистр OSPEEDR
+    SET_BIT(GPIOA->MODER, GPIO_MODER_MODER8_1);      
+    SET_BIT(GPIOC->OSPEEDR,GPIO_OSPEEDER_OSPEEDR8);  
     CLEAR_BIT(GPIOA->AFR[1], GPIO_AFRH_AFSEL8);  
 
-    SET_BIT     (GPIOB->MODER,      GPIO_MODER_MODER7_0);          //Настройка пина PF13 на вывод, регистр MODER
-    CLEAR_BIT   (GPIOB->OTYPER,     GPIO_OTYPER_OT7);              //Настройка режима работы выxода на push-pull, регистр OTYPER
-    SET_BIT     (GPIOB->OSPEEDR,    GPIO_OSPEEDER_OSPEEDR7_0);     //Настройка скорости работы вывода PF13, регистр OSPEEDR
-    SET_BIT     (GPIOB->BSRR,       GPIO_BSRR_BR7);                //Предварительное выключение светодиода, регистр BSR, бит BR13
+    SET_BIT     (GPIOB->MODER,      GPIO_MODER_MODER7_0);        
+    CLEAR_BIT   (GPIOB->OTYPER,     GPIO_OTYPER_OT7);            
+    SET_BIT     (GPIOB->OSPEEDR,    GPIO_OSPEEDER_OSPEEDR7_0);   
+    SET_BIT     (GPIOB->BSRR,       GPIO_BSRR_BR7);              
 
 
 }
