@@ -1,0 +1,1251 @@
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"init_LB1_CMSIS.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Core/Src/init_LB1_CMSIS.c"
+  20              		.section	.text.GPIO_Init_CMSIS_LB1,"ax",%progbits
+  21              		.align	1
+  22              		.global	GPIO_Init_CMSIS_LB1
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	GPIO_Init_CMSIS_LB1:
+  28              	.LFB130:
+   1:Core/Src/init_LB1_CMSIS.c **** #include "../Inc/init_LB1_CMSIS.h"
+   2:Core/Src/init_LB1_CMSIS.c **** 
+   3:Core/Src/init_LB1_CMSIS.c **** void GPIO_Init_CMSIS_LB1(void){
+  29              		.loc 1 3 31 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+   4:Core/Src/init_LB1_CMSIS.c **** 
+   5:Core/Src/init_LB1_CMSIS.c ****     SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIODEN | RCC_AHB1ENR_GPIOGEN | RCC_AHB1ENR_GPIOEEN | RCC_AHB
+  34              		.loc 1 5 5 view .LVU1
+  35 0000 334A     		ldr	r2, .L2
+  36 0002 136B     		ldr	r3, [r2, #48]
+  37 0004 43F07A03 		orr	r3, r3, #122
+  38 0008 1363     		str	r3, [r2, #48]
+   6:Core/Src/init_LB1_CMSIS.c **** 
+   7:Core/Src/init_LB1_CMSIS.c ****     SET_BIT     (GPIOF->MODER,      GPIO_MODER_MODER13_0);          //Настройка пина P
+  39              		.loc 1 7 5 view .LVU2
+  40 000a 324B     		ldr	r3, .L2+4
+  41 000c 1A68     		ldr	r2, [r3]
+  42 000e 42F08062 		orr	r2, r2, #67108864
+  43 0012 1A60     		str	r2, [r3]
+   8:Core/Src/init_LB1_CMSIS.c ****     CLEAR_BIT   (GPIOF->OTYPER,     GPIO_OTYPER_OT13);              //Настройка режим
+  44              		.loc 1 8 5 view .LVU3
+  45 0014 5A68     		ldr	r2, [r3, #4]
+  46 0016 22F40052 		bic	r2, r2, #8192
+  47 001a 5A60     		str	r2, [r3, #4]
+   9:Core/Src/init_LB1_CMSIS.c ****     SET_BIT     (GPIOF->OSPEEDR,    GPIO_OSPEEDER_OSPEEDR13_0);     //Настройка скоро
+  48              		.loc 1 9 5 view .LVU4
+  49 001c 9A68     		ldr	r2, [r3, #8]
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 2
+
+
+  50 001e 42F08062 		orr	r2, r2, #67108864
+  51 0022 9A60     		str	r2, [r3, #8]
+  10:Core/Src/init_LB1_CMSIS.c ****     SET_BIT     (GPIOF->BSRR,       GPIO_BSRR_BR13);                //Предварительно�
+  52              		.loc 1 10 5 view .LVU5
+  53 0024 9A69     		ldr	r2, [r3, #24]
+  54 0026 42F00052 		orr	r2, r2, #536870912
+  55 002a 9A61     		str	r2, [r3, #24]
+  11:Core/Src/init_LB1_CMSIS.c **** 
+  12:Core/Src/init_LB1_CMSIS.c ****     SET_BIT     (GPIOE->MODER,      GPIO_MODER_MODER9_0);          //Настройка пина PE
+  56              		.loc 1 12 5 view .LVU6
+  57 002c 2A4A     		ldr	r2, .L2+8
+  58 002e 1168     		ldr	r1, [r2]
+  59 0030 41F48021 		orr	r1, r1, #262144
+  60 0034 1160     		str	r1, [r2]
+  13:Core/Src/init_LB1_CMSIS.c ****     CLEAR_BIT   (GPIOE->OTYPER,     GPIO_OTYPER_OT9);              //Настройка режим�
+  61              		.loc 1 13 5 view .LVU7
+  62 0036 5168     		ldr	r1, [r2, #4]
+  63 0038 21F40071 		bic	r1, r1, #512
+  64 003c 5160     		str	r1, [r2, #4]
+  14:Core/Src/init_LB1_CMSIS.c ****     SET_BIT     (GPIOE->OSPEEDR,    GPIO_OSPEEDER_OSPEEDR9_0);     //Настройка скоро�
+  65              		.loc 1 14 5 view .LVU8
+  66 003e 9168     		ldr	r1, [r2, #8]
+  67 0040 41F48021 		orr	r1, r1, #262144
+  68 0044 9160     		str	r1, [r2, #8]
+  15:Core/Src/init_LB1_CMSIS.c ****     SET_BIT     (GPIOE->BSRR,       GPIO_BSRR_BR9);                //Предварительное
+  69              		.loc 1 15 5 view .LVU9
+  70 0046 9169     		ldr	r1, [r2, #24]
+  71 0048 41F00071 		orr	r1, r1, #33554432
+  72 004c 9161     		str	r1, [r2, #24]
+  16:Core/Src/init_LB1_CMSIS.c **** 
+  17:Core/Src/init_LB1_CMSIS.c ****     SET_BIT     (GPIOE->MODER,      GPIO_MODER_MODER11_0);          //Настройка пина P
+  73              		.loc 1 17 5 view .LVU10
+  74 004e 1168     		ldr	r1, [r2]
+  75 0050 41F48001 		orr	r1, r1, #4194304
+  76 0054 1160     		str	r1, [r2]
+  18:Core/Src/init_LB1_CMSIS.c ****     CLEAR_BIT   (GPIOE->OTYPER,     GPIO_OTYPER_OT11);              //Настройка режим
+  77              		.loc 1 18 5 view .LVU11
+  78 0056 5168     		ldr	r1, [r2, #4]
+  79 0058 21F40061 		bic	r1, r1, #2048
+  80 005c 5160     		str	r1, [r2, #4]
+  19:Core/Src/init_LB1_CMSIS.c ****     SET_BIT     (GPIOE->OSPEEDR,    GPIO_OSPEEDER_OSPEEDR11_0);     //Настройка скоро
+  81              		.loc 1 19 5 view .LVU12
+  82 005e 9168     		ldr	r1, [r2, #8]
+  83 0060 41F48001 		orr	r1, r1, #4194304
+  84 0064 9160     		str	r1, [r2, #8]
+  20:Core/Src/init_LB1_CMSIS.c ****     SET_BIT     (GPIOE->BSRR,       GPIO_BSRR_BR11);                //Предварительно�
+  85              		.loc 1 20 5 view .LVU13
+  86 0066 9169     		ldr	r1, [r2, #24]
+  87 0068 41F00061 		orr	r1, r1, #134217728
+  88 006c 9161     		str	r1, [r2, #24]
+  21:Core/Src/init_LB1_CMSIS.c **** 
+  22:Core/Src/init_LB1_CMSIS.c ****     SET_BIT     (GPIOF->MODER,      GPIO_MODER_MODER14_0);          //Настройка пина P
+  89              		.loc 1 22 5 view .LVU14
+  90 006e 1968     		ldr	r1, [r3]
+  91 0070 41F08051 		orr	r1, r1, #268435456
+  92 0074 1960     		str	r1, [r3]
+  23:Core/Src/init_LB1_CMSIS.c ****     CLEAR_BIT   (GPIOF->OTYPER,     GPIO_OTYPER_OT14);              //Настройка режим
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 3
+
+
+  93              		.loc 1 23 5 view .LVU15
+  94 0076 5968     		ldr	r1, [r3, #4]
+  95 0078 21F48041 		bic	r1, r1, #16384
+  96 007c 5960     		str	r1, [r3, #4]
+  24:Core/Src/init_LB1_CMSIS.c ****     SET_BIT     (GPIOF->OSPEEDR,    GPIO_OSPEEDER_OSPEEDR14_0);     //Настройка скоро
+  97              		.loc 1 24 5 view .LVU16
+  98 007e 9968     		ldr	r1, [r3, #8]
+  99 0080 41F08051 		orr	r1, r1, #268435456
+ 100 0084 9960     		str	r1, [r3, #8]
+  25:Core/Src/init_LB1_CMSIS.c ****     SET_BIT     (GPIOF->BSRR,       GPIO_BSRR_BR14);                //Предварительно�
+ 101              		.loc 1 25 5 view .LVU17
+ 102 0086 9969     		ldr	r1, [r3, #24]
+ 103 0088 41F08041 		orr	r1, r1, #1073741824
+ 104 008c 9961     		str	r1, [r3, #24]
+  26:Core/Src/init_LB1_CMSIS.c **** 
+  27:Core/Src/init_LB1_CMSIS.c ****     SET_BIT     (GPIOE->MODER,      GPIO_MODER_MODER13_0);          //Настройка пина P
+ 105              		.loc 1 27 5 view .LVU18
+ 106 008e 1168     		ldr	r1, [r2]
+ 107 0090 41F08061 		orr	r1, r1, #67108864
+ 108 0094 1160     		str	r1, [r2]
+  28:Core/Src/init_LB1_CMSIS.c ****     CLEAR_BIT   (GPIOE->OTYPER,     GPIO_OTYPER_OT13);              //Настройка режим
+ 109              		.loc 1 28 5 view .LVU19
+ 110 0096 5168     		ldr	r1, [r2, #4]
+ 111 0098 21F40051 		bic	r1, r1, #8192
+ 112 009c 5160     		str	r1, [r2, #4]
+  29:Core/Src/init_LB1_CMSIS.c ****     SET_BIT     (GPIOE->OSPEEDR,    GPIO_OSPEEDER_OSPEEDR13_0);     //Настройка скоро
+ 113              		.loc 1 29 5 view .LVU20
+ 114 009e 9168     		ldr	r1, [r2, #8]
+ 115 00a0 41F08061 		orr	r1, r1, #67108864
+ 116 00a4 9160     		str	r1, [r2, #8]
+  30:Core/Src/init_LB1_CMSIS.c ****     SET_BIT     (GPIOE->BSRR,       GPIO_BSRR_BR13);                //Предварительно�
+ 117              		.loc 1 30 5 view .LVU21
+ 118 00a6 9169     		ldr	r1, [r2, #24]
+ 119 00a8 41F00051 		orr	r1, r1, #536870912
+ 120 00ac 9161     		str	r1, [r2, #24]
+  31:Core/Src/init_LB1_CMSIS.c **** 
+  32:Core/Src/init_LB1_CMSIS.c ****     SET_BIT     (GPIOF->MODER,      GPIO_MODER_MODER15_0);          //Настройка пина P
+ 121              		.loc 1 32 5 view .LVU22
+ 122 00ae 1A68     		ldr	r2, [r3]
+ 123 00b0 42F08042 		orr	r2, r2, #1073741824
+ 124 00b4 1A60     		str	r2, [r3]
+  33:Core/Src/init_LB1_CMSIS.c ****     CLEAR_BIT   (GPIOF->OTYPER,     GPIO_OTYPER_OT15);              //Настройка режим
+ 125              		.loc 1 33 5 view .LVU23
+ 126 00b6 5A68     		ldr	r2, [r3, #4]
+ 127 00b8 22F40042 		bic	r2, r2, #32768
+ 128 00bc 5A60     		str	r2, [r3, #4]
+  34:Core/Src/init_LB1_CMSIS.c ****     SET_BIT     (GPIOF->OSPEEDR,    GPIO_OSPEEDER_OSPEEDR15_0);     //Настройка скоро
+ 129              		.loc 1 34 5 view .LVU24
+ 130 00be 9A68     		ldr	r2, [r3, #8]
+ 131 00c0 42F08042 		orr	r2, r2, #1073741824
+ 132 00c4 9A60     		str	r2, [r3, #8]
+  35:Core/Src/init_LB1_CMSIS.c ****     SET_BIT     (GPIOF->BSRR,       GPIO_BSRR_BR15);                //Предварительно�
+ 133              		.loc 1 35 5 view .LVU25
+ 134 00c6 9A69     		ldr	r2, [r3, #24]
+ 135 00c8 42F00042 		orr	r2, r2, #-2147483648
+ 136 00cc 9A61     		str	r2, [r3, #24]
+  36:Core/Src/init_LB1_CMSIS.c **** 
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 4
+
+
+  37:Core/Src/init_LB1_CMSIS.c **** }
+ 137              		.loc 1 37 1 is_stmt 0 view .LVU26
+ 138 00ce 7047     		bx	lr
+ 139              	.L3:
+ 140              		.align	2
+ 141              	.L2:
+ 142 00d0 00380240 		.word	1073887232
+ 143 00d4 00140240 		.word	1073878016
+ 144 00d8 00100240 		.word	1073876992
+ 145              		.cfi_endproc
+ 146              	.LFE130:
+ 148              		.section	.text.pressedButton1,"ax",%progbits
+ 149              		.align	1
+ 150              		.global	pressedButton1
+ 151              		.syntax unified
+ 152              		.thumb
+ 153              		.thumb_func
+ 155              	pressedButton1:
+ 156              	.LFB131:
+  38:Core/Src/init_LB1_CMSIS.c **** 
+  39:Core/Src/init_LB1_CMSIS.c **** 
+  40:Core/Src/init_LB1_CMSIS.c **** int pressedButton1(void){
+ 157              		.loc 1 40 25 is_stmt 1 view -0
+ 158              		.cfi_startproc
+ 159              		@ args = 0, pretend = 0, frame = 0
+ 160              		@ frame_needed = 0, uses_anonymous_args = 0
+ 161              		@ link register save eliminated.
+  41:Core/Src/init_LB1_CMSIS.c ****     if(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) == 0){
+ 162              		.loc 1 41 5 view .LVU28
+ 163              		.loc 1 41 8 is_stmt 0 view .LVU29
+ 164 0000 0D4B     		ldr	r3, .L11
+ 165 0002 1B69     		ldr	r3, [r3, #16]
+ 166              		.loc 1 41 7 view .LVU30
+ 167 0004 13F0040F 		tst	r3, #4
+ 168 0008 0DD0     		beq	.L9
+  42:Core/Src/init_LB1_CMSIS.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+  43:Core/Src/init_LB1_CMSIS.c ****         if(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) == 0){
+  44:Core/Src/init_LB1_CMSIS.c ****             while(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) == 0){
+  45:Core/Src/init_LB1_CMSIS.c ****             }
+  46:Core/Src/init_LB1_CMSIS.c ****             return 1;
+  47:Core/Src/init_LB1_CMSIS.c ****         }
+  48:Core/Src/init_LB1_CMSIS.c **** 
+  49:Core/Src/init_LB1_CMSIS.c ****     }
+  50:Core/Src/init_LB1_CMSIS.c ****     return 0;
+ 169              		.loc 1 50 12 view .LVU31
+ 170 000a 0020     		movs	r0, #0
+ 171 000c 7047     		bx	lr
+ 172              	.LVL0:
+ 173              	.L7:
+ 174              	.LBB2:
+  42:Core/Src/init_LB1_CMSIS.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 175              		.loc 1 42 46 is_stmt 1 discriminator 3 view .LVU32
+  42:Core/Src/init_LB1_CMSIS.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 176              		.loc 1 42 42 discriminator 3 view .LVU33
+ 177 000e 0133     		adds	r3, r3, #1
+ 178              	.LVL1:
+ 179              	.L5:
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 5
+
+
+  42:Core/Src/init_LB1_CMSIS.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 180              		.loc 1 42 26 discriminator 1 view .LVU34
+ 181 0010 40F6AB52 		movw	r2, #3499
+ 182 0014 9342     		cmp	r3, r2
+ 183 0016 FADD     		ble	.L7
+ 184              	.LBE2:
+  43:Core/Src/init_LB1_CMSIS.c ****             while(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) == 0){
+ 185              		.loc 1 43 9 view .LVU35
+  43:Core/Src/init_LB1_CMSIS.c ****             while(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) == 0){
+ 186              		.loc 1 43 12 is_stmt 0 view .LVU36
+ 187 0018 074B     		ldr	r3, .L11
+ 188              	.LVL2:
+  43:Core/Src/init_LB1_CMSIS.c ****             while(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) == 0){
+ 189              		.loc 1 43 12 view .LVU37
+ 190 001a 1B69     		ldr	r3, [r3, #16]
+  43:Core/Src/init_LB1_CMSIS.c ****             while(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) == 0){
+ 191              		.loc 1 43 11 view .LVU38
+ 192 001c 13F0040F 		tst	r3, #4
+ 193 0020 03D0     		beq	.L8
+ 194              		.loc 1 50 12 view .LVU39
+ 195 0022 0020     		movs	r0, #0
+  51:Core/Src/init_LB1_CMSIS.c **** }
+ 196              		.loc 1 51 1 view .LVU40
+ 197 0024 7047     		bx	lr
+ 198              	.LVL3:
+ 199              	.L9:
+ 200              	.LBB3:
+  42:Core/Src/init_LB1_CMSIS.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 201              		.loc 1 42 17 view .LVU41
+ 202 0026 0023     		movs	r3, #0
+ 203 0028 F2E7     		b	.L5
+ 204              	.LVL4:
+ 205              	.L8:
+  42:Core/Src/init_LB1_CMSIS.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 206              		.loc 1 42 17 view .LVU42
+ 207              	.LBE3:
+  45:Core/Src/init_LB1_CMSIS.c ****             return 1;
+ 208              		.loc 1 45 13 is_stmt 1 view .LVU43
+  44:Core/Src/init_LB1_CMSIS.c ****             }
+ 209              		.loc 1 44 57 discriminator 1 view .LVU44
+  44:Core/Src/init_LB1_CMSIS.c ****             }
+ 210              		.loc 1 44 19 is_stmt 0 discriminator 1 view .LVU45
+ 211 002a 034B     		ldr	r3, .L11
+ 212 002c 1B69     		ldr	r3, [r3, #16]
+  44:Core/Src/init_LB1_CMSIS.c ****             }
+ 213              		.loc 1 44 57 discriminator 1 view .LVU46
+ 214 002e 13F0040F 		tst	r3, #4
+ 215 0032 FAD0     		beq	.L8
+  46:Core/Src/init_LB1_CMSIS.c ****         }
+ 216              		.loc 1 46 20 view .LVU47
+ 217 0034 0120     		movs	r0, #1
+ 218 0036 7047     		bx	lr
+ 219              	.L12:
+ 220              		.align	2
+ 221              	.L11:
+ 222 0038 000C0240 		.word	1073875968
+ 223              		.cfi_endproc
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 6
+
+
+ 224              	.LFE131:
+ 226              		.section	.text.pressedButton2,"ax",%progbits
+ 227              		.align	1
+ 228              		.global	pressedButton2
+ 229              		.syntax unified
+ 230              		.thumb
+ 231              		.thumb_func
+ 233              	pressedButton2:
+ 234              	.LFB132:
+  52:Core/Src/init_LB1_CMSIS.c **** 
+  53:Core/Src/init_LB1_CMSIS.c **** int pressedButton2(void){
+ 235              		.loc 1 53 25 is_stmt 1 view -0
+ 236              		.cfi_startproc
+ 237              		@ args = 0, pretend = 0, frame = 0
+ 238              		@ frame_needed = 0, uses_anonymous_args = 0
+ 239              		@ link register save eliminated.
+  54:Core/Src/init_LB1_CMSIS.c ****     if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){
+ 240              		.loc 1 54 5 view .LVU49
+ 241              		.loc 1 54 8 is_stmt 0 view .LVU50
+ 242 0000 0D4B     		ldr	r3, .L20
+ 243 0002 1B69     		ldr	r3, [r3, #16]
+ 244              		.loc 1 54 7 view .LVU51
+ 245 0004 13F0040F 		tst	r3, #4
+ 246 0008 0DD0     		beq	.L18
+  55:Core/Src/init_LB1_CMSIS.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+  56:Core/Src/init_LB1_CMSIS.c ****         if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){
+  57:Core/Src/init_LB1_CMSIS.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){
+  58:Core/Src/init_LB1_CMSIS.c ****             }
+  59:Core/Src/init_LB1_CMSIS.c ****             return 1;
+  60:Core/Src/init_LB1_CMSIS.c ****         }
+  61:Core/Src/init_LB1_CMSIS.c **** 
+  62:Core/Src/init_LB1_CMSIS.c ****     }
+  63:Core/Src/init_LB1_CMSIS.c ****     return 0;
+ 247              		.loc 1 63 12 view .LVU52
+ 248 000a 0020     		movs	r0, #0
+ 249 000c 7047     		bx	lr
+ 250              	.LVL5:
+ 251              	.L16:
+ 252              	.LBB4:
+  55:Core/Src/init_LB1_CMSIS.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 253              		.loc 1 55 46 is_stmt 1 discriminator 3 view .LVU53
+  55:Core/Src/init_LB1_CMSIS.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 254              		.loc 1 55 42 discriminator 3 view .LVU54
+ 255 000e 0133     		adds	r3, r3, #1
+ 256              	.LVL6:
+ 257              	.L14:
+  55:Core/Src/init_LB1_CMSIS.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 258              		.loc 1 55 26 discriminator 1 view .LVU55
+ 259 0010 40F6AB52 		movw	r2, #3499
+ 260 0014 9342     		cmp	r3, r2
+ 261 0016 FADD     		ble	.L16
+ 262              	.LBE4:
+  56:Core/Src/init_LB1_CMSIS.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){
+ 263              		.loc 1 56 9 view .LVU56
+  56:Core/Src/init_LB1_CMSIS.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){
+ 264              		.loc 1 56 12 is_stmt 0 view .LVU57
+ 265 0018 074B     		ldr	r3, .L20
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 7
+
+
+ 266              	.LVL7:
+  56:Core/Src/init_LB1_CMSIS.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){
+ 267              		.loc 1 56 12 view .LVU58
+ 268 001a 1B69     		ldr	r3, [r3, #16]
+  56:Core/Src/init_LB1_CMSIS.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){
+ 269              		.loc 1 56 11 view .LVU59
+ 270 001c 13F0040F 		tst	r3, #4
+ 271 0020 03D0     		beq	.L17
+ 272              		.loc 1 63 12 view .LVU60
+ 273 0022 0020     		movs	r0, #0
+  64:Core/Src/init_LB1_CMSIS.c **** }
+ 274              		.loc 1 64 1 view .LVU61
+ 275 0024 7047     		bx	lr
+ 276              	.LVL8:
+ 277              	.L18:
+ 278              	.LBB5:
+  55:Core/Src/init_LB1_CMSIS.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 279              		.loc 1 55 17 view .LVU62
+ 280 0026 0023     		movs	r3, #0
+ 281 0028 F2E7     		b	.L14
+ 282              	.LVL9:
+ 283              	.L17:
+  55:Core/Src/init_LB1_CMSIS.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 284              		.loc 1 55 17 view .LVU63
+ 285              	.LBE5:
+  58:Core/Src/init_LB1_CMSIS.c ****             return 1;
+ 286              		.loc 1 58 13 is_stmt 1 view .LVU64
+  57:Core/Src/init_LB1_CMSIS.c ****             }
+ 287              		.loc 1 57 57 discriminator 1 view .LVU65
+  57:Core/Src/init_LB1_CMSIS.c ****             }
+ 288              		.loc 1 57 19 is_stmt 0 discriminator 1 view .LVU66
+ 289 002a 034B     		ldr	r3, .L20
+ 290 002c 1B69     		ldr	r3, [r3, #16]
+  57:Core/Src/init_LB1_CMSIS.c ****             }
+ 291              		.loc 1 57 57 discriminator 1 view .LVU67
+ 292 002e 13F0040F 		tst	r3, #4
+ 293 0032 FAD0     		beq	.L17
+  59:Core/Src/init_LB1_CMSIS.c ****         }
+ 294              		.loc 1 59 20 view .LVU68
+ 295 0034 0120     		movs	r0, #1
+ 296 0036 7047     		bx	lr
+ 297              	.L21:
+ 298              		.align	2
+ 299              	.L20:
+ 300 0038 00180240 		.word	1073879040
+ 301              		.cfi_endproc
+ 302              	.LFE132:
+ 304              		.section	.text.pressedButton3,"ax",%progbits
+ 305              		.align	1
+ 306              		.global	pressedButton3
+ 307              		.syntax unified
+ 308              		.thumb
+ 309              		.thumb_func
+ 311              	pressedButton3:
+ 312              	.LFB133:
+  65:Core/Src/init_LB1_CMSIS.c **** 
+  66:Core/Src/init_LB1_CMSIS.c **** int pressedButton3(void){
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 8
+
+
+ 313              		.loc 1 66 25 is_stmt 1 view -0
+ 314              		.cfi_startproc
+ 315              		@ args = 0, pretend = 0, frame = 0
+ 316              		@ frame_needed = 0, uses_anonymous_args = 0
+ 317              		@ link register save eliminated.
+  67:Core/Src/init_LB1_CMSIS.c ****     if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) == 0){
+ 318              		.loc 1 67 5 view .LVU70
+ 319              		.loc 1 67 8 is_stmt 0 view .LVU71
+ 320 0000 0D4B     		ldr	r3, .L29
+ 321 0002 1B69     		ldr	r3, [r3, #16]
+ 322              		.loc 1 67 7 view .LVU72
+ 323 0004 13F0080F 		tst	r3, #8
+ 324 0008 0DD0     		beq	.L27
+  68:Core/Src/init_LB1_CMSIS.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+  69:Core/Src/init_LB1_CMSIS.c ****         if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) == 0){
+  70:Core/Src/init_LB1_CMSIS.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) == 0){
+  71:Core/Src/init_LB1_CMSIS.c ****             }
+  72:Core/Src/init_LB1_CMSIS.c ****             return 1;
+  73:Core/Src/init_LB1_CMSIS.c ****         }
+  74:Core/Src/init_LB1_CMSIS.c **** 
+  75:Core/Src/init_LB1_CMSIS.c ****     }
+  76:Core/Src/init_LB1_CMSIS.c ****     return 0;
+ 325              		.loc 1 76 12 view .LVU73
+ 326 000a 0020     		movs	r0, #0
+ 327 000c 7047     		bx	lr
+ 328              	.LVL10:
+ 329              	.L25:
+ 330              	.LBB6:
+  68:Core/Src/init_LB1_CMSIS.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 331              		.loc 1 68 46 is_stmt 1 discriminator 3 view .LVU74
+  68:Core/Src/init_LB1_CMSIS.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 332              		.loc 1 68 42 discriminator 3 view .LVU75
+ 333 000e 0133     		adds	r3, r3, #1
+ 334              	.LVL11:
+ 335              	.L23:
+  68:Core/Src/init_LB1_CMSIS.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 336              		.loc 1 68 26 discriminator 1 view .LVU76
+ 337 0010 40F6AB52 		movw	r2, #3499
+ 338 0014 9342     		cmp	r3, r2
+ 339 0016 FADD     		ble	.L25
+ 340              	.LBE6:
+  69:Core/Src/init_LB1_CMSIS.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) == 0){
+ 341              		.loc 1 69 9 view .LVU77
+  69:Core/Src/init_LB1_CMSIS.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) == 0){
+ 342              		.loc 1 69 12 is_stmt 0 view .LVU78
+ 343 0018 074B     		ldr	r3, .L29
+ 344              	.LVL12:
+  69:Core/Src/init_LB1_CMSIS.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) == 0){
+ 345              		.loc 1 69 12 view .LVU79
+ 346 001a 1B69     		ldr	r3, [r3, #16]
+  69:Core/Src/init_LB1_CMSIS.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) == 0){
+ 347              		.loc 1 69 11 view .LVU80
+ 348 001c 13F0080F 		tst	r3, #8
+ 349 0020 03D0     		beq	.L26
+ 350              		.loc 1 76 12 view .LVU81
+ 351 0022 0020     		movs	r0, #0
+  77:Core/Src/init_LB1_CMSIS.c **** }
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 9
+
+
+ 352              		.loc 1 77 1 view .LVU82
+ 353 0024 7047     		bx	lr
+ 354              	.LVL13:
+ 355              	.L27:
+ 356              	.LBB7:
+  68:Core/Src/init_LB1_CMSIS.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 357              		.loc 1 68 17 view .LVU83
+ 358 0026 0023     		movs	r3, #0
+ 359 0028 F2E7     		b	.L23
+ 360              	.LVL14:
+ 361              	.L26:
+  68:Core/Src/init_LB1_CMSIS.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 362              		.loc 1 68 17 view .LVU84
+ 363              	.LBE7:
+  71:Core/Src/init_LB1_CMSIS.c ****             return 1;
+ 364              		.loc 1 71 13 is_stmt 1 view .LVU85
+  70:Core/Src/init_LB1_CMSIS.c ****             }
+ 365              		.loc 1 70 57 discriminator 1 view .LVU86
+  70:Core/Src/init_LB1_CMSIS.c ****             }
+ 366              		.loc 1 70 19 is_stmt 0 discriminator 1 view .LVU87
+ 367 002a 034B     		ldr	r3, .L29
+ 368 002c 1B69     		ldr	r3, [r3, #16]
+  70:Core/Src/init_LB1_CMSIS.c ****             }
+ 369              		.loc 1 70 57 discriminator 1 view .LVU88
+ 370 002e 13F0080F 		tst	r3, #8
+ 371 0032 FAD0     		beq	.L26
+  72:Core/Src/init_LB1_CMSIS.c ****         }
+ 372              		.loc 1 72 20 view .LVU89
+ 373 0034 0120     		movs	r0, #1
+ 374 0036 7047     		bx	lr
+ 375              	.L30:
+ 376              		.align	2
+ 377              	.L29:
+ 378 0038 00180240 		.word	1073879040
+ 379              		.cfi_endproc
+ 380              	.LFE133:
+ 382              		.section	.text.TurningOnState,"ax",%progbits
+ 383              		.align	1
+ 384              		.global	TurningOnState
+ 385              		.syntax unified
+ 386              		.thumb
+ 387              		.thumb_func
+ 389              	TurningOnState:
+ 390              	.LFB134:
+  78:Core/Src/init_LB1_CMSIS.c **** 
+  79:Core/Src/init_LB1_CMSIS.c **** void TurningOnState(void){
+ 391              		.loc 1 79 26 is_stmt 1 view -0
+ 392              		.cfi_startproc
+ 393              		@ args = 0, pretend = 0, frame = 0
+ 394              		@ frame_needed = 0, uses_anonymous_args = 0
+ 395              		@ link register save eliminated.
+  80:Core/Src/init_LB1_CMSIS.c ****     if(READ_BIT(GPIOF->IDR , GPIO_IDR_IDR_13) == 0){
+ 396              		.loc 1 80 5 view .LVU91
+ 397              		.loc 1 80 8 is_stmt 0 view .LVU92
+ 398 0000 204B     		ldr	r3, .L38
+ 399 0002 1B69     		ldr	r3, [r3, #16]
+ 400              		.loc 1 80 7 view .LVU93
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 10
+
+
+ 401 0004 13F4005F 		tst	r3, #8192
+ 402 0008 05D1     		bne	.L32
+  81:Core/Src/init_LB1_CMSIS.c ****         SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS13);
+ 403              		.loc 1 81 9 is_stmt 1 view .LVU94
+ 404 000a 1E4A     		ldr	r2, .L38
+ 405 000c 9369     		ldr	r3, [r2, #24]
+ 406 000e 43F40053 		orr	r3, r3, #8192
+ 407 0012 9361     		str	r3, [r2, #24]
+ 408 0014 7047     		bx	lr
+ 409              	.L32:
+  82:Core/Src/init_LB1_CMSIS.c ****     }
+  83:Core/Src/init_LB1_CMSIS.c **** 
+  84:Core/Src/init_LB1_CMSIS.c ****     else if(READ_BIT(GPIOE->IDR , GPIO_IDR_IDR_9) == 0){
+ 410              		.loc 1 84 10 view .LVU95
+ 411              		.loc 1 84 13 is_stmt 0 view .LVU96
+ 412 0016 1C4B     		ldr	r3, .L38+4
+ 413 0018 1B69     		ldr	r3, [r3, #16]
+ 414              		.loc 1 84 12 view .LVU97
+ 415 001a 13F4007F 		tst	r3, #512
+ 416 001e 05D1     		bne	.L34
+  85:Core/Src/init_LB1_CMSIS.c ****         SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS9);
+ 417              		.loc 1 85 9 is_stmt 1 view .LVU98
+ 418 0020 194A     		ldr	r2, .L38+4
+ 419 0022 9369     		ldr	r3, [r2, #24]
+ 420 0024 43F40073 		orr	r3, r3, #512
+ 421 0028 9361     		str	r3, [r2, #24]
+ 422 002a 7047     		bx	lr
+ 423              	.L34:
+  86:Core/Src/init_LB1_CMSIS.c ****     }
+  87:Core/Src/init_LB1_CMSIS.c **** 
+  88:Core/Src/init_LB1_CMSIS.c ****     else if(READ_BIT(GPIOE->IDR , GPIO_IDR_IDR_11) == 0){
+ 424              		.loc 1 88 10 view .LVU99
+ 425              		.loc 1 88 13 is_stmt 0 view .LVU100
+ 426 002c 164B     		ldr	r3, .L38+4
+ 427 002e 1B69     		ldr	r3, [r3, #16]
+ 428              		.loc 1 88 12 view .LVU101
+ 429 0030 13F4006F 		tst	r3, #2048
+ 430 0034 05D1     		bne	.L35
+  89:Core/Src/init_LB1_CMSIS.c ****         SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS11);
+ 431              		.loc 1 89 9 is_stmt 1 view .LVU102
+ 432 0036 144A     		ldr	r2, .L38+4
+ 433 0038 9369     		ldr	r3, [r2, #24]
+ 434 003a 43F40063 		orr	r3, r3, #2048
+ 435 003e 9361     		str	r3, [r2, #24]
+ 436 0040 7047     		bx	lr
+ 437              	.L35:
+  90:Core/Src/init_LB1_CMSIS.c ****     }
+  91:Core/Src/init_LB1_CMSIS.c **** 
+  92:Core/Src/init_LB1_CMSIS.c ****     else if(READ_BIT(GPIOF->IDR , GPIO_IDR_IDR_14) == 0){
+ 438              		.loc 1 92 10 view .LVU103
+ 439              		.loc 1 92 13 is_stmt 0 view .LVU104
+ 440 0042 104B     		ldr	r3, .L38
+ 441 0044 1B69     		ldr	r3, [r3, #16]
+ 442              		.loc 1 92 12 view .LVU105
+ 443 0046 13F4804F 		tst	r3, #16384
+ 444 004a 05D1     		bne	.L36
+  93:Core/Src/init_LB1_CMSIS.c ****         SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS14);
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 11
+
+
+ 445              		.loc 1 93 9 is_stmt 1 view .LVU106
+ 446 004c 0D4A     		ldr	r2, .L38
+ 447 004e 9369     		ldr	r3, [r2, #24]
+ 448 0050 43F48043 		orr	r3, r3, #16384
+ 449 0054 9361     		str	r3, [r2, #24]
+ 450 0056 7047     		bx	lr
+ 451              	.L36:
+  94:Core/Src/init_LB1_CMSIS.c ****     }
+  95:Core/Src/init_LB1_CMSIS.c **** 
+  96:Core/Src/init_LB1_CMSIS.c ****     else if(READ_BIT(GPIOE->IDR , GPIO_IDR_IDR_13) == 0){
+ 452              		.loc 1 96 10 view .LVU107
+ 453              		.loc 1 96 13 is_stmt 0 view .LVU108
+ 454 0058 0B4B     		ldr	r3, .L38+4
+ 455 005a 1B69     		ldr	r3, [r3, #16]
+ 456              		.loc 1 96 12 view .LVU109
+ 457 005c 13F4005F 		tst	r3, #8192
+ 458 0060 05D1     		bne	.L37
+  97:Core/Src/init_LB1_CMSIS.c ****         SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS13);
+ 459              		.loc 1 97 9 is_stmt 1 view .LVU110
+ 460 0062 094A     		ldr	r2, .L38+4
+ 461 0064 9369     		ldr	r3, [r2, #24]
+ 462 0066 43F40053 		orr	r3, r3, #8192
+ 463 006a 9361     		str	r3, [r2, #24]
+ 464 006c 7047     		bx	lr
+ 465              	.L37:
+  98:Core/Src/init_LB1_CMSIS.c ****     }
+  99:Core/Src/init_LB1_CMSIS.c **** 
+ 100:Core/Src/init_LB1_CMSIS.c ****     else if(READ_BIT(GPIOF->IDR , GPIO_IDR_IDR_15) == 0){
+ 466              		.loc 1 100 10 view .LVU111
+ 467              		.loc 1 100 13 is_stmt 0 view .LVU112
+ 468 006e 054B     		ldr	r3, .L38
+ 469 0070 1B69     		ldr	r3, [r3, #16]
+ 470              		.loc 1 100 12 view .LVU113
+ 471 0072 13F4004F 		tst	r3, #32768
+ 472 0076 04D1     		bne	.L31
+ 101:Core/Src/init_LB1_CMSIS.c ****         SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS15);
+ 473              		.loc 1 101 9 is_stmt 1 view .LVU114
+ 474 0078 024A     		ldr	r2, .L38
+ 475 007a 9369     		ldr	r3, [r2, #24]
+ 476 007c 43F40043 		orr	r3, r3, #32768
+ 477 0080 9361     		str	r3, [r2, #24]
+ 478              	.L31:
+ 102:Core/Src/init_LB1_CMSIS.c ****     }
+ 103:Core/Src/init_LB1_CMSIS.c **** 
+ 104:Core/Src/init_LB1_CMSIS.c **** }
+ 479              		.loc 1 104 1 is_stmt 0 view .LVU115
+ 480 0082 7047     		bx	lr
+ 481              	.L39:
+ 482              		.align	2
+ 483              	.L38:
+ 484 0084 00140240 		.word	1073878016
+ 485 0088 00100240 		.word	1073876992
+ 486              		.cfi_endproc
+ 487              	.LFE134:
+ 489              		.section	.text.TurningOffState,"ax",%progbits
+ 490              		.align	1
+ 491              		.global	TurningOffState
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 12
+
+
+ 492              		.syntax unified
+ 493              		.thumb
+ 494              		.thumb_func
+ 496              	TurningOffState:
+ 497              	.LFB135:
+ 105:Core/Src/init_LB1_CMSIS.c **** 
+ 106:Core/Src/init_LB1_CMSIS.c **** void TurningOffState(){
+ 498              		.loc 1 106 23 is_stmt 1 view -0
+ 499              		.cfi_startproc
+ 500              		@ args = 0, pretend = 0, frame = 0
+ 501              		@ frame_needed = 0, uses_anonymous_args = 0
+ 502              		@ link register save eliminated.
+ 107:Core/Src/init_LB1_CMSIS.c ****     if(READ_BIT(GPIOF->IDR , GPIO_IDR_IDR_15) != 0){
+ 503              		.loc 1 107 5 view .LVU117
+ 504              		.loc 1 107 8 is_stmt 0 view .LVU118
+ 505 0000 204B     		ldr	r3, .L47
+ 506 0002 1B69     		ldr	r3, [r3, #16]
+ 507              		.loc 1 107 7 view .LVU119
+ 508 0004 13F4004F 		tst	r3, #32768
+ 509 0008 05D0     		beq	.L41
+ 108:Core/Src/init_LB1_CMSIS.c ****         SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR15);
+ 510              		.loc 1 108 9 is_stmt 1 view .LVU120
+ 511 000a 1E4A     		ldr	r2, .L47
+ 512 000c 9369     		ldr	r3, [r2, #24]
+ 513 000e 43F00043 		orr	r3, r3, #-2147483648
+ 514 0012 9361     		str	r3, [r2, #24]
+ 515 0014 7047     		bx	lr
+ 516              	.L41:
+ 109:Core/Src/init_LB1_CMSIS.c ****     }
+ 110:Core/Src/init_LB1_CMSIS.c **** 
+ 111:Core/Src/init_LB1_CMSIS.c ****     else if(READ_BIT(GPIOE->IDR , GPIO_IDR_IDR_13) != 0){
+ 517              		.loc 1 111 10 view .LVU121
+ 518              		.loc 1 111 13 is_stmt 0 view .LVU122
+ 519 0016 1C4B     		ldr	r3, .L47+4
+ 520 0018 1B69     		ldr	r3, [r3, #16]
+ 521              		.loc 1 111 12 view .LVU123
+ 522 001a 13F4005F 		tst	r3, #8192
+ 523 001e 05D0     		beq	.L43
+ 112:Core/Src/init_LB1_CMSIS.c ****         SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR13);
+ 524              		.loc 1 112 9 is_stmt 1 view .LVU124
+ 525 0020 194A     		ldr	r2, .L47+4
+ 526 0022 9369     		ldr	r3, [r2, #24]
+ 527 0024 43F00053 		orr	r3, r3, #536870912
+ 528 0028 9361     		str	r3, [r2, #24]
+ 529 002a 7047     		bx	lr
+ 530              	.L43:
+ 113:Core/Src/init_LB1_CMSIS.c ****     }
+ 114:Core/Src/init_LB1_CMSIS.c **** 
+ 115:Core/Src/init_LB1_CMSIS.c ****     else if(READ_BIT(GPIOF->IDR , GPIO_IDR_IDR_14) != 0){
+ 531              		.loc 1 115 10 view .LVU125
+ 532              		.loc 1 115 13 is_stmt 0 view .LVU126
+ 533 002c 154B     		ldr	r3, .L47
+ 534 002e 1B69     		ldr	r3, [r3, #16]
+ 535              		.loc 1 115 12 view .LVU127
+ 536 0030 13F4804F 		tst	r3, #16384
+ 537 0034 05D0     		beq	.L44
+ 116:Core/Src/init_LB1_CMSIS.c ****         SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR14);
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 13
+
+
+ 538              		.loc 1 116 9 is_stmt 1 view .LVU128
+ 539 0036 134A     		ldr	r2, .L47
+ 540 0038 9369     		ldr	r3, [r2, #24]
+ 541 003a 43F08043 		orr	r3, r3, #1073741824
+ 542 003e 9361     		str	r3, [r2, #24]
+ 543 0040 7047     		bx	lr
+ 544              	.L44:
+ 117:Core/Src/init_LB1_CMSIS.c ****     }
+ 118:Core/Src/init_LB1_CMSIS.c ****     else if(READ_BIT(GPIOE->IDR , GPIO_IDR_IDR_11) != 0){
+ 545              		.loc 1 118 10 view .LVU129
+ 546              		.loc 1 118 13 is_stmt 0 view .LVU130
+ 547 0042 114B     		ldr	r3, .L47+4
+ 548 0044 1B69     		ldr	r3, [r3, #16]
+ 549              		.loc 1 118 12 view .LVU131
+ 550 0046 13F4006F 		tst	r3, #2048
+ 551 004a 05D0     		beq	.L45
+ 119:Core/Src/init_LB1_CMSIS.c ****         SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR11);
+ 552              		.loc 1 119 9 is_stmt 1 view .LVU132
+ 553 004c 0E4A     		ldr	r2, .L47+4
+ 554 004e 9369     		ldr	r3, [r2, #24]
+ 555 0050 43F00063 		orr	r3, r3, #134217728
+ 556 0054 9361     		str	r3, [r2, #24]
+ 557 0056 7047     		bx	lr
+ 558              	.L45:
+ 120:Core/Src/init_LB1_CMSIS.c ****     }
+ 121:Core/Src/init_LB1_CMSIS.c ****     else if(READ_BIT(GPIOE->IDR , GPIO_IDR_IDR_9) != 0){
+ 559              		.loc 1 121 10 view .LVU133
+ 560              		.loc 1 121 13 is_stmt 0 view .LVU134
+ 561 0058 0B4B     		ldr	r3, .L47+4
+ 562 005a 1B69     		ldr	r3, [r3, #16]
+ 563              		.loc 1 121 12 view .LVU135
+ 564 005c 13F4007F 		tst	r3, #512
+ 565 0060 05D0     		beq	.L46
+ 122:Core/Src/init_LB1_CMSIS.c ****         SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR9);
+ 566              		.loc 1 122 9 is_stmt 1 view .LVU136
+ 567 0062 094A     		ldr	r2, .L47+4
+ 568 0064 9369     		ldr	r3, [r2, #24]
+ 569 0066 43F00073 		orr	r3, r3, #33554432
+ 570 006a 9361     		str	r3, [r2, #24]
+ 571 006c 7047     		bx	lr
+ 572              	.L46:
+ 123:Core/Src/init_LB1_CMSIS.c ****     }
+ 124:Core/Src/init_LB1_CMSIS.c **** 
+ 125:Core/Src/init_LB1_CMSIS.c ****     else if(READ_BIT(GPIOF->IDR , GPIO_IDR_IDR_13) != 0){
+ 573              		.loc 1 125 10 view .LVU137
+ 574              		.loc 1 125 13 is_stmt 0 view .LVU138
+ 575 006e 054B     		ldr	r3, .L47
+ 576 0070 1B69     		ldr	r3, [r3, #16]
+ 577              		.loc 1 125 12 view .LVU139
+ 578 0072 13F4005F 		tst	r3, #8192
+ 579 0076 04D0     		beq	.L40
+ 126:Core/Src/init_LB1_CMSIS.c ****         SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR13);
+ 580              		.loc 1 126 9 is_stmt 1 view .LVU140
+ 581 0078 024A     		ldr	r2, .L47
+ 582 007a 9369     		ldr	r3, [r2, #24]
+ 583 007c 43F00053 		orr	r3, r3, #536870912
+ 584 0080 9361     		str	r3, [r2, #24]
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 14
+
+
+ 585              	.L40:
+ 127:Core/Src/init_LB1_CMSIS.c ****     }
+ 128:Core/Src/init_LB1_CMSIS.c **** 
+ 129:Core/Src/init_LB1_CMSIS.c **** }
+ 586              		.loc 1 129 1 is_stmt 0 view .LVU141
+ 587 0082 7047     		bx	lr
+ 588              	.L48:
+ 589              		.align	2
+ 590              	.L47:
+ 591 0084 00140240 		.word	1073878016
+ 592 0088 00100240 		.word	1073876992
+ 593              		.cfi_endproc
+ 594              	.LFE135:
+ 596              		.section	.text.TheSwitcher,"ax",%progbits
+ 597              		.align	1
+ 598              		.global	TheSwitcher
+ 599              		.syntax unified
+ 600              		.thumb
+ 601              		.thumb_func
+ 603              	TheSwitcher:
+ 604              	.LVL15:
+ 605              	.LFB136:
+ 130:Core/Src/init_LB1_CMSIS.c **** 
+ 131:Core/Src/init_LB1_CMSIS.c **** int TheSwitcher(int count){
+ 606              		.loc 1 131 27 is_stmt 1 view -0
+ 607              		.cfi_startproc
+ 608              		@ args = 0, pretend = 0, frame = 0
+ 609              		@ frame_needed = 0, uses_anonymous_args = 0
+ 610              		@ link register save eliminated.
+ 132:Core/Src/init_LB1_CMSIS.c ****     return count & 1;
+ 611              		.loc 1 132 5 view .LVU143
+ 133:Core/Src/init_LB1_CMSIS.c **** }
+ 612              		.loc 1 133 1 is_stmt 0 view .LVU144
+ 613 0000 00F00100 		and	r0, r0, #1
+ 614              	.LVL16:
+ 615              		.loc 1 133 1 view .LVU145
+ 616 0004 7047     		bx	lr
+ 617              		.cfi_endproc
+ 618              	.LFE136:
+ 620              		.section	.text.ledOn,"ax",%progbits
+ 621              		.align	1
+ 622              		.global	ledOn
+ 623              		.syntax unified
+ 624              		.thumb
+ 625              		.thumb_func
+ 627              	ledOn:
+ 628              	.LVL17:
+ 629              	.LFB137:
+ 134:Core/Src/init_LB1_CMSIS.c **** 
+ 135:Core/Src/init_LB1_CMSIS.c **** 
+ 136:Core/Src/init_LB1_CMSIS.c **** // Extra task functions
+ 137:Core/Src/init_LB1_CMSIS.c **** 
+ 138:Core/Src/init_LB1_CMSIS.c **** 
+ 139:Core/Src/init_LB1_CMSIS.c **** void ledOn(int n){
+ 630              		.loc 1 139 18 is_stmt 1 view -0
+ 631              		.cfi_startproc
+ 632              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 15
+
+
+ 633              		@ frame_needed = 0, uses_anonymous_args = 0
+ 634              		@ link register save eliminated.
+ 140:Core/Src/init_LB1_CMSIS.c ****     switch(n){
+ 635              		.loc 1 140 5 view .LVU147
+ 636 0000 0528     		cmp	r0, #5
+ 637 0002 27D8     		bhi	.L50
+ 638 0004 DFE800F0 		tbb	[pc, r0]
+ 639              	.L53:
+ 640 0008 03       		.byte	(.L58-.L53)/2
+ 641 0009 09       		.byte	(.L57-.L53)/2
+ 642 000a 0F       		.byte	(.L56-.L53)/2
+ 643 000b 15       		.byte	(.L55-.L53)/2
+ 644 000c 1B       		.byte	(.L54-.L53)/2
+ 645 000d 21       		.byte	(.L52-.L53)/2
+ 646              		.p2align 1
+ 647              	.L58:
+ 141:Core/Src/init_LB1_CMSIS.c ****         case 0:
+ 142:Core/Src/init_LB1_CMSIS.c ****             SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS13); // PF13 ON
+ 648              		.loc 1 142 13 view .LVU148
+ 649 000e 124A     		ldr	r2, .L60
+ 650 0010 9369     		ldr	r3, [r2, #24]
+ 651 0012 43F40053 		orr	r3, r3, #8192
+ 652 0016 9361     		str	r3, [r2, #24]
+ 143:Core/Src/init_LB1_CMSIS.c ****             break;
+ 653              		.loc 1 143 13 view .LVU149
+ 654 0018 7047     		bx	lr
+ 655              	.L57:
+ 144:Core/Src/init_LB1_CMSIS.c ****         case 1:
+ 145:Core/Src/init_LB1_CMSIS.c ****             SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS9);  // PE9 ON
+ 656              		.loc 1 145 13 view .LVU150
+ 657 001a 104A     		ldr	r2, .L60+4
+ 658 001c 9369     		ldr	r3, [r2, #24]
+ 659 001e 43F40073 		orr	r3, r3, #512
+ 660 0022 9361     		str	r3, [r2, #24]
+ 146:Core/Src/init_LB1_CMSIS.c ****             break;
+ 661              		.loc 1 146 13 view .LVU151
+ 662 0024 7047     		bx	lr
+ 663              	.L56:
+ 147:Core/Src/init_LB1_CMSIS.c ****         case 2:
+ 148:Core/Src/init_LB1_CMSIS.c ****             SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS11); // PE11 ON
+ 664              		.loc 1 148 13 view .LVU152
+ 665 0026 0D4A     		ldr	r2, .L60+4
+ 666 0028 9369     		ldr	r3, [r2, #24]
+ 667 002a 43F40063 		orr	r3, r3, #2048
+ 668 002e 9361     		str	r3, [r2, #24]
+ 149:Core/Src/init_LB1_CMSIS.c ****             break;
+ 669              		.loc 1 149 13 view .LVU153
+ 670 0030 7047     		bx	lr
+ 671              	.L55:
+ 150:Core/Src/init_LB1_CMSIS.c ****         case 3:
+ 151:Core/Src/init_LB1_CMSIS.c ****             SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS14); // PF14 ON
+ 672              		.loc 1 151 13 view .LVU154
+ 673 0032 094A     		ldr	r2, .L60
+ 674 0034 9369     		ldr	r3, [r2, #24]
+ 675 0036 43F48043 		orr	r3, r3, #16384
+ 676 003a 9361     		str	r3, [r2, #24]
+ 152:Core/Src/init_LB1_CMSIS.c ****             break;
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 16
+
+
+ 677              		.loc 1 152 13 view .LVU155
+ 678 003c 7047     		bx	lr
+ 679              	.L54:
+ 153:Core/Src/init_LB1_CMSIS.c ****         case 4:
+ 154:Core/Src/init_LB1_CMSIS.c ****             SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS13); // PE13 ON
+ 680              		.loc 1 154 13 view .LVU156
+ 681 003e 074A     		ldr	r2, .L60+4
+ 682 0040 9369     		ldr	r3, [r2, #24]
+ 683 0042 43F40053 		orr	r3, r3, #8192
+ 684 0046 9361     		str	r3, [r2, #24]
+ 155:Core/Src/init_LB1_CMSIS.c ****             break;
+ 685              		.loc 1 155 13 view .LVU157
+ 686 0048 7047     		bx	lr
+ 687              	.L52:
+ 156:Core/Src/init_LB1_CMSIS.c ****         case 5:
+ 157:Core/Src/init_LB1_CMSIS.c ****             SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS15); // PF15 ON
+ 688              		.loc 1 157 13 view .LVU158
+ 689 004a 034A     		ldr	r2, .L60
+ 690 004c 9369     		ldr	r3, [r2, #24]
+ 691 004e 43F40043 		orr	r3, r3, #32768
+ 692 0052 9361     		str	r3, [r2, #24]
+ 158:Core/Src/init_LB1_CMSIS.c ****             break;
+ 693              		.loc 1 158 13 view .LVU159
+ 694              	.L50:
+ 159:Core/Src/init_LB1_CMSIS.c ****     }
+ 160:Core/Src/init_LB1_CMSIS.c **** }
+ 695              		.loc 1 160 1 is_stmt 0 view .LVU160
+ 696 0054 7047     		bx	lr
+ 697              	.L61:
+ 698 0056 00BF     		.align	2
+ 699              	.L60:
+ 700 0058 00140240 		.word	1073878016
+ 701 005c 00100240 		.word	1073876992
+ 702              		.cfi_endproc
+ 703              	.LFE137:
+ 705              		.section	.text.ledOff,"ax",%progbits
+ 706              		.align	1
+ 707              		.global	ledOff
+ 708              		.syntax unified
+ 709              		.thumb
+ 710              		.thumb_func
+ 712              	ledOff:
+ 713              	.LVL18:
+ 714              	.LFB138:
+ 161:Core/Src/init_LB1_CMSIS.c **** 
+ 162:Core/Src/init_LB1_CMSIS.c **** void ledOff(int n){
+ 715              		.loc 1 162 19 is_stmt 1 view -0
+ 716              		.cfi_startproc
+ 717              		@ args = 0, pretend = 0, frame = 0
+ 718              		@ frame_needed = 0, uses_anonymous_args = 0
+ 719              		@ link register save eliminated.
+ 163:Core/Src/init_LB1_CMSIS.c ****     switch(n){
+ 720              		.loc 1 163 5 view .LVU162
+ 721 0000 0528     		cmp	r0, #5
+ 722 0002 27D8     		bhi	.L62
+ 723 0004 DFE800F0 		tbb	[pc, r0]
+ 724              	.L65:
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 17
+
+
+ 725 0008 03       		.byte	(.L70-.L65)/2
+ 726 0009 09       		.byte	(.L69-.L65)/2
+ 727 000a 0F       		.byte	(.L68-.L65)/2
+ 728 000b 15       		.byte	(.L67-.L65)/2
+ 729 000c 1B       		.byte	(.L66-.L65)/2
+ 730 000d 21       		.byte	(.L64-.L65)/2
+ 731              		.p2align 1
+ 732              	.L70:
+ 164:Core/Src/init_LB1_CMSIS.c ****         case 0:
+ 165:Core/Src/init_LB1_CMSIS.c ****             SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR13); // PF13 OFF
+ 733              		.loc 1 165 13 view .LVU163
+ 734 000e 124A     		ldr	r2, .L72
+ 735 0010 9369     		ldr	r3, [r2, #24]
+ 736 0012 43F00053 		orr	r3, r3, #536870912
+ 737 0016 9361     		str	r3, [r2, #24]
+ 166:Core/Src/init_LB1_CMSIS.c ****             break;
+ 738              		.loc 1 166 13 view .LVU164
+ 739 0018 7047     		bx	lr
+ 740              	.L69:
+ 167:Core/Src/init_LB1_CMSIS.c ****         case 1:
+ 168:Core/Src/init_LB1_CMSIS.c ****             SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR9);  // PE9 OFF
+ 741              		.loc 1 168 13 view .LVU165
+ 742 001a 104A     		ldr	r2, .L72+4
+ 743 001c 9369     		ldr	r3, [r2, #24]
+ 744 001e 43F00073 		orr	r3, r3, #33554432
+ 745 0022 9361     		str	r3, [r2, #24]
+ 169:Core/Src/init_LB1_CMSIS.c ****             break;
+ 746              		.loc 1 169 13 view .LVU166
+ 747 0024 7047     		bx	lr
+ 748              	.L68:
+ 170:Core/Src/init_LB1_CMSIS.c ****         case 2:
+ 171:Core/Src/init_LB1_CMSIS.c ****             SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR11); // PE11 OFF
+ 749              		.loc 1 171 13 view .LVU167
+ 750 0026 0D4A     		ldr	r2, .L72+4
+ 751 0028 9369     		ldr	r3, [r2, #24]
+ 752 002a 43F00063 		orr	r3, r3, #134217728
+ 753 002e 9361     		str	r3, [r2, #24]
+ 172:Core/Src/init_LB1_CMSIS.c ****             break;
+ 754              		.loc 1 172 13 view .LVU168
+ 755 0030 7047     		bx	lr
+ 756              	.L67:
+ 173:Core/Src/init_LB1_CMSIS.c ****         case 3:
+ 174:Core/Src/init_LB1_CMSIS.c ****             SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR14); // PF14 OFF
+ 757              		.loc 1 174 13 view .LVU169
+ 758 0032 094A     		ldr	r2, .L72
+ 759 0034 9369     		ldr	r3, [r2, #24]
+ 760 0036 43F08043 		orr	r3, r3, #1073741824
+ 761 003a 9361     		str	r3, [r2, #24]
+ 175:Core/Src/init_LB1_CMSIS.c ****             break;
+ 762              		.loc 1 175 13 view .LVU170
+ 763 003c 7047     		bx	lr
+ 764              	.L66:
+ 176:Core/Src/init_LB1_CMSIS.c ****         case 4:
+ 177:Core/Src/init_LB1_CMSIS.c ****             SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR13); // PE13 OFF
+ 765              		.loc 1 177 13 view .LVU171
+ 766 003e 074A     		ldr	r2, .L72+4
+ 767 0040 9369     		ldr	r3, [r2, #24]
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 18
+
+
+ 768 0042 43F00053 		orr	r3, r3, #536870912
+ 769 0046 9361     		str	r3, [r2, #24]
+ 178:Core/Src/init_LB1_CMSIS.c ****             break;
+ 770              		.loc 1 178 13 view .LVU172
+ 771 0048 7047     		bx	lr
+ 772              	.L64:
+ 179:Core/Src/init_LB1_CMSIS.c ****         case 5:
+ 180:Core/Src/init_LB1_CMSIS.c ****             SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR15); // PF15 OFF
+ 773              		.loc 1 180 13 view .LVU173
+ 774 004a 034A     		ldr	r2, .L72
+ 775 004c 9369     		ldr	r3, [r2, #24]
+ 776 004e 43F00043 		orr	r3, r3, #-2147483648
+ 777 0052 9361     		str	r3, [r2, #24]
+ 181:Core/Src/init_LB1_CMSIS.c ****             break;
+ 778              		.loc 1 181 13 view .LVU174
+ 779              	.L62:
+ 182:Core/Src/init_LB1_CMSIS.c ****     }
+ 183:Core/Src/init_LB1_CMSIS.c **** }
+ 780              		.loc 1 183 1 is_stmt 0 view .LVU175
+ 781 0054 7047     		bx	lr
+ 782              	.L73:
+ 783 0056 00BF     		.align	2
+ 784              	.L72:
+ 785 0058 00140240 		.word	1073878016
+ 786 005c 00100240 		.word	1073876992
+ 787              		.cfi_endproc
+ 788              	.LFE138:
+ 790              		.section	.text.changeSpeed,"ax",%progbits
+ 791              		.align	1
+ 792              		.global	changeSpeed
+ 793              		.syntax unified
+ 794              		.thumb
+ 795              		.thumb_func
+ 797              	changeSpeed:
+ 798              	.LVL19:
+ 799              	.LFB139:
+ 184:Core/Src/init_LB1_CMSIS.c **** 
+ 185:Core/Src/init_LB1_CMSIS.c **** int changeSpeed(int speedIndex){
+ 800              		.loc 1 185 32 is_stmt 1 view -0
+ 801              		.cfi_startproc
+ 802              		@ args = 0, pretend = 0, frame = 0
+ 803              		@ frame_needed = 0, uses_anonymous_args = 0
+ 804              		@ link register save eliminated.
+ 186:Core/Src/init_LB1_CMSIS.c ****     switch(speedIndex){
+ 805              		.loc 1 186 5 view .LVU177
+ 806 0000 0138     		subs	r0, r0, #1
+ 807              	.LVL20:
+ 808              		.loc 1 186 5 is_stmt 0 view .LVU178
+ 809 0002 0328     		cmp	r0, #3
+ 810 0004 03D8     		bhi	.L75
+ 811 0006 DFE800F0 		tbb	[pc, r0]
+ 812              	.L77:
+ 813 000a 0B       		.byte	(.L81-.L77)/2
+ 814 000b 04       		.byte	(.L79-.L77)/2
+ 815 000c 06       		.byte	(.L78-.L77)/2
+ 816 000d 08       		.byte	(.L76-.L77)/2
+ 817              		.p2align 1
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 19
+
+
+ 818              	.L75:
+ 819 000e 0020     		movs	r0, #0
+ 820              	.LVL21:
+ 821              		.loc 1 186 5 view .LVU179
+ 822 0010 7047     		bx	lr
+ 823              	.L79:
+ 187:Core/Src/init_LB1_CMSIS.c ****         case 0:
+ 188:Core/Src/init_LB1_CMSIS.c ****             return 0;
+ 189:Core/Src/init_LB1_CMSIS.c **** 
+ 190:Core/Src/init_LB1_CMSIS.c ****         case 1:
+ 191:Core/Src/init_LB1_CMSIS.c ****             return 500000;
+ 192:Core/Src/init_LB1_CMSIS.c **** 
+ 193:Core/Src/init_LB1_CMSIS.c ****         case 2:
+ 194:Core/Src/init_LB1_CMSIS.c ****             return 200000;
+ 824              		.loc 1 194 13 is_stmt 1 view .LVU180
+ 825              		.loc 1 194 20 is_stmt 0 view .LVU181
+ 826 0012 0448     		ldr	r0, .L82
+ 827 0014 7047     		bx	lr
+ 828              	.L78:
+ 195:Core/Src/init_LB1_CMSIS.c **** 
+ 196:Core/Src/init_LB1_CMSIS.c ****         case 3:
+ 197:Core/Src/init_LB1_CMSIS.c ****             return 80000;
+ 829              		.loc 1 197 13 is_stmt 1 view .LVU182
+ 830              		.loc 1 197 20 is_stmt 0 view .LVU183
+ 831 0016 0448     		ldr	r0, .L82+4
+ 832 0018 7047     		bx	lr
+ 833              	.L76:
+ 198:Core/Src/init_LB1_CMSIS.c **** 
+ 199:Core/Src/init_LB1_CMSIS.c ****         case 4:
+ 200:Core/Src/init_LB1_CMSIS.c ****             return 30000;
+ 834              		.loc 1 200 13 is_stmt 1 view .LVU184
+ 835              		.loc 1 200 20 is_stmt 0 view .LVU185
+ 836 001a 47F23050 		movw	r0, #30000
+ 837 001e 7047     		bx	lr
+ 838              	.L81:
+ 191:Core/Src/init_LB1_CMSIS.c **** 
+ 839              		.loc 1 191 20 view .LVU186
+ 840 0020 0248     		ldr	r0, .L82+8
+ 201:Core/Src/init_LB1_CMSIS.c ****     }
+ 202:Core/Src/init_LB1_CMSIS.c **** 
+ 203:Core/Src/init_LB1_CMSIS.c ****     return 0;
+ 204:Core/Src/init_LB1_CMSIS.c **** }
+ 841              		.loc 1 204 1 view .LVU187
+ 842 0022 7047     		bx	lr
+ 843              	.L83:
+ 844              		.align	2
+ 845              	.L82:
+ 846 0024 400D0300 		.word	200000
+ 847 0028 80380100 		.word	80000
+ 848 002c 20A10700 		.word	500000
+ 849              		.cfi_endproc
+ 850              	.LFE139:
+ 852              		.section	.text.blinkLed,"ax",%progbits
+ 853              		.align	1
+ 854              		.global	blinkLed
+ 855              		.syntax unified
+ 856              		.thumb
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 20
+
+
+ 857              		.thumb_func
+ 859              	blinkLed:
+ 860              	.LVL22:
+ 861              	.LFB140:
+ 205:Core/Src/init_LB1_CMSIS.c **** 
+ 206:Core/Src/init_LB1_CMSIS.c **** void blinkLed(int ledNum, int *ledState){
+ 862              		.loc 1 206 41 is_stmt 1 view -0
+ 863              		.cfi_startproc
+ 864              		@ args = 0, pretend = 0, frame = 0
+ 865              		@ frame_needed = 0, uses_anonymous_args = 0
+ 866              		.loc 1 206 41 is_stmt 0 view .LVU189
+ 867 0000 10B5     		push	{r4, lr}
+ 868              	.LCFI0:
+ 869              		.cfi_def_cfa_offset 8
+ 870              		.cfi_offset 4, -8
+ 871              		.cfi_offset 14, -4
+ 872 0002 0C46     		mov	r4, r1
+ 207:Core/Src/init_LB1_CMSIS.c ****     if (*ledState == 1){
+ 873              		.loc 1 207 5 is_stmt 1 view .LVU190
+ 874              		.loc 1 207 9 is_stmt 0 view .LVU191
+ 875 0004 0B68     		ldr	r3, [r1]
+ 876              		.loc 1 207 8 view .LVU192
+ 877 0006 012B     		cmp	r3, #1
+ 878 0008 04D0     		beq	.L88
+ 208:Core/Src/init_LB1_CMSIS.c ****         ledOff(ledNum);
+ 209:Core/Src/init_LB1_CMSIS.c ****         *ledState = 0;
+ 210:Core/Src/init_LB1_CMSIS.c ****     } else {
+ 211:Core/Src/init_LB1_CMSIS.c ****         ledOn(ledNum);
+ 879              		.loc 1 211 9 is_stmt 1 view .LVU193
+ 880 000a FFF7FEFF 		bl	ledOn
+ 881              	.LVL23:
+ 212:Core/Src/init_LB1_CMSIS.c ****         *ledState = 1;
+ 882              		.loc 1 212 9 view .LVU194
+ 883              		.loc 1 212 19 is_stmt 0 view .LVU195
+ 884 000e 0123     		movs	r3, #1
+ 885 0010 2360     		str	r3, [r4]
+ 886              	.L84:
+ 213:Core/Src/init_LB1_CMSIS.c ****     }
+ 214:Core/Src/init_LB1_CMSIS.c **** }
+ 887              		.loc 1 214 1 view .LVU196
+ 888 0012 10BD     		pop	{r4, pc}
+ 889              	.LVL24:
+ 890              	.L88:
+ 208:Core/Src/init_LB1_CMSIS.c ****         *ledState = 0;
+ 891              		.loc 1 208 9 is_stmt 1 view .LVU197
+ 892 0014 FFF7FEFF 		bl	ledOff
+ 893              	.LVL25:
+ 209:Core/Src/init_LB1_CMSIS.c ****     } else {
+ 894              		.loc 1 209 9 view .LVU198
+ 209:Core/Src/init_LB1_CMSIS.c ****     } else {
+ 895              		.loc 1 209 19 is_stmt 0 view .LVU199
+ 896 0018 0023     		movs	r3, #0
+ 897 001a 2360     		str	r3, [r4]
+ 898 001c F9E7     		b	.L84
+ 899              		.cfi_endproc
+ 900              	.LFE140:
+ 902              		.text
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 21
+
+
+ 903              	.Letext0:
+ 904              		.file 2 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/machine/_default_types.
+ 905              		.file 3 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/sys/_stdint.h"
+ 906              		.file 4 "CMSIS/Devices/STM32F4xx/Inc/STM32F429ZI/stm32f429xx.h"
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 22
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 init_LB1_CMSIS.c
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:21     .text.GPIO_Init_CMSIS_LB1:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:27     .text.GPIO_Init_CMSIS_LB1:00000000 GPIO_Init_CMSIS_LB1
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:142    .text.GPIO_Init_CMSIS_LB1:000000d0 $d
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:149    .text.pressedButton1:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:155    .text.pressedButton1:00000000 pressedButton1
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:222    .text.pressedButton1:00000038 $d
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:227    .text.pressedButton2:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:233    .text.pressedButton2:00000000 pressedButton2
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:300    .text.pressedButton2:00000038 $d
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:305    .text.pressedButton3:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:311    .text.pressedButton3:00000000 pressedButton3
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:378    .text.pressedButton3:00000038 $d
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:383    .text.TurningOnState:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:389    .text.TurningOnState:00000000 TurningOnState
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:484    .text.TurningOnState:00000084 $d
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:490    .text.TurningOffState:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:496    .text.TurningOffState:00000000 TurningOffState
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:591    .text.TurningOffState:00000084 $d
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:597    .text.TheSwitcher:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:603    .text.TheSwitcher:00000000 TheSwitcher
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:621    .text.ledOn:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:627    .text.ledOn:00000000 ledOn
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:640    .text.ledOn:00000008 $d
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:646    .text.ledOn:0000000e $t
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:700    .text.ledOn:00000058 $d
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:706    .text.ledOff:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:712    .text.ledOff:00000000 ledOff
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:725    .text.ledOff:00000008 $d
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:731    .text.ledOff:0000000e $t
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:785    .text.ledOff:00000058 $d
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:791    .text.changeSpeed:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:797    .text.changeSpeed:00000000 changeSpeed
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:813    .text.changeSpeed:0000000a $d
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:817    .text.changeSpeed:0000000e $t
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:846    .text.changeSpeed:00000024 $d
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:853    .text.blinkLed:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:859    .text.blinkLed:00000000 blinkLed
+
+NO UNDEFINED SYMBOLS

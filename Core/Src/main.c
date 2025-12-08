@@ -5,6 +5,37 @@
 int main(void){
     
     GPIO_Init_CMSIS_LB1();
+    int count = 0;
+
+    while(1){
+
+        if(pressedButton3() == 1){
+            count++;
+        }
+        
+        int key = TheSwitcher(count);
+     
+        if (key == 0){
+            if(pressedButton1() == 1){
+                TurningOnState();
+            }
+            else if(pressedButton2() == 1){
+                TurningOffState();
+
+            }
+        }
+        else if(key == 1){
+            if(pressedButton1() == 1){
+                TurningOffState();
+
+            }
+            else if(pressedButton2() == 1){
+                TurningOnState();
+
+            }
+        }
+
+    }
 
     // LB1 extra task 
 
