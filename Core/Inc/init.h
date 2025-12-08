@@ -4,7 +4,9 @@
 #include "../../CMSIS/Devices/STM32F4xx/Inc/stm32f4xx.h"
 #include "../../CMSIS/Devices/STM32F4xx/Inc/STM32F429ZI/stm32f429xx.h"
 
-        
+
+
+
 #define RCC_AHB1ENR         *(uint32_t *)(0x40023800UL + 0x30UL)
 
 #define RCC_GPIOB_EN        0x02UL
@@ -13,7 +15,7 @@
 #define GPIOB_MODER         *(uint32_t *)(0x40020400UL + 0x00UL) 
 #define GPIOB_OTYPER        *(uint32_t *)(0x40020400UL + 0x04UL) 
 #define GPIOB_OSPEEDR       *(uint32_t *)(0x40020400UL + 0x08UL) 
-#define GPIOB_BSSR          *(uint32_t *)(0x40020400UL + 0x18UL) 
+#define GPIOB_BSRR          *(uint32_t *)(0x40020400UL + 0x18UL) 
 
 #define GPIOC_IDR           *(uint32_t *)(0x40020800UL + 0x10UL) 
 

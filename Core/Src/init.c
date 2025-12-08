@@ -14,7 +14,7 @@ void GPIO_Init_With_My_Macros(void){
     BIT_SET(GPIOB_MODER,    GPIO_PIN_OUT_7);        //Настройка пина PB7 на вывод, регистр MODER
     BIT_SET(GPIOB_OTYPER,   GPIO_OFF);              //Настройка режима работы выxода на push-pull, регистр OTYPER
     BIT_SET(GPIOB_OSPEEDR,  GPIO_PIN_MED_7);        //Настройка скорости вывода PB7, регистр OSPEEDR
-    BIT_SET(GPIOB_BSSR,     GPIO_PIN_RESET_7);      //Предварительное выключение светодиода, регистр BSR, бит BR7
+    BIT_SET(GPIOB_BSRR,     GPIO_PIN_RESET_7);      //Предварительное выключение светодиода, регистр BSR, бит BR7
 
 }
 

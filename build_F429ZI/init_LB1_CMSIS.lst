@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -41,7 +41,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
   34              		.loc 1 5 5 view .LVU1
   35 0000 334A     		ldr	r2, .L2
   36 0002 136B     		ldr	r3, [r2, #48]
-  37 0004 43F07A03 		orr	r3, r3, #122
+  37 0004 43F07803 		orr	r3, r3, #120
   38 0008 1363     		str	r3, [r2, #48]
    6:Core/Src/init_LB1_CMSIS.c **** 
    7:Core/Src/init_LB1_CMSIS.c ****     SET_BIT     (GPIOF->MODER,      GPIO_MODER_MODER13_0);          //Настройка пина P
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
    9:Core/Src/init_LB1_CMSIS.c ****     SET_BIT     (GPIOF->OSPEEDR,    GPIO_OSPEEDER_OSPEEDR13_0);     //Настройка скоро
   48              		.loc 1 9 5 view .LVU4
   49 001c 9A68     		ldr	r2, [r3, #8]
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 2
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s 			page 2
 
 
   50 001e 42F08062 		orr	r2, r2, #67108864
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
   91 0070 41F08051 		orr	r1, r1, #268435456
   92 0074 1960     		str	r1, [r3]
   23:Core/Src/init_LB1_CMSIS.c ****     CLEAR_BIT   (GPIOF->OTYPER,     GPIO_OTYPER_OT14);              //Настройка режим
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 3
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s 			page 3
 
 
   93              		.loc 1 23 5 view .LVU15
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
  135 00c8 42F00042 		orr	r2, r2, #-2147483648
  136 00cc 9A61     		str	r2, [r3, #24]
   36:Core/Src/init_LB1_CMSIS.c **** 
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 4
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s 			page 4
 
 
   37:Core/Src/init_LB1_CMSIS.c **** }
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
  177 000e 0133     		adds	r3, r3, #1
  178              	.LVL1:
  179              	.L5:
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 5
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s 			page 5
 
 
   42:Core/Src/init_LB1_CMSIS.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
  221              	.L11:
  222 0038 000C0240 		.word	1073875968
  223              		.cfi_endproc
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 6
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s 			page 6
 
 
  224              	.LFE131:
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
   56:Core/Src/init_LB1_CMSIS.c ****             while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){
  264              		.loc 1 56 12 is_stmt 0 view .LVU57
  265 0018 074B     		ldr	r3, .L20
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 7
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s 			page 7
 
 
  266              	.LVL7:
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
  312              	.LFB133:
   65:Core/Src/init_LB1_CMSIS.c **** 
   66:Core/Src/init_LB1_CMSIS.c **** int pressedButton3(void){
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 8
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s 			page 8
 
 
  313              		.loc 1 66 25 is_stmt 1 view -0
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
  350              		.loc 1 76 12 view .LVU81
  351 0022 0020     		movs	r0, #0
   77:Core/Src/init_LB1_CMSIS.c **** }
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 9
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s 			page 9
 
 
  352              		.loc 1 77 1 view .LVU82
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
  398 0000 204B     		ldr	r3, .L38
  399 0002 1B69     		ldr	r3, [r3, #16]
  400              		.loc 1 80 7 view .LVU93
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 10
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s 			page 10
 
 
  401 0004 13F4005F 		tst	r3, #8192
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
  443 0046 13F4804F 		tst	r3, #16384
  444 004a 05D1     		bne	.L36
   93:Core/Src/init_LB1_CMSIS.c ****         SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS14);
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 11
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s 			page 11
 
 
  445              		.loc 1 93 9 is_stmt 1 view .LVU106
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
  489              		.section	.text.TurningOffState,"ax",%progbits
  490              		.align	1
  491              		.global	TurningOffState
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 12
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s 			page 12
 
 
  492              		.syntax unified
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
  536 0030 13F4804F 		tst	r3, #16384
  537 0034 05D0     		beq	.L44
  116:Core/Src/init_LB1_CMSIS.c ****         SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR14);
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 13
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s 			page 13
 
 
  538              		.loc 1 116 9 is_stmt 1 view .LVU128
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
  582 007a 9369     		ldr	r3, [r2, #24]
  583 007c 43F00053 		orr	r3, r3, #536870912
  584 0080 9361     		str	r3, [r2, #24]
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 14
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s 			page 14
 
 
  585              	.L40:
@@ -838,7 +838,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
  630              		.loc 1 139 18 is_stmt 1 view -0
  631              		.cfi_startproc
  632              		@ args = 0, pretend = 0, frame = 0
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 15
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s 			page 15
 
 
  633              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -898,7 +898,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
  675 0036 43F48043 		orr	r3, r3, #16384
  676 003a 9361     		str	r3, [r2, #24]
  152:Core/Src/init_LB1_CMSIS.c ****             break;
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 16
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s 			page 16
 
 
  677              		.loc 1 152 13 view .LVU155
@@ -958,7 +958,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
  722 0002 27D8     		bhi	.L62
  723 0004 DFE800F0 		tbb	[pc, r0]
  724              	.L65:
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 17
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s 			page 17
 
 
  725 0008 03       		.byte	(.L70-.L65)/2
@@ -1018,7 +1018,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
  765              		.loc 1 177 13 view .LVU171
  766 003e 074A     		ldr	r2, .L72+4
  767 0040 9369     		ldr	r3, [r2, #24]
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 18
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s 			page 18
 
 
  768 0042 43F00053 		orr	r3, r3, #536870912
@@ -1078,7 +1078,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
  815 000c 06       		.byte	(.L78-.L77)/2
  816 000d 08       		.byte	(.L76-.L77)/2
  817              		.p2align 1
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 19
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s 			page 19
 
 
  818              	.L75:
@@ -1138,7 +1138,7 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
  854              		.global	blinkLed
  855              		.syntax unified
  856              		.thumb
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 20
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s 			page 20
 
 
  857              		.thumb_func
@@ -1198,54 +1198,54 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 1
  899              		.cfi_endproc
  900              	.LFE140:
  902              		.text
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 21
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s 			page 21
 
 
  903              	.Letext0:
  904              		.file 2 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/machine/_default_types.
  905              		.file 3 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/sys/_stdint.h"
  906              		.file 4 "CMSIS/Devices/STM32F4xx/Inc/STM32F429ZI/stm32f429xx.h"
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s 			page 22
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s 			page 22
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 init_LB1_CMSIS.c
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:21     .text.GPIO_Init_CMSIS_LB1:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:27     .text.GPIO_Init_CMSIS_LB1:00000000 GPIO_Init_CMSIS_LB1
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:142    .text.GPIO_Init_CMSIS_LB1:000000d0 $d
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:149    .text.pressedButton1:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:155    .text.pressedButton1:00000000 pressedButton1
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:222    .text.pressedButton1:00000038 $d
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:227    .text.pressedButton2:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:233    .text.pressedButton2:00000000 pressedButton2
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:300    .text.pressedButton2:00000038 $d
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:305    .text.pressedButton3:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:311    .text.pressedButton3:00000000 pressedButton3
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:378    .text.pressedButton3:00000038 $d
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:383    .text.TurningOnState:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:389    .text.TurningOnState:00000000 TurningOnState
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:484    .text.TurningOnState:00000084 $d
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:490    .text.TurningOffState:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:496    .text.TurningOffState:00000000 TurningOffState
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:591    .text.TurningOffState:00000084 $d
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:597    .text.TheSwitcher:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:603    .text.TheSwitcher:00000000 TheSwitcher
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:621    .text.ledOn:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:627    .text.ledOn:00000000 ledOn
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:640    .text.ledOn:00000008 $d
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:646    .text.ledOn:0000000e $t
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:700    .text.ledOn:00000058 $d
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:706    .text.ledOff:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:712    .text.ledOff:00000000 ledOff
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:725    .text.ledOff:00000008 $d
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:731    .text.ledOff:0000000e $t
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:785    .text.ledOff:00000058 $d
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:791    .text.changeSpeed:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:797    .text.changeSpeed:00000000 changeSpeed
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:813    .text.changeSpeed:0000000a $d
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:817    .text.changeSpeed:0000000e $t
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:846    .text.changeSpeed:00000024 $d
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:853    .text.blinkLed:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\cc4c4Vce.s:859    .text.blinkLed:00000000 blinkLed
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:21     .text.GPIO_Init_CMSIS_LB1:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:27     .text.GPIO_Init_CMSIS_LB1:00000000 GPIO_Init_CMSIS_LB1
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:142    .text.GPIO_Init_CMSIS_LB1:000000d0 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:149    .text.pressedButton1:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:155    .text.pressedButton1:00000000 pressedButton1
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:222    .text.pressedButton1:00000038 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:227    .text.pressedButton2:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:233    .text.pressedButton2:00000000 pressedButton2
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:300    .text.pressedButton2:00000038 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:305    .text.pressedButton3:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:311    .text.pressedButton3:00000000 pressedButton3
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:378    .text.pressedButton3:00000038 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:383    .text.TurningOnState:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:389    .text.TurningOnState:00000000 TurningOnState
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:484    .text.TurningOnState:00000084 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:490    .text.TurningOffState:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:496    .text.TurningOffState:00000000 TurningOffState
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:591    .text.TurningOffState:00000084 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:597    .text.TheSwitcher:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:603    .text.TheSwitcher:00000000 TheSwitcher
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:621    .text.ledOn:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:627    .text.ledOn:00000000 ledOn
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:640    .text.ledOn:00000008 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:646    .text.ledOn:0000000e $t
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:700    .text.ledOn:00000058 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:706    .text.ledOff:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:712    .text.ledOff:00000000 ledOff
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:725    .text.ledOff:00000008 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:731    .text.ledOff:0000000e $t
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:785    .text.ledOff:00000058 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:791    .text.changeSpeed:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:797    .text.changeSpeed:00000000 changeSpeed
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:813    .text.changeSpeed:0000000a $d
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:817    .text.changeSpeed:0000000e $t
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:846    .text.changeSpeed:00000024 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:853    .text.blinkLed:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccQeeJpt.s:859    .text.blinkLed:00000000 blinkLed
 
 NO UNDEFINED SYMBOLS
