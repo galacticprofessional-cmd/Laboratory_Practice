@@ -103,7 +103,7 @@ void TurningOnState(void){
 
 }
 
-void TurningOffState(){
+void TurningOffState(void){
     if(READ_BIT(GPIOF->IDR , GPIO_IDR_IDR_15) != 0){
         SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR15);
     }

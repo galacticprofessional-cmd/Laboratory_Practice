@@ -76,4 +76,12 @@
 #define BIT_CLEAR(REG, BIT)   ((REG) &= ~(BIT))
 #define BIT_READ(REG, BIT)  ((REG) & (BIT))
 
+void GPIO_Init_Macros_LB1(void);
+int pressedButton1_macros(void);
+int pressedButton2_macros(void);
+int pressedButton3_macros(void);
+void TurningOnState_macros(void);
+void TurningOffState_macros(void);
+int TheSwitcher_macros(int count);
+
 #endif 

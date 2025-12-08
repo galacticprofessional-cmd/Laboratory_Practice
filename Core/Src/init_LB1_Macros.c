@@ -37,7 +37,7 @@ void GPIO_Init_Macros_LB1(void){
 }
 
 
-int pressedButton1(void){
+int pressedButton1_macros(void){
     if(BIT_READ(GPIOD_IDR, IDR_2) == 0){
         for(int i = 0; i < TIME_DELAY1; i++){}
         if(BIT_READ(GPIOD_IDR, IDR_2) == 0){
@@ -50,7 +50,7 @@ int pressedButton1(void){
     return 0;
 }
 
-int pressedButton2(void){
+int pressedButton2_macros(void){
     if(BIT_READ(GPIOG_IDR, IDR_2) == 0){
         for(int i = 0; i < TIME_DELAY1; i++){}
         if(BIT_READ(GPIOG_IDR, IDR_2) == 0){
@@ -63,7 +63,7 @@ int pressedButton2(void){
     return 0;
 }
 
-int pressedButton3(void){
+int pressedButton3_macros(void){
     if(BIT_READ(GPIOG_IDR, IDR_3) == 0){
         for(int i = 0; i < TIME_DELAY1; i++){}
         if(BIT_READ(GPIOG_IDR, IDR_3) == 0){
@@ -76,7 +76,7 @@ int pressedButton3(void){
     return 0;
 }
 
-void TurningOnState(void){
+void TurningOnState_macros(void){
     if(BIT_READ(GPIOF_IDR, IDR_13) == 0){
         BIT_SET(GPIOF_BSRR, BSRR_BS13);
     }
@@ -103,7 +103,7 @@ void TurningOnState(void){
 
 }
 
-void TurningOffState(){
+void TurningOffState_macros(void){
     if(BIT_READ(GPIOF_IDR, IDR_15) != 0){
         BIT_SET(GPIOF_BSRR, BSRR_BR15);
     }
@@ -128,6 +128,6 @@ void TurningOffState(){
 
 }
 
-int TheSwitcher(int count){
+int TheSwitcher_macros(int count){
     return count & 1;
 }

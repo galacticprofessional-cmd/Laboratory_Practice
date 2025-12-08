@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccR84QX9.s 			page 1
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc9cKJXX.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -27,10 +27,10 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccR84QX9.s 			page 1
   24              		.thumb
   25              		.thumb_func
   27              	main:
-  28              	.LFB130:
+  28              	.LFB0:
    1:Core/Src/main.c **** // LB1
    2:Core/Src/main.c **** 
-   3:Core/Src/main.c **** #include "../Inc/init_LB1_CMSIS.h"
+   3:Core/Src/main.c **** #include "../Inc/init_LB1_Macros.h"
    4:Core/Src/main.c **** 
    5:Core/Src/main.c **** int main(void){
   29              		.loc 1 5 15 view -0
@@ -43,9 +43,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccR84QX9.s 			page 1
   36              		.cfi_offset 4, -8
   37              		.cfi_offset 14, -4
    6:Core/Src/main.c ****     
-   7:Core/Src/main.c ****     GPIO_Init_CMSIS_LB1();
+   7:Core/Src/main.c ****     GPIO_Init_Macros_LB1();
   38              		.loc 1 7 5 view .LVU1
-  39 0002 FFF7FEFF 		bl	GPIO_Init_CMSIS_LB1
+  39 0002 FFF7FEFF 		bl	GPIO_Init_Macros_LB1
   40              	.LVL0:
    8:Core/Src/main.c ****     int count = 0;
   41              		.loc 1 8 5 view .LVU2
@@ -58,10 +58,10 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccR84QX9.s 			page 1
    9:Core/Src/main.c **** 
   10:Core/Src/main.c ****     while(1){
   11:Core/Src/main.c **** 
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccR84QX9.s 			page 2
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc9cKJXX.s 			page 2
 
 
-  12:Core/Src/main.c ****         if(pressedButton3() == 1){
+  12:Core/Src/main.c ****         if(pressedButton3_macros() == 1){
   13:Core/Src/main.c ****             count++;
   48              		.loc 1 13 13 is_stmt 1 view .LVU4
   49              		.loc 1 13 18 is_stmt 0 view .LVU5
@@ -73,23 +73,23 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccR84QX9.s 			page 1
   55              	.L5:
   14:Core/Src/main.c ****         }
   15:Core/Src/main.c ****         
-  16:Core/Src/main.c ****         int key = TheSwitcher(count);
+  16:Core/Src/main.c ****         int key = TheSwitcher_macros(count);
   17:Core/Src/main.c ****      
   18:Core/Src/main.c ****         if (key == 0){
-  19:Core/Src/main.c ****             if(pressedButton1() == 1){
-  20:Core/Src/main.c ****                 TurningOnState();
+  19:Core/Src/main.c ****             if(pressedButton1_macros() == 1){
+  20:Core/Src/main.c ****                 TurningOnState_macros();
   21:Core/Src/main.c ****             }
-  22:Core/Src/main.c ****             else if(pressedButton2() == 1){
+  22:Core/Src/main.c ****             else if(pressedButton2_macros() == 1){
   56              		.loc 1 22 18 is_stmt 1 view .LVU7
   57              		.loc 1 22 21 is_stmt 0 view .LVU8
-  58 000e FFF7FEFF 		bl	pressedButton2
+  58 000e FFF7FEFF 		bl	pressedButton2_macros
   59              	.LVL4:
   60              		.loc 1 22 20 discriminator 1 view .LVU9
   61 0012 0128     		cmp	r0, #1
   62 0014 04D1     		bne	.L2
-  23:Core/Src/main.c ****                 TurningOffState();
+  23:Core/Src/main.c ****                 TurningOffState_macros();
   63              		.loc 1 23 17 is_stmt 1 view .LVU10
-  64 0016 FFF7FEFF 		bl	TurningOffState
+  64 0016 FFF7FEFF 		bl	TurningOffState_macros
   65              	.LVL5:
   66 001a 01E0     		b	.L2
   67              	.LVL6:
@@ -113,12 +113,12 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccR84QX9.s 			page 1
   79              		.loc 1 12 9 view .LVU15
   12:Core/Src/main.c ****             count++;
   80              		.loc 1 12 12 is_stmt 0 view .LVU16
-  81 0020 FFF7FEFF 		bl	pressedButton3
+  81 0020 FFF7FEFF 		bl	pressedButton3_macros
   82              	.LVL8:
   12:Core/Src/main.c ****             count++;
   83              		.loc 1 12 11 discriminator 1 view .LVU17
   84 0024 0128     		cmp	r0, #1
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccR84QX9.s 			page 3
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc9cKJXX.s 			page 3
 
 
   85 0026 F0D0     		beq	.L10
@@ -128,83 +128,83 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccR84QX9.s 			page 1
   16:Core/Src/main.c ****      
   88              		.loc 1 16 19 is_stmt 0 view .LVU19
   89 0028 2046     		mov	r0, r4
-  90 002a FFF7FEFF 		bl	TheSwitcher
+  90 002a FFF7FEFF 		bl	TheSwitcher_macros
   91              	.LVL9:
-  18:Core/Src/main.c ****             if(pressedButton1() == 1){
+  18:Core/Src/main.c ****             if(pressedButton1_macros() == 1){
   92              		.loc 1 18 9 is_stmt 1 view .LVU20
-  18:Core/Src/main.c ****             if(pressedButton1() == 1){
+  18:Core/Src/main.c ****             if(pressedButton1_macros() == 1){
   93              		.loc 1 18 12 is_stmt 0 view .LVU21
   94 002e 0028     		cmp	r0, #0
   95 0030 F4D1     		bne	.L4
-  19:Core/Src/main.c ****                 TurningOnState();
+  19:Core/Src/main.c ****                 TurningOnState_macros();
   96              		.loc 1 19 13 is_stmt 1 view .LVU22
-  19:Core/Src/main.c ****                 TurningOnState();
+  19:Core/Src/main.c ****                 TurningOnState_macros();
   97              		.loc 1 19 16 is_stmt 0 view .LVU23
-  98 0032 FFF7FEFF 		bl	pressedButton1
+  98 0032 FFF7FEFF 		bl	pressedButton1_macros
   99              	.LVL10:
-  19:Core/Src/main.c ****                 TurningOnState();
+  19:Core/Src/main.c ****                 TurningOnState_macros();
  100              		.loc 1 19 15 discriminator 1 view .LVU24
  101 0036 0128     		cmp	r0, #1
  102 0038 E9D1     		bne	.L5
   20:Core/Src/main.c ****             }
  103              		.loc 1 20 17 is_stmt 1 view .LVU25
- 104 003a FFF7FEFF 		bl	TurningOnState
+ 104 003a FFF7FEFF 		bl	TurningOnState_macros
  105              	.LVL11:
  106 003e EFE7     		b	.L2
  107              	.LVL12:
  108              	.L9:
-  28:Core/Src/main.c ****             if(pressedButton1() == 1){
+  28:Core/Src/main.c ****             if(pressedButton1_macros() == 1){
  109              		.loc 1 28 13 view .LVU26
  110              		.loc 1 28 16 is_stmt 0 view .LVU27
- 111 0040 FFF7FEFF 		bl	pressedButton1
+ 111 0040 FFF7FEFF 		bl	pressedButton1_macros
  112              	.LVL13:
  113              		.loc 1 28 15 discriminator 1 view .LVU28
  114 0044 0128     		cmp	r0, #1
  115 0046 06D0     		beq	.L11
-  29:Core/Src/main.c ****                 TurningOffState();
+  29:Core/Src/main.c ****                 TurningOffState_macros();
   30:Core/Src/main.c **** 
   31:Core/Src/main.c ****             }
-  32:Core/Src/main.c ****             else if(pressedButton2() == 1){
+  32:Core/Src/main.c ****             else if(pressedButton2_macros() == 1){
  116              		.loc 1 32 18 is_stmt 1 view .LVU29
  117              		.loc 1 32 21 is_stmt 0 view .LVU30
- 118 0048 FFF7FEFF 		bl	pressedButton2
+ 118 0048 FFF7FEFF 		bl	pressedButton2_macros
  119              	.LVL14:
  120              		.loc 1 32 20 discriminator 1 view .LVU31
  121 004c 0128     		cmp	r0, #1
  122 004e E7D1     		bne	.L2
-  33:Core/Src/main.c ****                 TurningOnState();
+  33:Core/Src/main.c ****                 TurningOnState_macros();
  123              		.loc 1 33 17 is_stmt 1 view .LVU32
- 124 0050 FFF7FEFF 		bl	TurningOnState
+ 124 0050 FFF7FEFF 		bl	TurningOnState_macros
  125              	.LVL15:
  126 0054 E4E7     		b	.L2
  127              	.L11:
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccR84QX9.s 			page 4
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc9cKJXX.s 			page 4
 
 
-  29:Core/Src/main.c ****                 TurningOffState();
+  29:Core/Src/main.c ****                 TurningOffState_macros();
  128              		.loc 1 29 17 view .LVU33
- 129 0056 FFF7FEFF 		bl	TurningOffState
+ 129 0056 FFF7FEFF 		bl	TurningOffState_macros
  130              	.LVL16:
  131 005a E1E7     		b	.L2
  132              	.LBE3:
  133              		.cfi_endproc
- 134              	.LFE130:
+ 134              	.LFE0:
  136              		.text
  137              	.Letext0:
- 138              		.file 2 "Core/Src/../Inc/init_LB1_CMSIS.h"
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccR84QX9.s 			page 5
+ 138              		.file 2 "Core/Src/../Inc/init_LB1_Macros.h"
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cc9cKJXX.s 			page 5
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 main.c
-C:\Users\VICTUS\AppData\Local\Temp\ccR84QX9.s:21     .text.main:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccR84QX9.s:27     .text.main:00000000 main
+C:\Users\VICTUS\AppData\Local\Temp\cc9cKJXX.s:21     .text.main:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\cc9cKJXX.s:27     .text.main:00000000 main
 
 UNDEFINED SYMBOLS
-GPIO_Init_CMSIS_LB1
-pressedButton2
-TurningOffState
-pressedButton3
-TheSwitcher
-pressedButton1
-TurningOnState
+GPIO_Init_Macros_LB1
+pressedButton2_macros
+TurningOffState_macros
+pressedButton3_macros
+TheSwitcher_macros
+pressedButton1_macros
+TurningOnState_macros

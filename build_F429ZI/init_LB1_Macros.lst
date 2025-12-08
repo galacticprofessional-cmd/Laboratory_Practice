@@ -1,0 +1,717 @@
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"init_LB1_Macros.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Core/Src/init_LB1_Macros.c"
+  20              		.section	.text.GPIO_Init_Macros_LB1,"ax",%progbits
+  21              		.align	1
+  22              		.global	GPIO_Init_Macros_LB1
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	GPIO_Init_Macros_LB1:
+  28              	.LFB0:
+   1:Core/Src/init_LB1_Macros.c **** #include "../Inc/init_LB1_Macros.h"
+   2:Core/Src/init_LB1_Macros.c **** 
+   3:Core/Src/init_LB1_Macros.c **** void GPIO_Init_Macros_LB1(void){
+  29              		.loc 1 3 32 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 20
+  36              		.cfi_offset 4, -20
+  37              		.cfi_offset 5, -16
+  38              		.cfi_offset 6, -12
+  39              		.cfi_offset 7, -8
+  40              		.cfi_offset 14, -4
+   4:Core/Src/init_LB1_Macros.c **** 
+   5:Core/Src/init_LB1_Macros.c ****     BIT_SET     (RCC_AHB1ENR, RCC_GPIOD_EN | RCC_GPIOG_EN | RCC_GPIOE_EN | RCC_GPIOF_EN);
+  41              		.loc 1 5 5 view .LVU1
+  42 0002 364A     		ldr	r2, .L3
+  43 0004 D2F83038 		ldr	r3, [r2, #2096]
+  44 0008 43F07003 		orr	r3, r3, #112
+  45 000c C2F83038 		str	r3, [r2, #2096]
+   6:Core/Src/init_LB1_Macros.c **** 
+   7:Core/Src/init_LB1_Macros.c ****     BIT_SET     (GPIOF_MODER,      MODER13_0);          //Настройка пина PF13 на в�
+  46              		.loc 1 7 5 view .LVU2
+  47 0010 334B     		ldr	r3, .L3+4
+  48 0012 D3F80044 		ldr	r4, [r3, #1024]
+  49 0016 44F08062 		orr	r2, r4, #67108864
+  50 001a C3F80024 		str	r2, [r3, #1024]
+   8:Core/Src/init_LB1_Macros.c ****     BIT_CLEAR   (GPIOF_OTYPER,     OTYPER13);              //Настройка режима раб
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s 			page 2
+
+
+  51              		.loc 1 8 5 view .LVU3
+  52 001e D3F80404 		ldr	r0, [r3, #1028]
+  53 0022 20F40052 		bic	r2, r0, #8192
+  54 0026 C3F80424 		str	r2, [r3, #1028]
+   9:Core/Src/init_LB1_Macros.c ****     BIT_SET     (GPIOF_OSPEEDR,    OSPEEDR13_0);     //Настройка скорости рабо
+  55              		.loc 1 9 5 view .LVU4
+  56 002a D3F808C4 		ldr	ip, [r3, #1032]
+  57 002e 4CF08062 		orr	r2, ip, #67108864
+  58 0032 C3F80824 		str	r2, [r3, #1032]
+  10:Core/Src/init_LB1_Macros.c ****     BIT_SET     (GPIOF_BSRR,       BSRR_BR13);                //Предварительное вы
+  59              		.loc 1 10 5 view .LVU5
+  60 0036 D3F81874 		ldr	r7, [r3, #1048]
+  61 003a 47F00052 		orr	r2, r7, #536870912
+  62 003e C3F81824 		str	r2, [r3, #1048]
+  11:Core/Src/init_LB1_Macros.c **** 
+  12:Core/Src/init_LB1_Macros.c ****     BIT_SET     (GPIOE_MODER,      MODER9_0);          //Настройка пина PE9 на вы�
+  63              		.loc 1 12 5 view .LVU6
+  64 0042 1968     		ldr	r1, [r3]
+  65 0044 41F48022 		orr	r2, r1, #262144
+  66 0048 1A60     		str	r2, [r3]
+  13:Core/Src/init_LB1_Macros.c ****     BIT_CLEAR   (GPIOE_OTYPER,     OTYPER9);              //Настройка режима раб�
+  67              		.loc 1 13 5 view .LVU7
+  68 004a 5E68     		ldr	r6, [r3, #4]
+  69 004c 26F40072 		bic	r2, r6, #512
+  70 0050 5A60     		str	r2, [r3, #4]
+  14:Core/Src/init_LB1_Macros.c ****     BIT_SET     (GPIOE_OSPEEDR,    OSPEEDR9_0);     //Настройка скорости рабо�
+  71              		.loc 1 14 5 view .LVU8
+  72 0052 9A68     		ldr	r2, [r3, #8]
+  73 0054 42F48025 		orr	r5, r2, #262144
+  74 0058 9D60     		str	r5, [r3, #8]
+  15:Core/Src/init_LB1_Macros.c ****     BIT_SET     (GPIOE_BSRR,       BSRR_BR9);                //Предварительное вы�
+  75              		.loc 1 15 5 view .LVU9
+  76 005a 9D69     		ldr	r5, [r3, #24]
+  77 005c 45F0007E 		orr	lr, r5, #33554432
+  78 0060 C3F818E0 		str	lr, [r3, #24]
+  16:Core/Src/init_LB1_Macros.c **** 
+  17:Core/Src/init_LB1_Macros.c ****     BIT_SET     (GPIOE_MODER,      MODER11_0);          //Настройка пина PE11 на в�
+  79              		.loc 1 17 5 view .LVU10
+  80 0064 41F48801 		orr	r1, r1, #4456448
+  81 0068 1960     		str	r1, [r3]
+  18:Core/Src/init_LB1_Macros.c ****     BIT_CLEAR   (GPIOE_OTYPER,     OTYPER11);              //Настройка режима раб
+  82              		.loc 1 18 5 view .LVU11
+  83 006a 26F4206E 		bic	lr, r6, #2560
+  84 006e C3F804E0 		str	lr, [r3, #4]
+  19:Core/Src/init_LB1_Macros.c ****     BIT_SET     (GPIOE_OSPEEDR,    OSPEEDR11_0);     //Настройка скорости рабо
+  85              		.loc 1 19 5 view .LVU12
+  86 0072 42F48802 		orr	r2, r2, #4456448
+  87 0076 9A60     		str	r2, [r3, #8]
+  20:Core/Src/init_LB1_Macros.c ****     BIT_SET     (GPIOE_BSRR,       BSRR_BR11);                //Предварительное вы
+  88              		.loc 1 20 5 view .LVU13
+  89 0078 45F0206E 		orr	lr, r5, #167772160
+  90 007c C3F818E0 		str	lr, [r3, #24]
+  21:Core/Src/init_LB1_Macros.c **** 
+  22:Core/Src/init_LB1_Macros.c ****     BIT_SET     (GPIOF_MODER,      MODER14_0);          //Настройка пина PF14 на в�
+  91              		.loc 1 22 5 view .LVU14
+  92 0080 44F0A05E 		orr	lr, r4, #335544320
+  93 0084 C3F800E4 		str	lr, [r3, #1024]
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s 			page 3
+
+
+  23:Core/Src/init_LB1_Macros.c ****     BIT_CLEAR   (GPIOF_OTYPER,     OTYPER14);              //Настройка режима раб
+  94              		.loc 1 23 5 view .LVU15
+  95 0088 20F4C04E 		bic	lr, r0, #24576
+  96 008c C3F804E4 		str	lr, [r3, #1028]
+  24:Core/Src/init_LB1_Macros.c ****     BIT_SET     (GPIOF_OSPEEDR,    OSPEEDR14_0);     //Настройка скорости рабо
+  97              		.loc 1 24 5 view .LVU16
+  98 0090 4CF0A05E 		orr	lr, ip, #335544320
+  99 0094 C3F808E4 		str	lr, [r3, #1032]
+  25:Core/Src/init_LB1_Macros.c ****     BIT_SET     (GPIOF_BSRR,       BSRR_BR14);                //Предварительное вы
+ 100              		.loc 1 25 5 view .LVU17
+ 101 0098 47F0C04E 		orr	lr, r7, #1610612736
+ 102 009c C3F818E4 		str	lr, [r3, #1048]
+  26:Core/Src/init_LB1_Macros.c **** 
+  27:Core/Src/init_LB1_Macros.c ****     BIT_SET     (GPIOE_MODER,      MODER13_0);          //Настройка пина PE13 на в�
+ 103              		.loc 1 27 5 view .LVU18
+ 104 00a0 41F08061 		orr	r1, r1, #67108864
+ 105 00a4 1960     		str	r1, [r3]
+  28:Core/Src/init_LB1_Macros.c ****     BIT_CLEAR   (GPIOE_OTYPER,     OTYPER13);              //Настройка режима раб
+ 106              		.loc 1 28 5 view .LVU19
+ 107 00a6 26F42856 		bic	r6, r6, #10752
+ 108 00aa 5E60     		str	r6, [r3, #4]
+  29:Core/Src/init_LB1_Macros.c ****     BIT_SET     (GPIOE_OSPEEDR,    OSPEEDR13_0);     //Настройка скорости рабо
+ 109              		.loc 1 29 5 view .LVU20
+ 110 00ac 42F08062 		orr	r2, r2, #67108864
+ 111 00b0 9A60     		str	r2, [r3, #8]
+  30:Core/Src/init_LB1_Macros.c ****     BIT_SET     (GPIOE_BSRR,       BSRR_BR13);                //Предварительное вы
+ 112              		.loc 1 30 5 view .LVU21
+ 113 00b2 45F02855 		orr	r5, r5, #704643072
+ 114 00b6 9D61     		str	r5, [r3, #24]
+  31:Core/Src/init_LB1_Macros.c **** 
+  32:Core/Src/init_LB1_Macros.c ****     BIT_SET     (GPIOF_MODER,      MODER15_0);          //Настройка пина PF15 на в�
+ 115              		.loc 1 32 5 view .LVU22
+ 116 00b8 44F0A844 		orr	r4, r4, #1409286144
+ 117 00bc C3F80044 		str	r4, [r3, #1024]
+  33:Core/Src/init_LB1_Macros.c ****     BIT_CLEAR   (GPIOF_OTYPER,     OTYPER15);              //Настройка режима раб
+ 118              		.loc 1 33 5 view .LVU23
+ 119 00c0 20F46040 		bic	r0, r0, #57344
+ 120 00c4 C3F80404 		str	r0, [r3, #1028]
+  34:Core/Src/init_LB1_Macros.c ****     BIT_SET     (GPIOF_OSPEEDR,    OSPEEDR15_0);     //Настройка скорости рабо
+ 121              		.loc 1 34 5 view .LVU24
+ 122 00c8 4CF0A841 		orr	r1, ip, #1409286144
+ 123 00cc C3F80814 		str	r1, [r3, #1032]
+  35:Core/Src/init_LB1_Macros.c ****     BIT_SET     (GPIOF_BSRR,       BSRR_BR15);                //Предварительное вы
+ 124              		.loc 1 35 5 view .LVU25
+ 125 00d0 47F06047 		orr	r7, r7, #-536870912
+ 126 00d4 C3F81874 		str	r7, [r3, #1048]
+  36:Core/Src/init_LB1_Macros.c **** 
+  37:Core/Src/init_LB1_Macros.c **** }
+ 127              		.loc 1 37 1 is_stmt 0 view .LVU26
+ 128 00d8 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 129              	.L4:
+ 130 00da 00BF     		.align	2
+ 131              	.L3:
+ 132 00dc 00300240 		.word	1073885184
+ 133 00e0 00100240 		.word	1073876992
+ 134              		.cfi_endproc
+ 135              	.LFE0:
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s 			page 4
+
+
+ 137              		.section	.text.pressedButton1_macros,"ax",%progbits
+ 138              		.align	1
+ 139              		.global	pressedButton1_macros
+ 140              		.syntax unified
+ 141              		.thumb
+ 142              		.thumb_func
+ 144              	pressedButton1_macros:
+ 145              	.LFB1:
+  38:Core/Src/init_LB1_Macros.c **** 
+  39:Core/Src/init_LB1_Macros.c **** 
+  40:Core/Src/init_LB1_Macros.c **** int pressedButton1_macros(void){
+ 146              		.loc 1 40 32 is_stmt 1 view -0
+ 147              		.cfi_startproc
+ 148              		@ args = 0, pretend = 0, frame = 0
+ 149              		@ frame_needed = 0, uses_anonymous_args = 0
+ 150              		@ link register save eliminated.
+  41:Core/Src/init_LB1_Macros.c ****     if(BIT_READ(GPIOD_IDR, IDR_2) == 0){
+ 151              		.loc 1 41 5 view .LVU28
+ 152              		.loc 1 41 8 is_stmt 0 view .LVU29
+ 153 0000 074B     		ldr	r3, .L12
+ 154 0002 D3F8043C 		ldr	r3, [r3, #3076]
+ 155              		.loc 1 41 7 view .LVU30
+ 156 0006 13F0040F 		tst	r3, #4
+ 157 000a 07D0     		beq	.L10
+  42:Core/Src/init_LB1_Macros.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+  43:Core/Src/init_LB1_Macros.c ****         if(BIT_READ(GPIOD_IDR, IDR_2) == 0){
+  44:Core/Src/init_LB1_Macros.c ****             while(BIT_READ(GPIOD_IDR, IDR_2) == 0){
+  45:Core/Src/init_LB1_Macros.c ****             }
+  46:Core/Src/init_LB1_Macros.c ****             return 1;
+  47:Core/Src/init_LB1_Macros.c ****         }
+  48:Core/Src/init_LB1_Macros.c **** 
+  49:Core/Src/init_LB1_Macros.c ****     }
+  50:Core/Src/init_LB1_Macros.c ****     return 0;
+  51:Core/Src/init_LB1_Macros.c **** }
+ 158              		.loc 1 51 1 view .LVU31
+ 159 000c 0020     		movs	r0, #0
+ 160 000e 7047     		bx	lr
+ 161              	.LVL0:
+ 162              	.L8:
+ 163              	.LBB2:
+  42:Core/Src/init_LB1_Macros.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 164              		.loc 1 42 46 is_stmt 1 discriminator 3 view .LVU32
+  42:Core/Src/init_LB1_Macros.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 165              		.loc 1 42 42 discriminator 3 view .LVU33
+ 166 0010 0133     		adds	r3, r3, #1
+ 167              	.LVL1:
+ 168              	.L6:
+  42:Core/Src/init_LB1_Macros.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 169              		.loc 1 42 26 discriminator 1 view .LVU34
+ 170 0012 40F6AB52 		movw	r2, #3499
+ 171 0016 9342     		cmp	r3, r2
+ 172 0018 FADD     		ble	.L8
+ 173              	.L9:
+ 174              	.LBE2:
+  45:Core/Src/init_LB1_Macros.c ****             return 1;
+ 175              		.loc 1 45 13 view .LVU35
+  44:Core/Src/init_LB1_Macros.c ****             }
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s 			page 5
+
+
+ 176              		.loc 1 44 46 discriminator 1 view .LVU36
+ 177 001a FEE7     		b	.L9
+ 178              	.LVL2:
+ 179              	.L10:
+ 180              	.LBB3:
+  42:Core/Src/init_LB1_Macros.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 181              		.loc 1 42 17 is_stmt 0 view .LVU37
+ 182 001c 0023     		movs	r3, #0
+ 183 001e F8E7     		b	.L6
+ 184              	.L13:
+ 185              		.align	2
+ 186              	.L12:
+ 187 0020 00000240 		.word	1073872896
+ 188              	.LBE3:
+ 189              		.cfi_endproc
+ 190              	.LFE1:
+ 192              		.section	.text.pressedButton2_macros,"ax",%progbits
+ 193              		.align	1
+ 194              		.global	pressedButton2_macros
+ 195              		.syntax unified
+ 196              		.thumb
+ 197              		.thumb_func
+ 199              	pressedButton2_macros:
+ 200              	.LFB2:
+  52:Core/Src/init_LB1_Macros.c **** 
+  53:Core/Src/init_LB1_Macros.c **** int pressedButton2_macros(void){
+ 201              		.loc 1 53 32 is_stmt 1 view -0
+ 202              		.cfi_startproc
+ 203              		@ args = 0, pretend = 0, frame = 0
+ 204              		@ frame_needed = 0, uses_anonymous_args = 0
+ 205              		@ link register save eliminated.
+  54:Core/Src/init_LB1_Macros.c ****     if(BIT_READ(GPIOG_IDR, IDR_2) == 0){
+ 206              		.loc 1 54 5 view .LVU39
+ 207              		.loc 1 54 8 is_stmt 0 view .LVU40
+ 208 0000 074B     		ldr	r3, .L21
+ 209 0002 D3F80438 		ldr	r3, [r3, #2052]
+ 210              		.loc 1 54 7 view .LVU41
+ 211 0006 13F0040F 		tst	r3, #4
+ 212 000a 07D0     		beq	.L19
+  55:Core/Src/init_LB1_Macros.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+  56:Core/Src/init_LB1_Macros.c ****         if(BIT_READ(GPIOG_IDR, IDR_2) == 0){
+  57:Core/Src/init_LB1_Macros.c ****             while(BIT_READ(GPIOG_IDR, IDR_2) == 0){
+  58:Core/Src/init_LB1_Macros.c ****             }
+  59:Core/Src/init_LB1_Macros.c ****             return 1;
+  60:Core/Src/init_LB1_Macros.c ****         }
+  61:Core/Src/init_LB1_Macros.c **** 
+  62:Core/Src/init_LB1_Macros.c ****     }
+  63:Core/Src/init_LB1_Macros.c ****     return 0;
+  64:Core/Src/init_LB1_Macros.c **** }
+ 213              		.loc 1 64 1 view .LVU42
+ 214 000c 0020     		movs	r0, #0
+ 215 000e 7047     		bx	lr
+ 216              	.LVL3:
+ 217              	.L17:
+ 218              	.LBB4:
+  55:Core/Src/init_LB1_Macros.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 219              		.loc 1 55 46 is_stmt 1 discriminator 3 view .LVU43
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s 			page 6
+
+
+  55:Core/Src/init_LB1_Macros.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 220              		.loc 1 55 42 discriminator 3 view .LVU44
+ 221 0010 0133     		adds	r3, r3, #1
+ 222              	.LVL4:
+ 223              	.L15:
+  55:Core/Src/init_LB1_Macros.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 224              		.loc 1 55 26 discriminator 1 view .LVU45
+ 225 0012 40F6AB52 		movw	r2, #3499
+ 226 0016 9342     		cmp	r3, r2
+ 227 0018 FADD     		ble	.L17
+ 228              	.L18:
+ 229              	.LBE4:
+  58:Core/Src/init_LB1_Macros.c ****             return 1;
+ 230              		.loc 1 58 13 view .LVU46
+  57:Core/Src/init_LB1_Macros.c ****             }
+ 231              		.loc 1 57 46 discriminator 1 view .LVU47
+ 232 001a FEE7     		b	.L18
+ 233              	.LVL5:
+ 234              	.L19:
+ 235              	.LBB5:
+  55:Core/Src/init_LB1_Macros.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 236              		.loc 1 55 17 is_stmt 0 view .LVU48
+ 237 001c 0023     		movs	r3, #0
+ 238 001e F8E7     		b	.L15
+ 239              	.L22:
+ 240              		.align	2
+ 241              	.L21:
+ 242 0020 00100240 		.word	1073876992
+ 243              	.LBE5:
+ 244              		.cfi_endproc
+ 245              	.LFE2:
+ 247              		.section	.text.pressedButton3_macros,"ax",%progbits
+ 248              		.align	1
+ 249              		.global	pressedButton3_macros
+ 250              		.syntax unified
+ 251              		.thumb
+ 252              		.thumb_func
+ 254              	pressedButton3_macros:
+ 255              	.LFB3:
+  65:Core/Src/init_LB1_Macros.c **** 
+  66:Core/Src/init_LB1_Macros.c **** int pressedButton3_macros(void){
+ 256              		.loc 1 66 32 is_stmt 1 view -0
+ 257              		.cfi_startproc
+ 258              		@ args = 0, pretend = 0, frame = 0
+ 259              		@ frame_needed = 0, uses_anonymous_args = 0
+ 260              		@ link register save eliminated.
+  67:Core/Src/init_LB1_Macros.c ****     if(BIT_READ(GPIOG_IDR, IDR_3) == 0){
+ 261              		.loc 1 67 5 view .LVU50
+ 262              		.loc 1 67 8 is_stmt 0 view .LVU51
+ 263 0000 074B     		ldr	r3, .L30
+ 264 0002 D3F80438 		ldr	r3, [r3, #2052]
+ 265              		.loc 1 67 7 view .LVU52
+ 266 0006 13F0080F 		tst	r3, #8
+ 267 000a 07D0     		beq	.L28
+  68:Core/Src/init_LB1_Macros.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+  69:Core/Src/init_LB1_Macros.c ****         if(BIT_READ(GPIOG_IDR, IDR_3) == 0){
+  70:Core/Src/init_LB1_Macros.c ****             while(BIT_READ(GPIOG_IDR, IDR_3) == 0){
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s 			page 7
+
+
+  71:Core/Src/init_LB1_Macros.c ****             }
+  72:Core/Src/init_LB1_Macros.c ****             return 1;
+  73:Core/Src/init_LB1_Macros.c ****         }
+  74:Core/Src/init_LB1_Macros.c **** 
+  75:Core/Src/init_LB1_Macros.c ****     }
+  76:Core/Src/init_LB1_Macros.c ****     return 0;
+  77:Core/Src/init_LB1_Macros.c **** }
+ 268              		.loc 1 77 1 view .LVU53
+ 269 000c 0020     		movs	r0, #0
+ 270 000e 7047     		bx	lr
+ 271              	.LVL6:
+ 272              	.L26:
+ 273              	.LBB6:
+  68:Core/Src/init_LB1_Macros.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 274              		.loc 1 68 46 is_stmt 1 discriminator 3 view .LVU54
+  68:Core/Src/init_LB1_Macros.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 275              		.loc 1 68 42 discriminator 3 view .LVU55
+ 276 0010 0133     		adds	r3, r3, #1
+ 277              	.LVL7:
+ 278              	.L24:
+  68:Core/Src/init_LB1_Macros.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 279              		.loc 1 68 26 discriminator 1 view .LVU56
+ 280 0012 40F6AB52 		movw	r2, #3499
+ 281 0016 9342     		cmp	r3, r2
+ 282 0018 FADD     		ble	.L26
+ 283              	.L27:
+ 284              	.LBE6:
+  71:Core/Src/init_LB1_Macros.c ****             return 1;
+ 285              		.loc 1 71 13 view .LVU57
+  70:Core/Src/init_LB1_Macros.c ****             }
+ 286              		.loc 1 70 46 discriminator 1 view .LVU58
+ 287 001a FEE7     		b	.L27
+ 288              	.LVL8:
+ 289              	.L28:
+ 290              	.LBB7:
+  68:Core/Src/init_LB1_Macros.c ****         for(int i = 0; i < TIME_DELAY1; i++){}
+ 291              		.loc 1 68 17 is_stmt 0 view .LVU59
+ 292 001c 0023     		movs	r3, #0
+ 293 001e F8E7     		b	.L24
+ 294              	.L31:
+ 295              		.align	2
+ 296              	.L30:
+ 297 0020 00100240 		.word	1073876992
+ 298              	.LBE7:
+ 299              		.cfi_endproc
+ 300              	.LFE3:
+ 302              		.section	.text.TurningOnState_macros,"ax",%progbits
+ 303              		.align	1
+ 304              		.global	TurningOnState_macros
+ 305              		.syntax unified
+ 306              		.thumb
+ 307              		.thumb_func
+ 309              	TurningOnState_macros:
+ 310              	.LFB4:
+  78:Core/Src/init_LB1_Macros.c **** 
+  79:Core/Src/init_LB1_Macros.c **** void TurningOnState_macros(void){
+ 311              		.loc 1 79 33 is_stmt 1 view -0
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s 			page 8
+
+
+ 312              		.cfi_startproc
+ 313              		@ args = 0, pretend = 0, frame = 0
+ 314              		@ frame_needed = 0, uses_anonymous_args = 0
+ 315              		@ link register save eliminated.
+  80:Core/Src/init_LB1_Macros.c ****     if(BIT_READ(GPIOF_IDR, IDR_13) == 0){
+ 316              		.loc 1 80 5 view .LVU61
+ 317              		.loc 1 80 8 is_stmt 0 view .LVU62
+ 318 0000 204B     		ldr	r3, .L39
+ 319 0002 D3F80434 		ldr	r3, [r3, #1028]
+ 320              		.loc 1 80 7 view .LVU63
+ 321 0006 13F4005F 		tst	r3, #8192
+ 322 000a 07D1     		bne	.L33
+  81:Core/Src/init_LB1_Macros.c ****         BIT_SET(GPIOF_BSRR, BSRR_BS13);
+ 323              		.loc 1 81 9 is_stmt 1 view .LVU64
+ 324 000c 1D4A     		ldr	r2, .L39
+ 325 000e D2F81834 		ldr	r3, [r2, #1048]
+ 326 0012 43F40053 		orr	r3, r3, #8192
+ 327 0016 C2F81834 		str	r3, [r2, #1048]
+ 328 001a 7047     		bx	lr
+ 329              	.L33:
+  82:Core/Src/init_LB1_Macros.c ****     }
+  83:Core/Src/init_LB1_Macros.c **** 
+  84:Core/Src/init_LB1_Macros.c ****     else if(BIT_READ(GPIOE_IDR, IDR_9) == 0){
+ 330              		.loc 1 84 10 view .LVU65
+ 331              		.loc 1 84 13 is_stmt 0 view .LVU66
+ 332 001c 194A     		ldr	r2, .L39
+ 333 001e 5268     		ldr	r2, [r2, #4]
+ 334              		.loc 1 84 12 view .LVU67
+ 335 0020 12F4007F 		tst	r2, #512
+ 336 0024 05D1     		bne	.L35
+  85:Core/Src/init_LB1_Macros.c ****         BIT_SET(GPIOE_BSRR, BSRR_BS9);
+ 337              		.loc 1 85 9 is_stmt 1 view .LVU68
+ 338 0026 174A     		ldr	r2, .L39
+ 339 0028 9369     		ldr	r3, [r2, #24]
+ 340 002a 43F40073 		orr	r3, r3, #512
+ 341 002e 9361     		str	r3, [r2, #24]
+ 342 0030 7047     		bx	lr
+ 343              	.L35:
+  86:Core/Src/init_LB1_Macros.c ****     }
+  87:Core/Src/init_LB1_Macros.c **** 
+  88:Core/Src/init_LB1_Macros.c ****     else if(BIT_READ(GPIOE_IDR, IDR_11) == 0){
+ 344              		.loc 1 88 10 view .LVU69
+ 345              		.loc 1 88 12 is_stmt 0 view .LVU70
+ 346 0032 12F4006F 		tst	r2, #2048
+ 347 0036 05D1     		bne	.L36
+  89:Core/Src/init_LB1_Macros.c ****         BIT_SET(GPIOE_BSRR, BSRR_BS11);
+ 348              		.loc 1 89 9 is_stmt 1 view .LVU71
+ 349 0038 124A     		ldr	r2, .L39
+ 350 003a 9369     		ldr	r3, [r2, #24]
+ 351 003c 43F40063 		orr	r3, r3, #2048
+ 352 0040 9361     		str	r3, [r2, #24]
+ 353 0042 7047     		bx	lr
+ 354              	.L36:
+  90:Core/Src/init_LB1_Macros.c ****     }
+  91:Core/Src/init_LB1_Macros.c **** 
+  92:Core/Src/init_LB1_Macros.c ****     else if(BIT_READ(GPIOF_IDR, IDR_14) == 0){
+ 355              		.loc 1 92 10 view .LVU72
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s 			page 9
+
+
+ 356              		.loc 1 92 12 is_stmt 0 view .LVU73
+ 357 0044 13F4804F 		tst	r3, #16384
+ 358 0048 07D1     		bne	.L37
+  93:Core/Src/init_LB1_Macros.c ****         BIT_SET(GPIOF_BSRR, BSRR_BS14);
+ 359              		.loc 1 93 9 is_stmt 1 view .LVU74
+ 360 004a 0E4A     		ldr	r2, .L39
+ 361 004c D2F81834 		ldr	r3, [r2, #1048]
+ 362 0050 43F48043 		orr	r3, r3, #16384
+ 363 0054 C2F81834 		str	r3, [r2, #1048]
+ 364 0058 7047     		bx	lr
+ 365              	.L37:
+  94:Core/Src/init_LB1_Macros.c ****     }
+  95:Core/Src/init_LB1_Macros.c **** 
+  96:Core/Src/init_LB1_Macros.c ****     else if(BIT_READ(GPIOE_IDR, IDR_13) == 0){
+ 366              		.loc 1 96 10 view .LVU75
+ 367              		.loc 1 96 12 is_stmt 0 view .LVU76
+ 368 005a 12F4005F 		tst	r2, #8192
+ 369 005e 05D1     		bne	.L38
+  97:Core/Src/init_LB1_Macros.c ****         BIT_SET(GPIOE_BSRR, BSRR_BS13);
+ 370              		.loc 1 97 9 is_stmt 1 view .LVU77
+ 371 0060 084A     		ldr	r2, .L39
+ 372 0062 9369     		ldr	r3, [r2, #24]
+ 373 0064 43F40053 		orr	r3, r3, #8192
+ 374 0068 9361     		str	r3, [r2, #24]
+ 375 006a 7047     		bx	lr
+ 376              	.L38:
+  98:Core/Src/init_LB1_Macros.c ****     }
+  99:Core/Src/init_LB1_Macros.c **** 
+ 100:Core/Src/init_LB1_Macros.c ****     else if(BIT_READ(GPIOF_IDR, IDR_15) == 0){
+ 377              		.loc 1 100 10 view .LVU78
+ 378              		.loc 1 100 12 is_stmt 0 view .LVU79
+ 379 006c 13F4004F 		tst	r3, #32768
+ 380 0070 06D1     		bne	.L32
+ 101:Core/Src/init_LB1_Macros.c ****         BIT_SET(GPIOF_BSRR, BSRR_BS15);
+ 381              		.loc 1 101 9 is_stmt 1 view .LVU80
+ 382 0072 044A     		ldr	r2, .L39
+ 383 0074 D2F81834 		ldr	r3, [r2, #1048]
+ 384 0078 43F40043 		orr	r3, r3, #32768
+ 385 007c C2F81834 		str	r3, [r2, #1048]
+ 386              	.L32:
+ 102:Core/Src/init_LB1_Macros.c ****     }
+ 103:Core/Src/init_LB1_Macros.c **** 
+ 104:Core/Src/init_LB1_Macros.c **** }
+ 387              		.loc 1 104 1 is_stmt 0 view .LVU81
+ 388 0080 7047     		bx	lr
+ 389              	.L40:
+ 390 0082 00BF     		.align	2
+ 391              	.L39:
+ 392 0084 00100240 		.word	1073876992
+ 393              		.cfi_endproc
+ 394              	.LFE4:
+ 396              		.section	.text.TurningOffState_macros,"ax",%progbits
+ 397              		.align	1
+ 398              		.global	TurningOffState_macros
+ 399              		.syntax unified
+ 400              		.thumb
+ 401              		.thumb_func
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s 			page 10
+
+
+ 403              	TurningOffState_macros:
+ 404              	.LFB5:
+ 105:Core/Src/init_LB1_Macros.c **** 
+ 106:Core/Src/init_LB1_Macros.c **** void TurningOffState_macros(void){
+ 405              		.loc 1 106 34 is_stmt 1 view -0
+ 406              		.cfi_startproc
+ 407              		@ args = 0, pretend = 0, frame = 0
+ 408              		@ frame_needed = 0, uses_anonymous_args = 0
+ 409              		@ link register save eliminated.
+ 107:Core/Src/init_LB1_Macros.c ****     if(BIT_READ(GPIOF_IDR, IDR_15) != 0){
+ 410              		.loc 1 107 5 view .LVU83
+ 411              		.loc 1 107 8 is_stmt 0 view .LVU84
+ 412 0000 204B     		ldr	r3, .L48
+ 413 0002 D3F80434 		ldr	r3, [r3, #1028]
+ 414              		.loc 1 107 7 view .LVU85
+ 415 0006 13F4004F 		tst	r3, #32768
+ 416 000a 07D0     		beq	.L42
+ 108:Core/Src/init_LB1_Macros.c ****         BIT_SET(GPIOF_BSRR, BSRR_BR15);
+ 417              		.loc 1 108 9 is_stmt 1 view .LVU86
+ 418 000c 1D4A     		ldr	r2, .L48
+ 419 000e D2F81834 		ldr	r3, [r2, #1048]
+ 420 0012 43F00043 		orr	r3, r3, #-2147483648
+ 421 0016 C2F81834 		str	r3, [r2, #1048]
+ 422 001a 7047     		bx	lr
+ 423              	.L42:
+ 109:Core/Src/init_LB1_Macros.c ****     }
+ 110:Core/Src/init_LB1_Macros.c **** 
+ 111:Core/Src/init_LB1_Macros.c ****     else if(BIT_READ(GPIOE_IDR, IDR_13) != 0){
+ 424              		.loc 1 111 10 view .LVU87
+ 425              		.loc 1 111 13 is_stmt 0 view .LVU88
+ 426 001c 194A     		ldr	r2, .L48
+ 427 001e 5268     		ldr	r2, [r2, #4]
+ 428              		.loc 1 111 12 view .LVU89
+ 429 0020 12F4005F 		tst	r2, #8192
+ 430 0024 05D0     		beq	.L44
+ 112:Core/Src/init_LB1_Macros.c ****         BIT_SET(GPIOE_BSRR, BSRR_BR13);
+ 431              		.loc 1 112 9 is_stmt 1 view .LVU90
+ 432 0026 174A     		ldr	r2, .L48
+ 433 0028 9369     		ldr	r3, [r2, #24]
+ 434 002a 43F00053 		orr	r3, r3, #536870912
+ 435 002e 9361     		str	r3, [r2, #24]
+ 436 0030 7047     		bx	lr
+ 437              	.L44:
+ 113:Core/Src/init_LB1_Macros.c ****     }
+ 114:Core/Src/init_LB1_Macros.c **** 
+ 115:Core/Src/init_LB1_Macros.c ****     else if(BIT_READ(GPIOF_IDR, IDR_14) != 0){
+ 438              		.loc 1 115 10 view .LVU91
+ 439              		.loc 1 115 12 is_stmt 0 view .LVU92
+ 440 0032 13F4804F 		tst	r3, #16384
+ 441 0036 07D0     		beq	.L45
+ 116:Core/Src/init_LB1_Macros.c ****         BIT_SET(GPIOF_BSRR, BSRR_BR14);
+ 442              		.loc 1 116 9 is_stmt 1 view .LVU93
+ 443 0038 124A     		ldr	r2, .L48
+ 444 003a D2F81834 		ldr	r3, [r2, #1048]
+ 445 003e 43F08043 		orr	r3, r3, #1073741824
+ 446 0042 C2F81834 		str	r3, [r2, #1048]
+ 447 0046 7047     		bx	lr
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s 			page 11
+
+
+ 448              	.L45:
+ 117:Core/Src/init_LB1_Macros.c ****     }
+ 118:Core/Src/init_LB1_Macros.c ****     else if(BIT_READ(GPIOE_IDR, IDR_11) != 0){
+ 449              		.loc 1 118 10 view .LVU94
+ 450              		.loc 1 118 12 is_stmt 0 view .LVU95
+ 451 0048 12F4006F 		tst	r2, #2048
+ 452 004c 05D0     		beq	.L46
+ 119:Core/Src/init_LB1_Macros.c ****         BIT_SET(GPIOE_BSRR, BSRR_BR11);
+ 453              		.loc 1 119 9 is_stmt 1 view .LVU96
+ 454 004e 0D4A     		ldr	r2, .L48
+ 455 0050 9369     		ldr	r3, [r2, #24]
+ 456 0052 43F00063 		orr	r3, r3, #134217728
+ 457 0056 9361     		str	r3, [r2, #24]
+ 458 0058 7047     		bx	lr
+ 459              	.L46:
+ 120:Core/Src/init_LB1_Macros.c ****     }
+ 121:Core/Src/init_LB1_Macros.c ****     else if(BIT_READ(GPIOE_IDR, IDR_9) != 0){
+ 460              		.loc 1 121 10 view .LVU97
+ 461              		.loc 1 121 12 is_stmt 0 view .LVU98
+ 462 005a 12F4007F 		tst	r2, #512
+ 463 005e 05D0     		beq	.L47
+ 122:Core/Src/init_LB1_Macros.c ****         BIT_SET(GPIOE_BSRR, BSRR_BR9);
+ 464              		.loc 1 122 9 is_stmt 1 view .LVU99
+ 465 0060 084A     		ldr	r2, .L48
+ 466 0062 9369     		ldr	r3, [r2, #24]
+ 467 0064 43F00073 		orr	r3, r3, #33554432
+ 468 0068 9361     		str	r3, [r2, #24]
+ 469 006a 7047     		bx	lr
+ 470              	.L47:
+ 123:Core/Src/init_LB1_Macros.c ****     }
+ 124:Core/Src/init_LB1_Macros.c **** 
+ 125:Core/Src/init_LB1_Macros.c ****     else if(BIT_READ(GPIOF_IDR, IDR_13) != 0){
+ 471              		.loc 1 125 10 view .LVU100
+ 472              		.loc 1 125 12 is_stmt 0 view .LVU101
+ 473 006c 13F4005F 		tst	r3, #8192
+ 474 0070 06D0     		beq	.L41
+ 126:Core/Src/init_LB1_Macros.c ****         BIT_SET(GPIOF_BSRR, BSRR_BR13);
+ 475              		.loc 1 126 9 is_stmt 1 view .LVU102
+ 476 0072 044A     		ldr	r2, .L48
+ 477 0074 D2F81834 		ldr	r3, [r2, #1048]
+ 478 0078 43F00053 		orr	r3, r3, #536870912
+ 479 007c C2F81834 		str	r3, [r2, #1048]
+ 480              	.L41:
+ 127:Core/Src/init_LB1_Macros.c ****     }
+ 128:Core/Src/init_LB1_Macros.c **** 
+ 129:Core/Src/init_LB1_Macros.c **** }
+ 481              		.loc 1 129 1 is_stmt 0 view .LVU103
+ 482 0080 7047     		bx	lr
+ 483              	.L49:
+ 484 0082 00BF     		.align	2
+ 485              	.L48:
+ 486 0084 00100240 		.word	1073876992
+ 487              		.cfi_endproc
+ 488              	.LFE5:
+ 490              		.section	.text.TheSwitcher_macros,"ax",%progbits
+ 491              		.align	1
+ 492              		.global	TheSwitcher_macros
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s 			page 12
+
+
+ 493              		.syntax unified
+ 494              		.thumb
+ 495              		.thumb_func
+ 497              	TheSwitcher_macros:
+ 498              	.LVL9:
+ 499              	.LFB6:
+ 130:Core/Src/init_LB1_Macros.c **** 
+ 131:Core/Src/init_LB1_Macros.c **** int TheSwitcher_macros(int count){
+ 500              		.loc 1 131 34 is_stmt 1 view -0
+ 501              		.cfi_startproc
+ 502              		@ args = 0, pretend = 0, frame = 0
+ 503              		@ frame_needed = 0, uses_anonymous_args = 0
+ 504              		@ link register save eliminated.
+ 132:Core/Src/init_LB1_Macros.c ****     return count & 1;
+ 505              		.loc 1 132 5 view .LVU105
+ 133:Core/Src/init_LB1_Macros.c **** }
+ 506              		.loc 1 133 1 is_stmt 0 view .LVU106
+ 507 0000 00F00100 		and	r0, r0, #1
+ 508              	.LVL10:
+ 509              		.loc 1 133 1 view .LVU107
+ 510 0004 7047     		bx	lr
+ 511              		.cfi_endproc
+ 512              	.LFE6:
+ 514              		.text
+ 515              	.Letext0:
+ 516              		.file 2 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/machine/_default_types.
+ 517              		.file 3 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/sys/_stdint.h"
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s 			page 13
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 init_LB1_Macros.c
+C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s:21     .text.GPIO_Init_Macros_LB1:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s:27     .text.GPIO_Init_Macros_LB1:00000000 GPIO_Init_Macros_LB1
+C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s:132    .text.GPIO_Init_Macros_LB1:000000dc $d
+C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s:138    .text.pressedButton1_macros:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s:144    .text.pressedButton1_macros:00000000 pressedButton1_macros
+C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s:187    .text.pressedButton1_macros:00000020 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s:193    .text.pressedButton2_macros:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s:199    .text.pressedButton2_macros:00000000 pressedButton2_macros
+C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s:242    .text.pressedButton2_macros:00000020 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s:248    .text.pressedButton3_macros:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s:254    .text.pressedButton3_macros:00000000 pressedButton3_macros
+C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s:297    .text.pressedButton3_macros:00000020 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s:303    .text.TurningOnState_macros:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s:309    .text.TurningOnState_macros:00000000 TurningOnState_macros
+C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s:392    .text.TurningOnState_macros:00000084 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s:397    .text.TurningOffState_macros:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s:403    .text.TurningOffState_macros:00000000 TurningOffState_macros
+C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s:486    .text.TurningOffState_macros:00000084 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s:491    .text.TheSwitcher_macros:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccZNflc9.s:497    .text.TheSwitcher_macros:00000000 TheSwitcher_macros
+
+NO UNDEFINED SYMBOLS
