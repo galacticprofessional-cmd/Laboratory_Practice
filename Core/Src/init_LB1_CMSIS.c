@@ -1,22 +1,4 @@
-#include "../Inc/init_LB1.h"
-
-void GPIO_Init_Memory1(void){
-//         *(uint32_t *)() |=     //Включение тактирования на переферии GPIOB и GPIOC, регистр AHB1ENR
-//         *(uint32_t *)() |=     //Настройка пина PB7 на вывводб регистр MODER
-//         *(uint32_t *)() |=     //Настройка режима работы выxода на push-pull, регистр OTYPER
-//         *(uint32_t *)() |=     //Настройка скорости вывода PB7, регистр OSPEEDR
-//         *(uint32_t *)() |=     //Предварительное выключение светодиода, регистр BSR, бит BR7
-}
-
-void GPIO_Init_Using_My_Macros(void){
-//     RCC_AHB1ENR |= RCC_GPIOB_EN | RCC_GPIOC_EN;     //Включение тактирования на переферии GPIOB и GPIOC, регистр AHB1ENR
-
-//     BIT_SET();        //Настройка пина PB7 на вывод, регистр MODER
-//     BIT_SET();              //Настройка режима работы выxода на push-pull, регистр OTYPER
-//     BIT_SET();        //Настройка скорости вывода PB7, регистр OSPEEDR
-//     BIT_SET();      //Предварительное выключение светодиода, регистр BSR, бит BR7
-
-}
+#include "../Inc/init_LB1_CMSIS.h"
 
 void GPIO_Init_CMSIS_LB1(void){
 

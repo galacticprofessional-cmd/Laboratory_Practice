@@ -1,8 +1,6 @@
 // LB1
 
-#include "../Inc/init_LB1.h"
-
-
+#include "../Inc/init_LB1_CMSIS.h"
 
 int main(void){
     
