@@ -120,11 +120,7 @@ endif
 C_SOURCES =  \
 $(SYS) \
 Core/Src/main.c \
-Core/Src/init.c \
-Core/Src/init_LB1_CMSIS.c \
-Core/Src/init_LB1_Macros.c \
-# Core/Src/init_LB2.c \
-# Core/Src/interrupt.c \
+Core/Src/init_LB1.c \
 
 
 # ASM sources
