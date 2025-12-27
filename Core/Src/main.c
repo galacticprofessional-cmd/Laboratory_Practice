@@ -40,64 +40,64 @@ int main(void){
 
     }
 
-    // LB1 extra task 
+// LB1 extra task 
 
-    int currentLed = -1;
-    int ledState   = 1;       
-    int speedIndex = 0;        
-    int delayValue = 0;
+//     int currentLed = -1;
+//     int ledState   = 1;       
+//     int speedIndex = 0;        
+//     int delayValue = 0;
 
-    while(1){
+//     while(1){
 
-        if (pressedButton1() == 1) {  
-            if (currentLed != -1) {
-                ledOff(currentLed);
-            }
+//         if (pressedButton1() == 1) {  
+//             if (currentLed != -1) {
+//                 ledOff(currentLed);
+//             }
 
-            currentLed++;          
-            if (currentLed >= 6) { 
-                currentLed = 0;    
-            }
+//             currentLed++;          
+//             if (currentLed >= 6) { 
+//                 currentLed = 0;    
+//             }
 
-            ledOn(currentLed);
-            ledState = 1;
-            speedIndex = 0;
-            delayValue = 0;
-        }
+//             ledOn(currentLed);
+//             ledState = 1;
+//             speedIndex = 0;
+//             delayValue = 0;
+//         }
 
-        if (pressedButton2() == 1) {  
-            if (currentLed != -1) {
-                ledOff(currentLed);
-            }
+//         if (pressedButton2() == 1) {  
+//             if (currentLed != -1) {
+//                 ledOff(currentLed);
+//             }
 
-            currentLed--;          
-            if (currentLed < 0) { 
-                currentLed = 5;    
-            }
+//             currentLed--;          
+//             if (currentLed < 0) { 
+//                 currentLed = 5;    
+//             }
 
-            ledOn(currentLed);
-            ledState = 1;
-            speedIndex = 0;
-            delayValue = 0;
-        }
+//             ledOn(currentLed);
+//             ledState = 1;
+//             speedIndex = 0;
+//             delayValue = 0;
+//         }
 
-    if (pressedButton3() == 1) {
-        speedIndex++;
-        if (speedIndex > 4) speedIndex = 0;  
+//     if (pressedButton3() == 1) {
+//         speedIndex++;
+//         if (speedIndex > 4) speedIndex = 0;  
 
-        delayValue = changeSpeed(speedIndex);
-    }
+//         delayValue = changeSpeed(speedIndex);
+//     }
 
 
-    if (currentLed != -1) {
-        if (speedIndex == 0) {
-            ledOn(currentLed);
-            ledState = 1;
-        } else {
-            blinkLed(currentLed, &ledState);
+//     if (currentLed != -1) {
+//         if (speedIndex == 0) {
+//             ledOn(currentLed);
+//             ledState = 1;
+//         } else {
+//             blinkLed(currentLed, &ledState);
 
-            for (volatile int i = 0; i < delayValue; i++){}
-        }
-    }
-    }
+//             for (volatile int i = 0; i < delayValue; i++){}
+//         }
+//     }
+// }
 }

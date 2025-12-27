@@ -4,10 +4,10 @@ void GPIO_Init_CMSIS_LB1(void){
 
     SET_BIT     (RCC->AHB1ENR, RCC_AHB1ENR_GPIODEN | RCC_AHB1ENR_GPIOGEN | RCC_AHB1ENR_GPIOEEN | RCC_AHB1ENR_GPIOFEN);
 
-    SET_BIT     (GPIOF->MODER,      GPIO_MODER_MODER13_0);          //Настройка пина PF13 на вывод, регистр MODER
-    CLEAR_BIT   (GPIOF->OTYPER,     GPIO_OTYPER_OT13);              //Настройка режима работы выxода на push-pull, регистр OTYPER
-    SET_BIT     (GPIOF->OSPEEDR,    GPIO_OSPEEDER_OSPEEDR13_0);     //Настройка скорости работы вывода PF13, регистр OSPEEDR
-    SET_BIT     (GPIOF->BSRR,       GPIO_BSRR_BR13);                //Предварительное выключение светодиода, регистр BSR, бит BR13
+    SET_BIT     (GPIOF->MODER,      GPIO_MODER_MODER13_0);         //Настройка пина PF13 на вывод, регистр MODER
+    CLEAR_BIT   (GPIOF->OTYPER,     GPIO_OTYPER_OT13);             //Настройка режима работы выxода на push-pull, регистр OTYPER
+    SET_BIT     (GPIOF->OSPEEDR,    GPIO_OSPEEDER_OSPEEDR13_0);    //Настройка скорости работы вывода PF13, регистр OSPEEDR
+    SET_BIT     (GPIOF->BSRR,       GPIO_BSRR_BR13);               //Предварительное выключение светодиода, регистр BSR, бит BR13
 
     SET_BIT     (GPIOE->MODER,      GPIO_MODER_MODER9_0);          //Настройка пина PE9 на вывод, регистр MODER
     CLEAR_BIT   (GPIOE->OTYPER,     GPIO_OTYPER_OT9);              //Настройка режима работы выxода на push-pull, регистр OTYPER
@@ -46,7 +46,7 @@ void GPIO_Init_Memory_LB1(void){
 
 
 int pressedButton1(void){
-    
+
     if(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) == 0){
         for(int i = 0; i < TIME_DELAY1; i++){}
         if(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) == 0){

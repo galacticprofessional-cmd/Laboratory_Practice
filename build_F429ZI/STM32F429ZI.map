@@ -756,17 +756,17 @@ LOAD D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13
  .comment       0x00000039       0x3a build_F429ZI/init_LB1.o
  .comment       0x00000039       0x3a D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-init.o)
 
-.debug_info     0x00000000      0xda8
+.debug_info     0x00000000      0xd63
  .debug_info    0x00000000      0x5ce build_F429ZI/system_stm32f4xx.o
- .debug_info    0x000005ce      0x200 build_F429ZI/main.o
- .debug_info    0x000007ce      0x5aa build_F429ZI/init_LB1.o
- .debug_info    0x00000d78       0x30 build_F429ZI/startup_stm32f429xx.o
+ .debug_info    0x000005ce      0x1bb build_F429ZI/main.o
+ .debug_info    0x00000789      0x5aa build_F429ZI/init_LB1.o
+ .debug_info    0x00000d33       0x30 build_F429ZI/startup_stm32f429xx.o
 
-.debug_abbrev   0x00000000      0x3b8
+.debug_abbrev   0x00000000      0x38c
  .debug_abbrev  0x00000000      0x11b build_F429ZI/system_stm32f4xx.o
- .debug_abbrev  0x0000011b      0x10f build_F429ZI/main.o
- .debug_abbrev  0x0000022a      0x171 build_F429ZI/init_LB1.o
- .debug_abbrev  0x0000039b       0x1d build_F429ZI/startup_stm32f429xx.o
+ .debug_abbrev  0x0000011b       0xe3 build_F429ZI/main.o
+ .debug_abbrev  0x000001fe      0x171 build_F429ZI/init_LB1.o
+ .debug_abbrev  0x0000036f       0x1d build_F429ZI/startup_stm32f429xx.o
 
 .debug_loc      0x00000000      0x341
  .debug_loc     0x00000000      0x181 build_F429ZI/system_stm32f4xx.o
@@ -795,12 +795,12 @@ LOAD D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/bin/../lib/gcc/arm-none-eabi/13
  .debug_line    0x00000358      0x49d build_F429ZI/init_LB1.o
  .debug_line    0x000007f5       0x8a build_F429ZI/startup_stm32f429xx.o
 
-.debug_str      0x00000000      0x4c4
- .debug_str     0x00000000      0x4c4 build_F429ZI/system_stm32f4xx.o
+.debug_str      0x00000000      0x4ae
+ .debug_str     0x00000000      0x4ae build_F429ZI/system_stm32f4xx.o
                                 0x37b (size before relaxing)
- .debug_str     0x000004c4      0x236 build_F429ZI/main.o
- .debug_str     0x000004c4      0x39d build_F429ZI/init_LB1.o
- .debug_str     0x000004c4       0x85 build_F429ZI/startup_stm32f429xx.o
+ .debug_str     0x000004ae      0x20c build_F429ZI/main.o
+ .debug_str     0x000004ae      0x39d build_F429ZI/init_LB1.o
+ .debug_str     0x000004ae       0x85 build_F429ZI/startup_stm32f429xx.o
 
 .debug_frame    0x00000000      0x140
  .debug_frame   0x00000000       0x30 build_F429ZI/system_stm32f4xx.o

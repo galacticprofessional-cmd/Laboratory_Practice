@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccAe1Uh4.s 			page 1
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cciMpudo.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -56,143 +56,142 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccAe1Uh4.s 			page 1
   45 000a FFF7FEFF 		bl	GPIO_Init_Memory_LB1
   46              	.LVL2:
   10:Core/Src/main.c **** 
-  11:Core/Src/main.c **** 
-  12:Core/Src/main.c ****     int count = 0;
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccAe1Uh4.s 			page 2
+  11:Core/Src/main.c ****     int count = 0;
+  47              		.loc 1 11 5 view .LVU4
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cciMpudo.s 			page 2
 
 
-  47              		.loc 1 12 5 view .LVU4
-  48              		.loc 1 12 9 is_stmt 0 view .LVU5
+  48              		.loc 1 11 9 is_stmt 0 view .LVU5
   49 000e 0024     		movs	r4, #0
   50 0010 0AE0     		b	.L2
   51              	.LVL3:
   52              	.L10:
   53              	.LBB2:
-  13:Core/Src/main.c **** 
-  14:Core/Src/main.c ****     while(1){
-  15:Core/Src/main.c **** 
-  16:Core/Src/main.c ****         if(pressedButton3() == 1){
-  17:Core/Src/main.c ****             count++;
-  54              		.loc 1 17 13 is_stmt 1 view .LVU6
-  55              		.loc 1 17 18 is_stmt 0 view .LVU7
+  12:Core/Src/main.c **** 
+  13:Core/Src/main.c ****     while(1){
+  14:Core/Src/main.c **** 
+  15:Core/Src/main.c ****         if(pressedButton3() == 1){
+  16:Core/Src/main.c ****             count++;
+  54              		.loc 1 16 13 is_stmt 1 view .LVU6
+  55              		.loc 1 16 18 is_stmt 0 view .LVU7
   56 0012 0134     		adds	r4, r4, #1
   57              	.LVL4:
-  58              		.loc 1 17 18 view .LVU8
+  58              		.loc 1 16 18 view .LVU8
   59 0014 0CE0     		b	.L3
   60              	.LVL5:
   61              	.L5:
-  18:Core/Src/main.c ****         }
-  19:Core/Src/main.c ****         
-  20:Core/Src/main.c ****         int key = TheSwitcher(count);
-  21:Core/Src/main.c ****      
-  22:Core/Src/main.c ****         if (key == 0){
-  23:Core/Src/main.c ****             if(pressedButton1() == 1){
-  24:Core/Src/main.c ****                 TurningOnState();
-  25:Core/Src/main.c ****             }
-  26:Core/Src/main.c ****             else if(pressedButton2() == 1){
-  62              		.loc 1 26 18 is_stmt 1 view .LVU9
-  63              		.loc 1 26 21 is_stmt 0 view .LVU10
+  17:Core/Src/main.c ****         }
+  18:Core/Src/main.c ****         
+  19:Core/Src/main.c ****         int key = TheSwitcher(count);
+  20:Core/Src/main.c ****      
+  21:Core/Src/main.c ****         if (key == 0){
+  22:Core/Src/main.c ****             if(pressedButton1() == 1){
+  23:Core/Src/main.c ****                 TurningOnState();
+  24:Core/Src/main.c ****             }
+  25:Core/Src/main.c ****             else if(pressedButton2() == 1){
+  62              		.loc 1 25 18 is_stmt 1 view .LVU9
+  63              		.loc 1 25 21 is_stmt 0 view .LVU10
   64 0016 FFF7FEFF 		bl	pressedButton2
   65              	.LVL6:
-  66              		.loc 1 26 20 discriminator 1 view .LVU11
+  66              		.loc 1 25 20 discriminator 1 view .LVU11
   67 001a 0128     		cmp	r0, #1
   68 001c 04D1     		bne	.L2
-  27:Core/Src/main.c ****                 TurningOffState();
-  69              		.loc 1 27 17 is_stmt 1 view .LVU12
+  26:Core/Src/main.c ****                 TurningOffState();
+  69              		.loc 1 26 17 is_stmt 1 view .LVU12
   70 001e FFF7FEFF 		bl	TurningOffState
   71              	.LVL7:
   72 0022 01E0     		b	.L2
   73              	.LVL8:
   74              	.L4:
-  28:Core/Src/main.c **** 
-  29:Core/Src/main.c ****             }
-  30:Core/Src/main.c ****         }
-  31:Core/Src/main.c ****         else if(key == 1){
-  75              		.loc 1 31 14 view .LVU13
-  76              		.loc 1 31 16 is_stmt 0 view .LVU14
+  27:Core/Src/main.c **** 
+  28:Core/Src/main.c ****             }
+  29:Core/Src/main.c ****         }
+  30:Core/Src/main.c ****         else if(key == 1){
+  75              		.loc 1 30 14 view .LVU13
+  76              		.loc 1 30 16 is_stmt 0 view .LVU14
   77 0024 0128     		cmp	r0, #1
   78 0026 0FD0     		beq	.L9
   79              	.LVL9:
   80              	.L2:
-  81              		.loc 1 31 16 view .LVU15
+  81              		.loc 1 30 16 view .LVU15
   82              	.LBE2:
-  14:Core/Src/main.c **** 
-  83              		.loc 1 14 5 is_stmt 1 view .LVU16
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccAe1Uh4.s 			page 3
-
-
+  13:Core/Src/main.c **** 
+  83              		.loc 1 13 5 is_stmt 1 view .LVU16
   84              	.LBB3:
-  16:Core/Src/main.c ****             count++;
-  85              		.loc 1 16 9 view .LVU17
-  16:Core/Src/main.c ****             count++;
-  86              		.loc 1 16 12 is_stmt 0 view .LVU18
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cciMpudo.s 			page 3
+
+
+  15:Core/Src/main.c ****             count++;
+  85              		.loc 1 15 9 view .LVU17
+  15:Core/Src/main.c ****             count++;
+  86              		.loc 1 15 12 is_stmt 0 view .LVU18
   87 0028 FFF7FEFF 		bl	pressedButton3
   88              	.LVL10:
-  16:Core/Src/main.c ****             count++;
-  89              		.loc 1 16 11 discriminator 1 view .LVU19
+  15:Core/Src/main.c ****             count++;
+  89              		.loc 1 15 11 discriminator 1 view .LVU19
   90 002c 0128     		cmp	r0, #1
   91 002e F0D0     		beq	.L10
   92              	.L3:
-  20:Core/Src/main.c ****      
-  93              		.loc 1 20 9 is_stmt 1 view .LVU20
-  20:Core/Src/main.c ****      
-  94              		.loc 1 20 19 is_stmt 0 view .LVU21
+  19:Core/Src/main.c ****      
+  93              		.loc 1 19 9 is_stmt 1 view .LVU20
+  19:Core/Src/main.c ****      
+  94              		.loc 1 19 19 is_stmt 0 view .LVU21
   95 0030 2046     		mov	r0, r4
   96 0032 FFF7FEFF 		bl	TheSwitcher
   97              	.LVL11:
-  22:Core/Src/main.c ****             if(pressedButton1() == 1){
-  98              		.loc 1 22 9 is_stmt 1 view .LVU22
-  22:Core/Src/main.c ****             if(pressedButton1() == 1){
-  99              		.loc 1 22 12 is_stmt 0 view .LVU23
+  21:Core/Src/main.c ****             if(pressedButton1() == 1){
+  98              		.loc 1 21 9 is_stmt 1 view .LVU22
+  21:Core/Src/main.c ****             if(pressedButton1() == 1){
+  99              		.loc 1 21 12 is_stmt 0 view .LVU23
  100 0036 0028     		cmp	r0, #0
  101 0038 F4D1     		bne	.L4
-  23:Core/Src/main.c ****                 TurningOnState();
- 102              		.loc 1 23 13 is_stmt 1 view .LVU24
-  23:Core/Src/main.c ****                 TurningOnState();
- 103              		.loc 1 23 16 is_stmt 0 view .LVU25
+  22:Core/Src/main.c ****                 TurningOnState();
+ 102              		.loc 1 22 13 is_stmt 1 view .LVU24
+  22:Core/Src/main.c ****                 TurningOnState();
+ 103              		.loc 1 22 16 is_stmt 0 view .LVU25
  104 003a FFF7FEFF 		bl	pressedButton1
  105              	.LVL12:
-  23:Core/Src/main.c ****                 TurningOnState();
- 106              		.loc 1 23 15 discriminator 1 view .LVU26
+  22:Core/Src/main.c ****                 TurningOnState();
+ 106              		.loc 1 22 15 discriminator 1 view .LVU26
  107 003e 0128     		cmp	r0, #1
  108 0040 E9D1     		bne	.L5
-  24:Core/Src/main.c ****             }
- 109              		.loc 1 24 17 is_stmt 1 view .LVU27
+  23:Core/Src/main.c ****             }
+ 109              		.loc 1 23 17 is_stmt 1 view .LVU27
  110 0042 FFF7FEFF 		bl	TurningOnState
  111              	.LVL13:
  112 0046 EFE7     		b	.L2
  113              	.LVL14:
  114              	.L9:
-  32:Core/Src/main.c ****             if(pressedButton1() == 1){
- 115              		.loc 1 32 13 view .LVU28
- 116              		.loc 1 32 16 is_stmt 0 view .LVU29
+  31:Core/Src/main.c ****             if(pressedButton1() == 1){
+ 115              		.loc 1 31 13 view .LVU28
+ 116              		.loc 1 31 16 is_stmt 0 view .LVU29
  117 0048 FFF7FEFF 		bl	pressedButton1
  118              	.LVL15:
- 119              		.loc 1 32 15 discriminator 1 view .LVU30
+ 119              		.loc 1 31 15 discriminator 1 view .LVU30
  120 004c 0128     		cmp	r0, #1
  121 004e 06D0     		beq	.L11
-  33:Core/Src/main.c ****                 TurningOffState();
-  34:Core/Src/main.c **** 
-  35:Core/Src/main.c ****             }
-  36:Core/Src/main.c ****             else if(pressedButton2() == 1){
- 122              		.loc 1 36 18 is_stmt 1 view .LVU31
- 123              		.loc 1 36 21 is_stmt 0 view .LVU32
+  32:Core/Src/main.c ****                 TurningOffState();
+  33:Core/Src/main.c **** 
+  34:Core/Src/main.c ****             }
+  35:Core/Src/main.c ****             else if(pressedButton2() == 1){
+ 122              		.loc 1 35 18 is_stmt 1 view .LVU31
+ 123              		.loc 1 35 21 is_stmt 0 view .LVU32
  124 0050 FFF7FEFF 		bl	pressedButton2
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccAe1Uh4.s 			page 4
-
-
  125              	.LVL16:
- 126              		.loc 1 36 20 discriminator 1 view .LVU33
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cciMpudo.s 			page 4
+
+
+ 126              		.loc 1 35 20 discriminator 1 view .LVU33
  127 0054 0128     		cmp	r0, #1
  128 0056 E7D1     		bne	.L2
-  37:Core/Src/main.c ****                 TurningOnState();
- 129              		.loc 1 37 17 is_stmt 1 view .LVU34
+  36:Core/Src/main.c ****                 TurningOnState();
+ 129              		.loc 1 36 17 is_stmt 1 view .LVU34
  130 0058 FFF7FEFF 		bl	TurningOnState
  131              	.LVL17:
  132 005c E4E7     		b	.L2
  133              	.L11:
-  33:Core/Src/main.c ****                 TurningOffState();
- 134              		.loc 1 33 17 view .LVU35
+  32:Core/Src/main.c ****                 TurningOffState();
+ 134              		.loc 1 32 17 view .LVU35
  135 005e FFF7FEFF 		bl	TurningOffState
  136              	.LVL18:
  137 0062 E1E7     		b	.L2
@@ -202,13 +201,13 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccAe1Uh4.s 			page 1
  142              		.text
  143              	.Letext0:
  144              		.file 2 "Core/Src/../Inc/init_LB1.h"
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccAe1Uh4.s 			page 5
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\cciMpudo.s 			page 5
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 main.c
-C:\Users\VICTUS\AppData\Local\Temp\ccAe1Uh4.s:21     .text.main:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccAe1Uh4.s:27     .text.main:00000000 main
+C:\Users\VICTUS\AppData\Local\Temp\cciMpudo.s:21     .text.main:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\cciMpudo.s:27     .text.main:00000000 main
 
 UNDEFINED SYMBOLS
 GPIO_Init_CMSIS_LB1
