@@ -8,7 +8,6 @@ int main(void){
     GPIO_Init_Macros_LB1();
     GPIO_Init_Memory_LB1();
 
-
     int count = 0;
 
     while(1){
@@ -49,6 +48,7 @@ int main(void){
     int delayValue = 0;
 
     while(1){
+
         if (pressedButton1() == 1) {  
             if (currentLed != -1) {
                 ledOff(currentLed);

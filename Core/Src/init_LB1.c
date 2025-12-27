@@ -17,6 +17,7 @@ void GPIO_Init_CMSIS_LB1(void){
 }
 
 void GPIO_Init_Macros_LB1(void){
+
     BIT_SET     (GPIOE_MODER,      MODER11_0);                      //Настройка пина PE11 на вывод, регистр MODER
     BIT_CLEAR   (GPIOE_OTYPER,     OTYPER11);                       //Настройка режима работы выxода на push-pull, регистр OTYPER
     BIT_SET     (GPIOE_OSPEEDR,    OSPEEDR11_0);                    //Настройка скорости работы вывода PE11, регистр OSPEEDR
@@ -45,6 +46,7 @@ void GPIO_Init_Memory_LB1(void){
 
 
 int pressedButton1(void){
+    
     if(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) == 0){
         for(int i = 0; i < TIME_DELAY1; i++){}
         if(READ_BIT(GPIOD->IDR , GPIO_IDR_IDR_2) == 0){
@@ -58,6 +60,7 @@ int pressedButton1(void){
 }
 
 int pressedButton2(void){
+
     if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){
         for(int i = 0; i < TIME_DELAY1; i++){}
         if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){
@@ -71,6 +74,7 @@ int pressedButton2(void){
 }
 
 int pressedButton3(void){
+
     if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) == 0){
         for(int i = 0; i < TIME_DELAY1; i++){}
         if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) == 0){
@@ -84,6 +88,7 @@ int pressedButton3(void){
 }
 
 void TurningOnState(void){
+
     if(READ_BIT(GPIOF->IDR , GPIO_IDR_IDR_13) == 0){
         SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS13);
     }
@@ -111,6 +116,7 @@ void TurningOnState(void){
 }
 
 void TurningOffState(void){
+
     if(READ_BIT(GPIOF->IDR , GPIO_IDR_IDR_15) != 0){
         SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR15);
     }
@@ -136,7 +142,9 @@ void TurningOffState(void){
 }
 
 int TheSwitcher(int count){
+
     return count & 1;
+
 }
 
 
@@ -144,6 +152,7 @@ int TheSwitcher(int count){
 
 
 void ledOn(int n){
+
     switch(n){
         case 0:
             SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS13); // PF13 ON
@@ -164,9 +173,11 @@ void ledOn(int n){
             SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS15); // PF15 ON
             break;
     }
+
 }
 
 void ledOff(int n){
+
     switch(n){
         case 0:
             SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR13); // PF13 OFF
@@ -187,9 +198,11 @@ void ledOff(int n){
             SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR15); // PF15 OFF
             break;
     }
+
 }
 
 int changeSpeed(int speedIndex){
+
     switch(speedIndex){
         case 0:
             return 0;
@@ -208,9 +221,11 @@ int changeSpeed(int speedIndex){
     }
 
     return 0;
+
 }
 
 void blinkLed(int ledNum, int *ledState){
+
     if (*ledState == 1){
         ledOff(ledNum);
         *ledState = 0;
@@ -218,5 +233,6 @@ void blinkLed(int ledNum, int *ledState){
         ledOn(ledNum);
         *ledState = 1;
     }
+
 }
 
