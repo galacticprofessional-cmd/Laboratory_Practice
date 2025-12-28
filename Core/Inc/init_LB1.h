@@ -4,16 +4,24 @@
 #include "../../CMSIS/Devices/STM32F4xx/Inc/stm32f4xx.h"
 #include "../../CMSIS/Devices/STM32F4xx/Inc/STM32F429ZI/stm32f429xx.h"
 
+extern volatile uint32_t mcu_btn1_count;
+extern volatile uint32_t mcu_btn2_count;
+extern volatile uint32_t mcu_btn3_count;
 
-#define GPIOE_MODER         *(uint32_t *)(0x40021000UL + 0x00UL) 
-#define GPIOE_OTYPER        *(uint32_t *)(0x40021000UL + 0x04UL) 
-#define GPIOE_OSPEEDR       *(uint32_t *)(0x40021000UL + 0x08UL) 
-#define GPIOE_BSRR          *(uint32_t *)(0x40021000UL + 0x18UL)
+extern volatile uint8_t  mcu_btn1_event;
+extern volatile uint8_t  mcu_btn2_event;
+extern volatile uint8_t  mcu_btn3_event;
 
-#define GPIOF_MODER         *(uint32_t *)(0x40021400UL + 0x00UL) 
-#define GPIOF_OTYPER        *(uint32_t *)(0x40021400UL + 0x04UL) 
-#define GPIOF_OSPEEDR       *(uint32_t *)(0x40021400UL + 0x08UL) 
-#define GPIOF_BSRR          *(uint32_t *)(0x40021400UL + 0x18UL)
+
+#define GPIOE_MODER   (*(volatile uint32_t *)(0x40021000UL + 0x00UL))
+#define GPIOE_OTYPER  (*(volatile uint32_t *)(0x40021000UL + 0x04UL))
+#define GPIOE_OSPEEDR (*(volatile uint32_t *)(0x40021000UL + 0x08UL))
+#define GPIOE_BSRR    (*(volatile uint32_t *)(0x40021000UL + 0x18UL))
+
+#define GPIOF_MODER   (*(volatile uint32_t *)(0x40021400UL + 0x00UL))
+#define GPIOF_OTYPER  (*(volatile uint32_t *)(0x40021400UL + 0x04UL))
+#define GPIOF_OSPEEDR (*(volatile uint32_t *)(0x40021400UL + 0x08UL))
+#define GPIOF_BSRR    (*(volatile uint32_t *)(0x40021400UL + 0x18UL))
 
 #define MODER11_0           0x00400000UL
 #define OTYPER11            0x1UL << 11U

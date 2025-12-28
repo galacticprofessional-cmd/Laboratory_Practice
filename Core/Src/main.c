@@ -40,6 +40,13 @@ int main(void){
 
     }
 
+    mcu_btn1_event = 0;
+    mcu_btn2_event = 0;
+    mcu_btn3_event = 0;
+
+
+
+
 // LB1 extra task 
 
 //     int currentLed = -1;
