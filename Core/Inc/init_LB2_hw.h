@@ -2,7 +2,7 @@
 #define INIT_LB2_HW
 
 #include "../../CMSIS/Devices/STM32F4xx/Inc/stm32f4xx.h"
-#include "../../CMSIS/Devices/STM32F4xx/Inc/STM32F429ZI/stm32f429xx.h"
+#include "../../CMSIS/Devices/STM32F4xx/Inc/STM32F411RE/stm32f411xe.h"
 
 /* ===================== КОНСТАНТЫ ===================== */
 

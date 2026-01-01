@@ -66,12 +66,13 @@ void LED_On_Index(int n)
 {
     switch (n)
     {
-        case 0: SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS13); break;
-        case 1: SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS9);  break;
-        case 2: SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS11); break;
-        case 3: SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS14); break;
-        case 4: SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS13); break;
-        case 5: SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS15); break;
+        case 0: SET_BIT(GPIOA->BSRR, GPIO_BSRR_BS8);  break;
+        case 1: SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS10); break;
+        case 2: SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS4);  break;
+        case 3: SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS5);  break;
+        case 4: SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS3);  break;
+        case 5: SET_BIT(GPIOA->BSRR, GPIO_BSRR_BS10); break;
+        case 6: SET_BIT(GPIOA->BSRR, GPIO_BSRR_BS5);  break;
     }
 }
 
@@ -79,19 +80,20 @@ void LED_Off_Index(int n)
 {
     switch (n)
     {
-        case 0: SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR13); break;
-        case 1: SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR9);  break;
-        case 2: SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR11); break;
-        case 3: SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR14); break;
-        case 4: SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR13); break;
-        case 5: SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR15); break;
+        case 0: SET_BIT(GPIOA->BSRR, GPIO_BSRR_BR8);  break;
+        case 1: SET_BIT(GPIOB->BSRR, GPIO_BSRR_BR10); break;
+        case 2: SET_BIT(GPIOB->BSRR, GPIO_BSRR_BR4);  break;
+        case 3: SET_BIT(GPIOB->BSRR, GPIO_BSRR_BR5);  break;
+        case 4: SET_BIT(GPIOB->BSRR, GPIO_BSRR_BR3);  break;
+        case 5: SET_BIT(GPIOA->BSRR, GPIO_BSRR_BR10); break;
+        case 6: SET_BIT(GPIOA->BSRR, GPIO_BSRR_BR5);  break;
     }
 }
 
 void LED_AllOff(void)
 {
-    SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR13 | GPIO_BSRR_BR14 | GPIO_BSRR_BR15);
-    SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR9  | GPIO_BSRR_BR11 | GPIO_BSRR_BR13);
+    SET_BIT(GPIOA->BSRR, GPIO_BSRR_BR8 | GPIO_BSRR_BR10 | GPIO_BSRR_BR5);
+    SET_BIT(GPIOB->BSRR, GPIO_BSRR_BR3 | GPIO_BSRR_BR4 | GPIO_BSRR_BR5 | GPIO_BSRR_BR10);
 }
 
 void LED_Next(void)
@@ -110,15 +112,22 @@ void LED_Next(void)
 
 void GPIO_Init_LEDs(void)
 {
-    SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOEEN | RCC_AHB1ENR_GPIOFEN);
+    SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOAEN | RCC_AHB1ENR_GPIOBEN);
 
-    SET_BIT(GPIOF->MODER, GPIO_MODER_MODER13_0 |
-                          GPIO_MODER_MODER14_0 |
-                          GPIO_MODER_MODER15_0);
+    SET_BIT(GPIOA->MODER, GPIO_MODER_MODER8_0 |
+                          GPIO_MODER_MODER10_0|
+                          GPIO_MODER_MODER5_0);
 
-    SET_BIT(GPIOE->MODER, GPIO_MODER_MODER9_0  |
-                          GPIO_MODER_MODER11_0 |
-                          GPIO_MODER_MODER13_0);
+    SET_BIT(GPIOB->MODER, GPIO_MODER_MODER3_0  |
+                          GPIO_MODER_MODER4_0 |
+                          GPIO_MODER_MODER5_0 |
+                          GPIO_MODER_MODER10_0);
+
+    // OTYPER не настраивается, потому что по умолчанию GPIO работает в push-pull,
+    // а для обычного светодиода открытый сток (open-drain) не требуется.
+
+    // OSPEEDR не настраивается, потому что скорость вывода не влияет на работу светодиода
+    // и по умолчанию стоит безопасное значение с минимальными помехами.
 
     LED_AllOff();
 }

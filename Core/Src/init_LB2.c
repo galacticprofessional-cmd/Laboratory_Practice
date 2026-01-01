@@ -50,7 +50,8 @@ void RCC_Init(void){
 
     SET_BIT(RCC->CR, RCC_CR_HSEON);
     while(READ_BIT(RCC->CR, RCC_CR_HSERDY) == RESET);
-    SET_BIT(RCC->CR, RCC_CR_CSSON);
+    CLEAR_BIT(RCC->CR, RCC_CR_HSEBYP); //Сбросим бит байпаса в 0, если вдруг там что-то лежит 
+    SET_BIT(RCC->CR, RCC_CR_CSSON); // Clock safety: detect HSE failure and protect system clock 
 
     CLEAR_REG(RCC->PLLCFGR);
     SET_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLLSRC_HSE);
