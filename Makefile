@@ -13,7 +13,7 @@
 ######################################
 # target
 ######################################
-TARGET = STM32F429ZI
+TARGET = STM32F411RET
 
 ######################################
 # building variables
@@ -39,6 +39,8 @@ else ifeq ($(TARGET), STM32F429ZI)
 	BUILD_DIR = build_F429ZI
 else ifeq ($(TARGET), STM32F446RET)
 	BUILD_DIR = build_F446RET
+else ifeq ($(TARGET), STM32F411RET)
+	BUILD_DIR = build_F411RET
 endif
 ######################################
 # selecting source
@@ -89,6 +91,17 @@ else ifeq ($(TARGET), STM32F411VET)
 	MCPU = cortex-m4
 	MFPU = fpv4-sp-d16
 	TRGT_CFG = stm32f4x
+else ifeq ($(TARGET), STM32F411RET)
+	SYS = CMSIS/Devices/STM32F4xx/Src/system_stm32f4xx.c \ CMSIS/Devices/Src/syscalls.c \ CMSIS/Devices/Src/sysmem.c
+	ASM = STMDevices/STM32F411RET/startup_stm32f411xe.s
+	CMSIS_INC_DEV = CMSIS/Devices/STM32F4xx/Inc
+	CMSIS_INC_UNIT = CMSIS/Devices/STM32F4xx/Inc/STM32F411RE
+	CMSIS_INC = CMSIS/Include
+	LD = STMDevices/STM32F411RET/STM32F411RETX_FLASH.ld
+	DEF = STM32F411xE
+	MCPU = cortex-m4
+	MFPU = fpv4-sp-d16
+	TRGT_CFG = stm32f4x
 else ifeq ($(TARGET), STM32F429ZI)
 	SYS = CMSIS/Devices/STM32F4xx/Src/system_stm32f4xx.c \ CMSIS/Devices/Src/syscalls.c \ CMSIS/Devices/Src/sysmem.c
 	ASM = STMDevices/STM32F429ZI/startup_stm32f429xx.s
@@ -120,7 +133,10 @@ endif
 C_SOURCES =  \
 $(SYS) \
 Core/Src/main.c \
-Core/Src/init_LB1.c \
+# Core/Src/init_LB2_hw.c \
+# Core/Src/init.c \
+# Core/Src/init_LB1.c \
+# Core/Src/interrupt.c \
 
 
 # ASM sources
