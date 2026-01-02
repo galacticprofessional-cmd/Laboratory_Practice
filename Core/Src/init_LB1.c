@@ -8,47 +8,56 @@ volatile uint8_t  mcu_btn1_event = 0;
 volatile uint8_t  mcu_btn2_event = 0;
 volatile uint8_t  mcu_btn3_event = 0;
 
+
+
 void GPIO_Init_CMSIS_LB1(void){
 
-    SET_BIT     (RCC->AHB1ENR, RCC_AHB1ENR_GPIODEN | RCC_AHB1ENR_GPIOGEN | RCC_AHB1ENR_GPIOEEN | RCC_AHB1ENR_GPIOFEN);
+    SET_BIT     (RCC->AHB1ENR, RCC_AHB1ENR_GPIODEN | RCC_AHB1ENR_GPIOAEN | RCC_AHB1ENR_GPIOBEN);
 
-    SET_BIT     (GPIOF->MODER,      GPIO_MODER_MODER13_0);         //Настройка пина PF13 на вывод, регистр MODER
-    CLEAR_BIT   (GPIOF->OTYPER,     GPIO_OTYPER_OT13);             //Настройка режима работы выxода на push-pull, регистр OTYPER
-    SET_BIT     (GPIOF->OSPEEDR,    GPIO_OSPEEDER_OSPEEDR13_0);    //Настройка скорости работы вывода PF13, регистр OSPEEDR
-    SET_BIT     (GPIOF->BSRR,       GPIO_BSRR_BR13);               //Предварительное выключение светодиода, регистр BSRR, бит BR13
+    SET_BIT     (GPIOA->MODER,      GPIO_MODER_MODER8_0);         
+    CLEAR_BIT   (GPIOA->OTYPER,     GPIO_OTYPER_OT8);             
+    SET_BIT     (GPIOA->OSPEEDR,    GPIO_OSPEEDER_OSPEEDR8_0);    
+    SET_BIT     (GPIOA->BSRR,       GPIO_BSRR_BR8);               
 
-    SET_BIT     (GPIOE->MODER,      GPIO_MODER_MODER9_0);          //Настройка пина PE9 на вывод, регистр MODER
-    CLEAR_BIT   (GPIOE->OTYPER,     GPIO_OTYPER_OT9);              //Настройка режима работы выxода на push-pull, регистр OTYPER
-    SET_BIT     (GPIOE->OSPEEDR,    GPIO_OSPEEDER_OSPEEDR9_0);     //Настройка скорости работы вывода PE9, регистр OSPEEDR
-    SET_BIT     (GPIOE->BSRR,       GPIO_BSRR_BR9);                //Предварительное выключение светодиода, регистр BSRR, бит BR9
-
-}
-
-void GPIO_Init_Macros_LB1(void){
-
-    BIT_SET     (GPIOE_MODER,      MODER11_0);                      //Настройка пина PE11 на вывод, регистр MODER
-    BIT_CLEAR   (GPIOE_OTYPER,     OTYPER11);                       //Настройка режима работы выxода на push-pull, регистр OTYPER
-    BIT_SET     (GPIOE_OSPEEDR,    OSPEEDR11_0);                    //Настройка скорости работы вывода PE11, регистр OSPEEDR
-    BIT_SET     (GPIOE_BSRR,       BSRR_BR11);                      //Предварительное выключение светодиода, регистр BSRR, бит BR11
-
-    BIT_SET     (GPIOF_MODER,      MODER14_0);                      //Настройка пина PF14 на вывод, регистр MODER
-    BIT_CLEAR   (GPIOF_OTYPER,     OTYPER14);                       //Настройка режима работы выxода на push-pull, регистр OTYPER
-    BIT_SET     (GPIOF_OSPEEDR,    OSPEEDR14_0);                    //Настройка скорости работы вывода PF14, регистр OSPEEDR
-    BIT_SET     (GPIOF_BSRR,       BSRR_BR14);                      //Предварительное выключение светодиода, регистр BSRR, бит BR14
-
-}
-
-void GPIO_Init_Memory_LB1(void){
+    SET_BIT     (GPIOB->MODER,      GPIO_MODER_MODER10_0);        
+    CLEAR_BIT   (GPIOB->OTYPER,     GPIO_OTYPER_OT10);            
+    SET_BIT     (GPIOB->OSPEEDR,    GPIO_OSPEEDER_OSPEEDR10_0);   
+    SET_BIT     (GPIOB->BSRR,       GPIO_BSRR_BR10);
     
-    *(uint32_t *)(0x40021000UL + 0x00UL) |= 0x04000000UL;               //Настройка пина PE13 на вывод, регистр MODER           
-    *(uint32_t *)(0x40021000UL + 0x04UL) &= ~(0x1UL << 13U);            //Настройка режима работы выxода на push-pull, регистр OTYPER
-    *(uint32_t *)(0x40021000UL + 0x08UL) |= (0x1UL << 26U);             //Настройка скорости работы вывода PE13, регистр OSPEEDR
-    *(uint32_t *)(0x40021000UL + 0x18UL) |= (0x1UL << 29U);             //Предварительное выключение светодиода, регистр BSRR, бит BR13
+    SET_BIT     (GPIOB->MODER,      GPIO_MODER_MODER3_0);        
+    CLEAR_BIT   (GPIOB->OTYPER,     GPIO_OTYPER_OT3);            
+    SET_BIT     (GPIOB->OSPEEDR,    GPIO_OSPEEDER_OSPEEDR3_0);   
+    SET_BIT     (GPIOB->BSRR,       GPIO_BSRR_BR3);
 
-    *(uint32_t *)(0x40021400UL + 0x00UL) |= (0x40000000UL);             //Настройка пина PF15 на вывод, регистр MODER
-    *(uint32_t *)(0x40021400UL + 0x04UL) &= ~(0x1UL << 15U);            //Настройка режима работы выxода на push-pull, регистр OTYPER
-    *(uint32_t *)(0x40021400UL + 0x08UL) |= (0x1UL << 30U);             //Настройка скорости работы вывода PF15, регистр OSPEEDR
-    *(uint32_t *)(0x40021400UL + 0x18UL) |= (0x1UL << 31U);             //Предварительное выключение светодиода, регистр BSRR, бит BR15
+    SET_BIT     (GPIOB->MODER,      GPIO_MODER_MODER4_0);        
+    CLEAR_BIT   (GPIOB->OTYPER,     GPIO_OTYPER_OT4);            
+    SET_BIT     (GPIOB->OSPEEDR,    GPIO_OSPEEDER_OSPEEDR4_0);   
+    SET_BIT     (GPIOB->BSRR,       GPIO_BSRR_BR4);
+
+    SET_BIT     (GPIOB->MODER,      GPIO_MODER_MODER5_0);        
+    CLEAR_BIT   (GPIOB->OTYPER,     GPIO_OTYPER_OT5);            
+    SET_BIT     (GPIOB->OSPEEDR,    GPIO_OSPEEDER_OSPEEDR5_0);   
+    SET_BIT     (GPIOB->BSRR,       GPIO_BSRR_BR5);
+
+    SET_BIT     (GPIOA->MODER,      GPIO_MODER_MODER10_0);            
+    CLEAR_BIT   (GPIOA->OTYPER,     GPIO_OTYPER_OT10);                
+    SET_BIT     (GPIOA->OSPEEDR,    GPIO_OSPEEDER_OSPEEDR10_0);       
+    SET_BIT     (GPIOA->BSRR,       GPIO_BSRR_BR10);
+    
+    // --- PD2: input + pull-up ---
+    CLEAR_BIT(GPIOD->MODER, GPIO_MODER_MODE2_Msk);      // 00 input
+    CLEAR_BIT(GPIOD->PUPDR, GPIO_PUPDR_PUPD2_Msk);
+    SET_BIT  (GPIOD->PUPDR, GPIO_PUPDR_PUPD2_0);        // 01 pull-up
+
+    // --- PA0: input + pull-up ---
+    CLEAR_BIT(GPIOA->MODER, GPIO_MODER_MODE0_Msk);      // 00 input
+    CLEAR_BIT(GPIOA->PUPDR, GPIO_PUPDR_PUPD0_Msk);
+    SET_BIT  (GPIOA->PUPDR, GPIO_PUPDR_PUPD0_0);        // 01 pull-up
+
+    // --- PA1: input + pull-up ---
+    CLEAR_BIT(GPIOA->MODER, GPIO_MODER_MODE1_Msk);      // 00 input
+    CLEAR_BIT(GPIOA->PUPDR, GPIO_PUPDR_PUPD1_Msk);
+    SET_BIT  (GPIOA->PUPDR, GPIO_PUPDR_PUPD1_0);        // 01 pull-up
 
 }
 
@@ -70,10 +79,10 @@ int pressedButton1(void){
 
 int pressedButton2(void){
 
-    if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){
+    if(READ_BIT(GPIOA->IDR , GPIO_IDR_IDR_0) == 0){
         for(int i = 0; i < TIME_DELAY1; i++){}
-        if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){
-            while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_2) == 0){}
+        if(READ_BIT(GPIOA->IDR , GPIO_IDR_IDR_0) == 0){
+            while(READ_BIT(GPIOA->IDR , GPIO_IDR_IDR_0) == 0){}
             mcu_btn2_count++;            
             mcu_btn2_event = 1;            
             return 1;
@@ -85,10 +94,10 @@ int pressedButton2(void){
 
 int pressedButton3(void){
 
-    if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) == 0){
+    if(READ_BIT(GPIOA->IDR , GPIO_IDR_IDR_1) == 0){
         for(int i = 0; i < TIME_DELAY1; i++){}
-        if(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) == 0){
-            while(READ_BIT(GPIOG->IDR , GPIO_IDR_IDR_3) == 0){}
+        if(READ_BIT(GPIOA->IDR , GPIO_IDR_IDR_1) == 0){
+            while(READ_BIT(GPIOA->IDR , GPIO_IDR_IDR_1) == 0){}
             mcu_btn3_count++;
             mcu_btn3_event = 1;
             return 1;
@@ -100,54 +109,56 @@ int pressedButton3(void){
 
 void TurningOnState(void){
 
-    if(READ_BIT(GPIOF->IDR , GPIO_IDR_IDR_13) == 0){
-        SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS13);
+    if(READ_BIT(GPIOA->IDR , GPIO_IDR_IDR_8) == 0){
+        SET_BIT(GPIOA->BSRR, GPIO_BSRR_BS8);
     }
 
-    else if(READ_BIT(GPIOE->IDR , GPIO_IDR_IDR_9) == 0){
-        SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS9);
+    else if(READ_BIT(GPIOB->IDR , GPIO_IDR_IDR_10) == 0){
+        SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS10);
     }
 
-    else if(READ_BIT(GPIOE->IDR , GPIO_IDR_IDR_11) == 0){
-        SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS11);
+    else if(READ_BIT(GPIOB->IDR , GPIO_IDR_IDR_4) == 0){
+        SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS4);
     }
 
-    else if(READ_BIT(GPIOF->IDR , GPIO_IDR_IDR_14) == 0){
-        SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS14);
+    else if(READ_BIT(GPIOB->IDR , GPIO_IDR_IDR_5) == 0){
+        SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS5);
     }
 
-    else if(READ_BIT(GPIOE->IDR , GPIO_IDR_IDR_13) == 0){
-        SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS13);
+    else if(READ_BIT(GPIOB->IDR , GPIO_IDR_IDR_3) == 0){
+        SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS3);
     }
 
-    else if(READ_BIT(GPIOF->IDR , GPIO_IDR_IDR_15) == 0){
-        SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS15);
+    else if(READ_BIT(GPIOA->IDR , GPIO_IDR_IDR_10) == 0){
+        SET_BIT(GPIOA->BSRR, GPIO_BSRR_BS10);
     }
 
 }
 
 void TurningOffState(void){
 
-    if(READ_BIT(GPIOF->IDR , GPIO_IDR_IDR_15) != 0){
-        SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR15);
+    if(READ_BIT(GPIOA->IDR , GPIO_IDR_IDR_8) != 0){
+        SET_BIT(GPIOA->BSRR, GPIO_BSRR_BR8);
     }
 
-    else if(READ_BIT(GPIOE->IDR , GPIO_IDR_IDR_13) != 0){
-        SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR13);
+    else if(READ_BIT(GPIOB->IDR , GPIO_IDR_IDR_10) != 0){
+        SET_BIT(GPIOB->BSRR, GPIO_BSRR_BR10);
     }
 
-    else if(READ_BIT(GPIOF->IDR , GPIO_IDR_IDR_14) != 0){
-        SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR14);
-    }
-    else if(READ_BIT(GPIOE->IDR , GPIO_IDR_IDR_11) != 0){
-        SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR11);
-    }
-    else if(READ_BIT(GPIOE->IDR , GPIO_IDR_IDR_9) != 0){
-        SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR9);
+    else if(READ_BIT(GPIOB->IDR , GPIO_IDR_IDR_4) != 0){
+        SET_BIT(GPIOB->BSRR, GPIO_BSRR_BR4);
     }
 
-    else if(READ_BIT(GPIOF->IDR , GPIO_IDR_IDR_13) != 0){
-        SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR13);
+    else if(READ_BIT(GPIOB->IDR , GPIO_IDR_IDR_5) != 0){
+        SET_BIT(GPIOB->BSRR, GPIO_BSRR_BR5);
+    }
+
+    else if(READ_BIT(GPIOB->IDR , GPIO_IDR_IDR_3) != 0){
+        SET_BIT(GPIOB->BSRR, GPIO_BSRR_BR3);
+    }
+
+    else if(READ_BIT(GPIOA->IDR , GPIO_IDR_IDR_10) != 0){
+        SET_BIT(GPIOA->BSRR, GPIO_BSRR_BR10);
     }
 
 }
@@ -157,93 +168,3 @@ int TheSwitcher(int count){
     return count & 1;
 
 }
-
-
-// Extra task functions
-
-
-void ledOn(int n){
-
-    switch(n){
-        case 0:
-            SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS13); // PF13 ON
-            break;
-        case 1:
-            SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS9);  // PE9 ON
-            break;
-        case 2:
-            SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS11); // PE11 ON
-            break;
-        case 3:
-            SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS14); // PF14 ON
-            break;
-        case 4:
-            SET_BIT(GPIOE->BSRR, GPIO_BSRR_BS13); // PE13 ON
-            break;
-        case 5:
-            SET_BIT(GPIOF->BSRR, GPIO_BSRR_BS15); // PF15 ON
-            break;
-    }
-
-}
-
-void ledOff(int n){
-
-    switch(n){
-        case 0:
-            SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR13); // PF13 OFF
-            break;
-        case 1:
-            SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR9);  // PE9 OFF
-            break;
-        case 2:
-            SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR11); // PE11 OFF
-            break;
-        case 3:
-            SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR14); // PF14 OFF
-            break;
-        case 4:
-            SET_BIT(GPIOE->BSRR, GPIO_BSRR_BR13); // PE13 OFF
-            break;
-        case 5:
-            SET_BIT(GPIOF->BSRR, GPIO_BSRR_BR15); // PF15 OFF
-            break;
-    }
-
-}
-
-int changeSpeed(int speedIndex){
-
-    switch(speedIndex){
-        case 0:
-            return 0;
-
-        case 1:
-            return 500000;
-
-        case 2:
-            return 200000;
-
-        case 3:
-            return 80000;
-
-        case 4:
-            return 30000;
-    }
-
-    return 0;
-
-}
-
-void blinkLed(int ledNum, int *ledState){
-
-    if (*ledState == 1){
-        ledOff(ledNum);
-        *ledState = 0;
-    } else {
-        ledOn(ledNum);
-        *ledState = 1;
-    }
-
-}
-

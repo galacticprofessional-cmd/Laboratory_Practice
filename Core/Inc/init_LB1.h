@@ -2,7 +2,7 @@
 #define INIT_LB1_H
 
 #include "../../CMSIS/Devices/STM32F4xx/Inc/stm32f4xx.h"
-#include "../../CMSIS/Devices/STM32F4xx/Inc/STM32F429ZI/stm32f429xx.h"
+#include "../../CMSIS/Devices/STM32F4xx/Inc/STM32F411RE/stm32f411xe.h"
 
 extern volatile uint32_t mcu_btn1_count;
 extern volatile uint32_t mcu_btn2_count;
@@ -11,6 +11,8 @@ extern volatile uint32_t mcu_btn3_count;
 extern volatile uint8_t  mcu_btn1_event;
 extern volatile uint8_t  mcu_btn2_event;
 extern volatile uint8_t  mcu_btn3_event;
+
+
 
 
 #define GPIOE_MODER   (*(volatile uint32_t *)(0x40021000UL + 0x00UL))
@@ -42,8 +44,6 @@ extern volatile uint8_t  mcu_btn3_event;
 
 #define TIME_DELAY1 3500
 
-void GPIO_Init_Memory_LB1(void);
-void GPIO_Init_Macros_LB1(void);
 void GPIO_Init_CMSIS_LB1(void);
 int pressedButton1(void);
 int pressedButton2(void);
@@ -52,11 +52,5 @@ void TurningOnState(void);
 void TurningOffState(void);
 int TheSwitcher(int count);
 
-// Extra task functions
-
-void ledOn(int n);
-void ledOff(int n);
-int changeSpeed(int speedIndex);
-void blinkLed(int ledNum, int *ledState);
 
 #endif 
