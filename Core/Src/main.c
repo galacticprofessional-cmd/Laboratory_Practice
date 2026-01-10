@@ -1,15 +1,14 @@
-#include "init_LB2_hw.h"
+#include "init_LB2.h"
 
 int main(void)
 {
-    GPIO_Init_LEDs();
-    GPIO_Init_Button_PD2_Pulldown();
-    EXTI_Init_PD2();
-    SysTick_Init_1ms();
+    RCC_Init();
+    GPIO_Init();
+    TIM3_PWM_Init();
 
     while (1)
     {
-        Button_Process();
-        Blink_Process();
+        Motor_SetSpeed_Left(60);
+        Motor_SetSpeed_Right(60);
     }
 }
