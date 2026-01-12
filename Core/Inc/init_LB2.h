@@ -8,5 +8,6 @@
 void GPIO_Init_CMSIS_LB2(void);
 void ITR_Init(void);
 void RCC_Init(void);
+void SysTick_Init(void);
 
 #endif 

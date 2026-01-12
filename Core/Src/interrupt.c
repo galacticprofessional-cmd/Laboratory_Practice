@@ -1,5 +1,7 @@
 #include "interrupt.h"
 
+volatile uint32_t global_systick_tim_count = 0;
+
 uint8_t FLAG_DELAY;
 uint32_t delay_count;
 
@@ -14,11 +16,11 @@ void EXTI15_10_IRQHandler(){
 
 void Systick_Handler(void){
     global_systick_tim_count++;
-    second_tim_count;
-    if (FLAG_DELAY){
-    delay_count++;
+    // second_tim_count;
+    // if (FLAG_DELAY){
+    // delay_count++;
 
-    }
+    // }
 }
 
 void delay(uint32_t del){

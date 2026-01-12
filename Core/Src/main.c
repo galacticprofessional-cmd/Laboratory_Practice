@@ -1,15 +1,17 @@
-#include "init_LB2_hw.h"
+#include "init_LB2.h"
+#include "interrupt.h"
+
+#define POROG 2000
 
 int main(void)
 {
-    GPIO_Init_LEDs();
-    GPIO_Init_Button_PD2_Pulldown();
-    EXTI_Init_PD2();
-    SysTick_Init_1ms();
-
+    RCC_Init();
+    SysTick_Init();
+    GPIO_Init_CMSIS_LB2();
+    
     while (1)
     {
-        Button_Process();
-        Blink_Process();
+        
+
     }
 }

@@ -62,7 +62,7 @@ void SysTick_Init(void){
     CLEAR_BIT(SysTick->CTRL, SysTick_CTRL_ENABLE_Msk);
     SET_BIT(SysTick->CTRL, SysTick_CTRL_TICKINT_Msk);
     SET_BIT(SysTick->CTRL, SysTick_CTRL_CLKSOURCE_Msk);
-    MODIFY_REG(SysTick->LOAD, SysTick_LOAD_RELOAD_Msk, (180000-1) << SysTick_LOAD_RELOAD_Pos);
-    MODIFY_REG(SysTick->VAL, SysTick_VAL_CURRENT_Msk, (180000-1) << SysTick_VAL_CURRENT_Pos);
+    MODIFY_REG(SysTick->LOAD, SysTick_LOAD_RELOAD_Msk, (100000-1) << SysTick_LOAD_RELOAD_Pos);
+    MODIFY_REG(SysTick->VAL, SysTick_VAL_CURRENT_Msk,  (100000-1) << SysTick_VAL_CURRENT_Pos);
     SET_BIT(SysTick->CTRL, SysTick_CTRL_ENABLE_Msk);
 }
