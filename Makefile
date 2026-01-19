@@ -133,7 +133,7 @@ endif
 C_SOURCES =  \
 $(SYS) \
 Core/Src/main.c \
-# Core/Src/init_LB2_hw.c \
+Core/Src/init_LB2.c \
 # Core/Src/init.c \
 # Core/Src/init_LB1.c \
 # Core/Src/interrupt.c \

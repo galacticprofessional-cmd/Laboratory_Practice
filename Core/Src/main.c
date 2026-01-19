@@ -8,7 +8,7 @@ int main(void)
 
     while (1)
     {
-        Motor_SetSpeed_Left(60);
-        Motor_SetSpeed_Right(60);
+        Motor_SetSpeed_Left(100);
+        Motor_SetSpeed_Right(100);
     }
 }
