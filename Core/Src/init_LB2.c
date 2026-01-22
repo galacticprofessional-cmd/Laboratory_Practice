@@ -2,6 +2,15 @@
 
 #define PWM_MAX 100
 
+// volatile uint8_t sensor_left;   // PA6
+// volatile uint8_t sensor_right;  // PA7
+
+// volatile int8_t line_error;     // для будущего алгоритма
+
+volatile uint16_t line_sensor_adc;
+static uint16_t line_sensor_filt = 0;
+
+
 void GPIO_Init(void){
 
     /*------------------------------------------------------------*/
@@ -267,11 +276,77 @@ void Motor_SetSpeed_Right(int16_t speed)
     TIM3->CCR2 = speed;
 }
 
-// void SysTick_Init(void){
-//     CLEAR_BIT(SysTick->CTRL, SysTick_CTRL_ENABLE_Msk);
-//     SET_BIT(SysTick->CTRL, SysTick_CTRL_TICKINT_Msk);
-//     SET_BIT(SysTick->CTRL, SysTick_CTRL_CLKSOURCE_Msk);
-//     MODIFY_REG(SysTick->LOAD, SysTick_LOAD_RELOAD_Msk, (180000-1) << SysTick_LOAD_RELOAD_Pos);
-//     MODIFY_REG(SysTick->VAL, SysTick_VAL_CURRENT_Msk, (180000-1) << SysTick_VAL_CURRENT_Pos);
-//     SET_BIT(SysTick->CTRL, SysTick_CTRL_ENABLE_Msk);
-// }
+
+void LineSensors_GPIO_Init(void)
+{
+    // SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOAEN);
+
+    CLEAR_BIT(GPIOA->MODER, GPIO_MODER_MODER6_Msk);
+
+    CLEAR_BIT(GPIOA->MODER, GPIO_MODER_MODER7_Msk);
+
+    CLEAR_BIT(GPIOA->PUPDR,
+              GPIO_PUPDR_PUPD6_Msk |
+              GPIO_PUPDR_PUPD7_Msk);
+}
+
+void LineSensor_ADC_Init(void)
+{
+    /* 1. Enable GPIOA clock */
+    SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOAEN);
+
+    /* 2. PA0 as analog */
+    SET_BIT(GPIOA->MODER, GPIO_MODER_MODER0_Msk);
+    CLEAR_BIT(GPIOA->PUPDR, GPIO_PUPDR_PUPD0_Msk);
+
+    /* 3. Enable ADC1 clock */
+    SET_BIT(RCC->APB2ENR, RCC_APB2ENR_ADC1EN);
+
+    /* 4. ADC prescaler /2 */
+    CLEAR_BIT(ADC->CCR, ADC_CCR_ADCPRE_Msk);
+
+    /* 5. Single conversion */
+    CLEAR_BIT(ADC1->CR2, ADC_CR2_CONT);
+
+    /* 6. Right alignment */
+    CLEAR_BIT(ADC1->CR2, ADC_CR2_ALIGN);
+
+    /* 7. Sample time (longer = more stable) */
+    MODIFY_REG(ADC1->SMPR2,
+               ADC_SMPR2_SMP0_Msk,
+               ADC_SMPR2_SMP0_2 | ADC_SMPR2_SMP0_1);
+
+    /* 8. Channel 0 */
+    MODIFY_REG(ADC1->SQR3,
+               ADC_SQR3_SQ1_Msk,
+               0U);
+
+    /* 9. Enable ADC */
+    SET_BIT(ADC1->CR2, ADC_CR2_ADON);
+}
+
+uint16_t LineSensor_ReadFiltered(void)
+{
+    uint32_t sum = 0;
+
+    for (uint8_t i = 0; i < 8; i++)
+    {
+        SET_BIT(ADC1->CR2, ADC_CR2_SWSTART);
+        while (!(ADC1->SR & ADC_SR_EOC));
+        sum += ADC1->DR;
+    }
+
+    return (uint16_t)(sum >> 3); // /8
+}
+
+void LineSensor_Update(void)
+{
+    uint16_t raw = LineSensor_ReadFiltered();
+
+    // alpha = 0.2
+    line_sensor_filt =
+        (line_sensor_filt * 4 + raw) / 5;
+
+    line_sensor_adc = line_sensor_filt;
+}
+
