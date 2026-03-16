@@ -1,27 +1,39 @@
 #ifndef INIT_LB2_H
 #define INIT_LB2_H
 
-#include "../../CMSIS/Devices/STM32F4xx/Inc/stm32f4xx.h"
-#include "../../CMSIS/Devices/STM32F4xx/Inc/STM32F411RE/stm32f411xe.h"
+#include "stm32f4xx.h"
+#include "stm32f411xe.h"
+#include <stdint.h>
 
+/* ===================== PWM ===================== */
+#define PWM_MAX        200
+#define BASE_SPEED     70
 
-// extern volatile uint8_t sensor_left;   // PA6
-// extern volatile uint8_t sensor_right;  // PA7
+/* ===================== PID ===================== */
+#define KP             25
+#define KD             0
+#define KI             0
 
-// extern volatile int8_t line_error;     // для будущего алгоритма.
+/* ===================== GLOBAL VARIABLES ===================== */
+extern volatile uint8_t sensor_left;
+extern volatile uint8_t sensor_center;
+extern volatile uint8_t sensor_right;
 
-extern volatile uint16_t line_sensor_adc;
+extern volatile int8_t line_error;
 
-
-        
-void GPIO_Init(void);
+/* ===================== INIT ===================== */
 void RCC_Init(void);
+void GPIO_Init(void);
 void TIM3_PWM_Init(void);
 void LineSensors_GPIO_Init(void);
-void LineSensor_ADC_Init(void);
-void LineSensor_Update(void);
-uint16_t LineSensor_ReadFiltered(void);
+
+/* ===================== SENSORS ===================== */
+void LineSensors_Read(void);
+void Line_CalcError(void);
+
+/* ===================== MOTORS ===================== */
 void Motor_SetSpeed_Left(int16_t speed);
 void Motor_SetSpeed_Right(int16_t speed);
+void Robot_Move(void);
 
-#endif 
+#endif

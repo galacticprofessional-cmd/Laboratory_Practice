@@ -1,21 +1,19 @@
-#include "init_LB2.h"
+ #include "init_LB2.h"
 
 int main(void)
 {
-    RCC_Init();
-    // GPIO_Init();
-    // TIM3_PWM_Init();
-    // LineSensors_GPIO_Init();
-    LineSensor_ADC_Init();
+    RCC_Init();                 // Тактирование (HSE + PLL 100 МГц)
+    GPIO_Init();                // Настройка GPIO для моторов и ШИМ
+    TIM3_PWM_Init();            // Настройка ШИМ на TIM3 (PC6, PC7)
+    LineSensors_GPIO_Init();    // Настройка пинов датчиков линии (PA6, PA7, PB1)
 
     while (1)
     {
-        // Motor_SetSpeed_Left(100);
-        // Motor_SetSpeed_Right(100);
-        LineSensor_Update();
-        line_sensor_adc = LineSensor_ReadFiltered();
+        LineSensors_Read();     // Опрос датчиков
+        Line_CalcError();       // Вычисление ошибки положения линии
+        Robot_Move();           // Расчёт и установка скоростей моторов
 
-
-
+        // Небольшая задержка для стабильности (~10 мс при 100 МГц)
+        for (volatile uint32_t i = 0; i < 500000; i++);
     }
 }
