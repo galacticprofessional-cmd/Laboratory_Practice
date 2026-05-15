@@ -1,14 +1,22 @@
-#include "init_LB2.h"
+#include "kursach.h"
 
 int main(void)
 {
+    /* --- INIT --- */
     RCC_Init();
     GPIO_Init();
-    TIM3_PWM_Init();
+    ADC_Init();
 
     while (1)
     {
-        Motor_SetSpeed_Left(100);
-        Motor_SetSpeed_Right(100);
+        /* 1. Калибровка (всегда доступна) */
+        Calibration_Process();
+
+        /* 2. Чтение ADC */
+        LineSensors_ReadADC();
+
+        /* 3. Обработка */
+        LineSensors_Process();
+
     }
 }
