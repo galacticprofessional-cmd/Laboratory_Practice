@@ -18,5 +18,14 @@ int main(void)
         /* 3. Обработка */
         LineSensors_Process();
 
+        if (sensor_center)
+        {
+            Motor_Forward();
+        }
+        else
+        {
+            Motor_Stop();
+        }
+
     }
 }

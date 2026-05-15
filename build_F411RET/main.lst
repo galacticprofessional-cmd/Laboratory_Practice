@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccG6iGUa.s 			page 1
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccHr2KFe.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -55,51 +55,92 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccG6iGUa.s 			page 1
   45              		.loc 1 8 5 view .LVU3
   46 000a FFF7FEFF 		bl	ADC_Init
   47              	.LVL2:
-  48              	.L2:
+  48 000e 01E0     		b	.L2
+  49              	.L6:
    9:Core/Src/main.c **** 
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccHr2KFe.s 			page 2
+
+
   10:Core/Src/main.c ****     while (1)
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccG6iGUa.s 			page 2
-
-
-  49              		.loc 1 10 5 view .LVU4
   11:Core/Src/main.c ****     {
   12:Core/Src/main.c ****         /* 1. Калибровка (всегда доступна) */
   13:Core/Src/main.c ****         Calibration_Process();
-  50              		.loc 1 13 9 view .LVU5
-  51 000e FFF7FEFF 		bl	Calibration_Process
-  52              	.LVL3:
   14:Core/Src/main.c **** 
   15:Core/Src/main.c ****         /* 2. Чтение ADC */
   16:Core/Src/main.c ****         LineSensors_ReadADC();
-  53              		.loc 1 16 9 view .LVU6
-  54 0012 FFF7FEFF 		bl	LineSensors_ReadADC
-  55              	.LVL4:
   17:Core/Src/main.c **** 
   18:Core/Src/main.c ****         /* 3. Обработка */
   19:Core/Src/main.c ****         LineSensors_Process();
-  56              		.loc 1 19 9 discriminator 1 view .LVU7
-  57 0016 FFF7FEFF 		bl	LineSensors_Process
-  58              	.LVL5:
+  20:Core/Src/main.c **** 
+  21:Core/Src/main.c ****         if (sensor_center)
+  22:Core/Src/main.c ****         {
+  23:Core/Src/main.c ****             Motor_Forward();
+  50              		.loc 1 23 13 view .LVU4
+  51 0010 FFF7FEFF 		bl	Motor_Forward
+  52              	.LVL3:
+  53              	.L2:
   10:Core/Src/main.c ****     {
-  59              		.loc 1 10 11 view .LVU8
-  60 001a F8E7     		b	.L2
-  61              		.cfi_endproc
-  62              	.LFE130:
-  64              		.text
-  65              	.Letext0:
-  66              		.file 2 "Core/Inc/kursach.h"
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccG6iGUa.s 			page 3
+  54              		.loc 1 10 5 view .LVU5
+  13:Core/Src/main.c **** 
+  55              		.loc 1 13 9 view .LVU6
+  56 0014 FFF7FEFF 		bl	Calibration_Process
+  57              	.LVL4:
+  16:Core/Src/main.c **** 
+  58              		.loc 1 16 9 view .LVU7
+  59 0018 FFF7FEFF 		bl	LineSensors_ReadADC
+  60              	.LVL5:
+  19:Core/Src/main.c **** 
+  61              		.loc 1 19 9 view .LVU8
+  62 001c FFF7FEFF 		bl	LineSensors_Process
+  63              	.LVL6:
+  21:Core/Src/main.c ****         {
+  64              		.loc 1 21 9 view .LVU9
+  21:Core/Src/main.c ****         {
+  65              		.loc 1 21 13 is_stmt 0 view .LVU10
+  66 0020 034B     		ldr	r3, .L7
+  67 0022 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  21:Core/Src/main.c ****         {
+  68              		.loc 1 21 12 view .LVU11
+  69 0024 002B     		cmp	r3, #0
+  70 0026 F3D1     		bne	.L6
+  24:Core/Src/main.c ****         }
+  25:Core/Src/main.c ****         else
+  26:Core/Src/main.c ****         {
+  27:Core/Src/main.c ****             Motor_Stop();
+  71              		.loc 1 27 13 is_stmt 1 view .LVU12
+  72 0028 FFF7FEFF 		bl	Motor_Stop
+  73              	.LVL7:
+  74 002c F2E7     		b	.L2
+  75              	.L8:
+  76 002e 00BF     		.align	2
+  77              	.L7:
+  78 0030 00000000 		.word	sensor_center
+  79              		.cfi_endproc
+  80              	.LFE130:
+  82              		.text
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccHr2KFe.s 			page 3
+
+
+  83              	.Letext0:
+  84              		.file 2 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/machine/_default_types.
+  85              		.file 3 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/sys/_stdint.h"
+  86              		.file 4 "Core/Inc/kursach.h"
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccHr2KFe.s 			page 4
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 main.c
-C:\Users\VICTUS\AppData\Local\Temp\ccG6iGUa.s:21     .text.main:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccG6iGUa.s:27     .text.main:00000000 main
+C:\Users\VICTUS\AppData\Local\Temp\ccHr2KFe.s:21     .text.main:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccHr2KFe.s:27     .text.main:00000000 main
+C:\Users\VICTUS\AppData\Local\Temp\ccHr2KFe.s:78     .text.main:00000030 $d
 
 UNDEFINED SYMBOLS
 RCC_Init
 GPIO_Init
 ADC_Init
+Motor_Forward
 Calibration_Process
 LineSensors_ReadADC
 LineSensors_Process
+Motor_Stop
+sensor_center
