@@ -1,4 +1,4 @@
-build_F411RET/main.o: Core/Src/main.c Core/Inc/kursach.h \
+build_F411RET/kursach.o: Core/Src/kursach.c Core/Inc/kursach.h \
  Core/Inc/../../CMSIS/Devices/STM32F4xx/Inc/stm32f4xx.h \
  CMSIS/Devices/STM32F4xx/Inc/STM32F411RE/stm32f411xe.h \
  CMSIS/Include/core_cm4.h CMSIS/Include/cmsis_version.h \
