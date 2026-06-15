@@ -133,10 +133,12 @@ endif
 C_SOURCES =  \
 $(SYS) \
 Core/Src/main.c \
-Core/Src/kursach.c \
-# Core/Src/init.c \
-# Core/Src/init_LB1.c \
-# Core/Src/interrupt.c \
+Core/Src/init.c \
+Core/Src/interrupt.c \
+Core/Src/motor.c \
+Core/Src/sensors.c \
+
+
 
 
 # ASM sources

@@ -1,12 +1,11 @@
-build_F411RET/kursach.o: Core/Src/kursach.c Core/Inc/kursach.h \
- Core/Inc/../../CMSIS/Devices/STM32F4xx/Inc/stm32f4xx.h \
+build_F411RET/sensors.o: Core/Src/sensors.c Core/Inc/sensors.h \
+ CMSIS/Devices/STM32F4xx/Inc/stm32f4xx.h \
  CMSIS/Devices/STM32F4xx/Inc/STM32F411RE/stm32f411xe.h \
  CMSIS/Include/core_cm4.h CMSIS/Include/cmsis_version.h \
  CMSIS/Include/cmsis_compiler.h CMSIS/Include/cmsis_gcc.h \
- CMSIS/Include/mpu_armv7.h CMSIS/Devices/STM32F4xx/Inc/system_stm32f4xx.h \
- Core/Inc/../../CMSIS/Devices/STM32F4xx/Inc/STM32F411RE/stm32f411xe.h
-Core/Inc/kursach.h:
-Core/Inc/../../CMSIS/Devices/STM32F4xx/Inc/stm32f4xx.h:
+ CMSIS/Include/mpu_armv7.h CMSIS/Devices/STM32F4xx/Inc/system_stm32f4xx.h
+Core/Inc/sensors.h:
+CMSIS/Devices/STM32F4xx/Inc/stm32f4xx.h:
 CMSIS/Devices/STM32F4xx/Inc/STM32F411RE/stm32f411xe.h:
 CMSIS/Include/core_cm4.h:
 CMSIS/Include/cmsis_version.h:
@@ -14,4 +13,3 @@ CMSIS/Include/cmsis_compiler.h:
 CMSIS/Include/cmsis_gcc.h:
 CMSIS/Include/mpu_armv7.h:
 CMSIS/Devices/STM32F4xx/Inc/system_stm32f4xx.h:
-Core/Inc/../../CMSIS/Devices/STM32F4xx/Inc/STM32F411RE/stm32f411xe.h:

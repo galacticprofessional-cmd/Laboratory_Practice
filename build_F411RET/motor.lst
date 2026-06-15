@@ -1,0 +1,368 @@
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccyeZj2S.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"motor.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Core/Src/motor.c"
+  20              		.section	.text.clamp_speed,"ax",%progbits
+  21              		.align	1
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  26              	clamp_speed:
+  27              	.LVL0:
+  28              	.LFB130:
+   1:Core/Src/motor.c **** #include "motor.h"
+   2:Core/Src/motor.c **** 
+   3:Core/Src/motor.c **** static int16_t clamp_speed(int16_t speed)
+   4:Core/Src/motor.c **** {
+  29              		.loc 1 4 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+   5:Core/Src/motor.c ****     if (speed > 999)
+  34              		.loc 1 5 5 view .LVU1
+  35              		.loc 1 5 8 is_stmt 0 view .LVU2
+  36 0000 B0F57A7F 		cmp	r0, #1000
+  37 0004 03DA     		bge	.L3
+   6:Core/Src/motor.c ****         return 999;
+   7:Core/Src/motor.c ****     if (speed < -999)
+  38              		.loc 1 7 5 is_stmt 1 view .LVU3
+  39              		.loc 1 7 8 is_stmt 0 view .LVU4
+  40 0006 10F57A7F 		cmn	r0, #1000
+  41 000a 03DD     		ble	.L4
+  42 000c 7047     		bx	lr
+  43              	.L3:
+   6:Core/Src/motor.c ****         return 999;
+  44              		.loc 1 6 16 view .LVU5
+  45 000e 40F2E730 		movw	r0, #999
+  46              	.LVL1:
+   6:Core/Src/motor.c ****         return 999;
+  47              		.loc 1 6 16 view .LVU6
+  48 0012 7047     		bx	lr
+  49              	.LVL2:
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccyeZj2S.s 			page 2
+
+
+  50              	.L4:
+   8:Core/Src/motor.c ****         return -999;
+  51              		.loc 1 8 16 view .LVU7
+  52 0014 0048     		ldr	r0, .L5
+  53              	.LVL3:
+   9:Core/Src/motor.c ****     return speed;
+  10:Core/Src/motor.c **** }
+  54              		.loc 1 10 1 view .LVU8
+  55 0016 7047     		bx	lr
+  56              	.L6:
+  57              		.align	2
+  58              	.L5:
+  59 0018 19FCFFFF 		.word	-999
+  60              		.cfi_endproc
+  61              	.LFE130:
+  63              		.section	.text.left_motor,"ax",%progbits
+  64              		.align	1
+  65              		.global	left_motor
+  66              		.syntax unified
+  67              		.thumb
+  68              		.thumb_func
+  70              	left_motor:
+  71              	.LVL4:
+  72              	.LFB131:
+  11:Core/Src/motor.c **** 
+  12:Core/Src/motor.c **** /**
+  13:Core/Src/motor.c ****  * @brief Управление левым мотором.
+  14:Core/Src/motor.c ****  * @note
+  15:Core/Src/motor.c ****  *  Направление: PA5, PA6
+  16:Core/Src/motor.c ****  *  PWM: TIM2_CH3 (PB10)
+  17:Core/Src/motor.c ****  * @param speed Скорость от -999 до 999
+  18:Core/Src/motor.c ****  */
+  19:Core/Src/motor.c **** void left_motor(int16_t speed)
+  20:Core/Src/motor.c **** {
+  73              		.loc 1 20 1 is_stmt 1 view -0
+  74              		.cfi_startproc
+  75              		@ args = 0, pretend = 0, frame = 0
+  76              		@ frame_needed = 0, uses_anonymous_args = 0
+  77              		.loc 1 20 1 is_stmt 0 view .LVU10
+  78 0000 08B5     		push	{r3, lr}
+  79              	.LCFI0:
+  80              		.cfi_def_cfa_offset 8
+  81              		.cfi_offset 3, -8
+  82              		.cfi_offset 14, -4
+  21:Core/Src/motor.c ****     speed = clamp_speed(speed);
+  83              		.loc 1 21 5 is_stmt 1 view .LVU11
+  84              		.loc 1 21 13 is_stmt 0 view .LVU12
+  85 0002 FFF7FEFF 		bl	clamp_speed
+  86              	.LVL5:
+  22:Core/Src/motor.c **** 
+  23:Core/Src/motor.c ****     if (speed > 0)
+  87              		.loc 1 23 5 is_stmt 1 view .LVU13
+  88              		.loc 1 23 8 is_stmt 0 view .LVU14
+  89 0006 0028     		cmp	r0, #0
+  90              		.loc 1 23 8 view .LVU15
+  91 0008 07DD     		ble	.L8
+  24:Core/Src/motor.c ****     {
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccyeZj2S.s 			page 3
+
+
+  25:Core/Src/motor.c ****         WRITE_REG(GPIOA->BSRR, GPIO_BSRR_BR_5 | GPIO_BSRR_BS_6);
+  92              		.loc 1 25 9 is_stmt 1 view .LVU16
+  93 000a 0E4B     		ldr	r3, .L13
+  94 000c 0E4A     		ldr	r2, .L13+4
+  95 000e 9A61     		str	r2, [r3, #24]
+  26:Core/Src/motor.c ****         WRITE_REG(TIM2->CCR3, (uint16_t)speed);
+  96              		.loc 1 26 9 view .LVU17
+  97 0010 80B2     		uxth	r0, r0
+  98              	.LVL6:
+  99              		.loc 1 26 9 is_stmt 0 view .LVU18
+ 100 0012 4FF08043 		mov	r3, #1073741824
+ 101 0016 D863     		str	r0, [r3, #60]
+ 102              	.LVL7:
+ 103              	.L7:
+  27:Core/Src/motor.c ****     }
+  28:Core/Src/motor.c ****     else if (speed < 0)
+  29:Core/Src/motor.c ****     {
+  30:Core/Src/motor.c ****         speed = -speed;
+  31:Core/Src/motor.c ****         WRITE_REG(GPIOA->BSRR, GPIO_BSRR_BS_5 | GPIO_BSRR_BR_6);
+  32:Core/Src/motor.c ****         WRITE_REG(TIM2->CCR3, (uint16_t)speed);
+  33:Core/Src/motor.c ****     }
+  34:Core/Src/motor.c ****     else
+  35:Core/Src/motor.c ****     {
+  36:Core/Src/motor.c ****         /* Плавная остановка без жесткого торможения */
+  37:Core/Src/motor.c ****         WRITE_REG(GPIOA->BSRR, GPIO_BSRR_BR_5 | GPIO_BSRR_BR_6);
+  38:Core/Src/motor.c ****         WRITE_REG(TIM2->CCR3, 0U);
+  39:Core/Src/motor.c ****     }
+  40:Core/Src/motor.c **** }
+ 104              		.loc 1 40 1 view .LVU19
+ 105 0018 08BD     		pop	{r3, pc}
+ 106              	.LVL8:
+ 107              	.L8:
+  28:Core/Src/motor.c ****     {
+ 108              		.loc 1 28 10 is_stmt 1 view .LVU20
+  28:Core/Src/motor.c ****     {
+ 109              		.loc 1 28 13 is_stmt 0 view .LVU21
+ 110 001a 0028     		cmp	r0, #0
+ 111 001c 08DB     		blt	.L12
+  37:Core/Src/motor.c ****         WRITE_REG(TIM2->CCR3, 0U);
+ 112              		.loc 1 37 9 is_stmt 1 view .LVU22
+ 113 001e 094B     		ldr	r3, .L13
+ 114 0020 4FF4C002 		mov	r2, #6291456
+ 115 0024 9A61     		str	r2, [r3, #24]
+  38:Core/Src/motor.c ****     }
+ 116              		.loc 1 38 9 view .LVU23
+ 117 0026 4FF08043 		mov	r3, #1073741824
+ 118 002a 0022     		movs	r2, #0
+ 119 002c DA63     		str	r2, [r3, #60]
+ 120              		.loc 1 40 1 is_stmt 0 view .LVU24
+ 121 002e F3E7     		b	.L7
+ 122              	.L12:
+  30:Core/Src/motor.c ****         WRITE_REG(GPIOA->BSRR, GPIO_BSRR_BS_5 | GPIO_BSRR_BR_6);
+ 123              		.loc 1 30 9 is_stmt 1 view .LVU25
+  30:Core/Src/motor.c ****         WRITE_REG(GPIOA->BSRR, GPIO_BSRR_BS_5 | GPIO_BSRR_BR_6);
+ 124              		.loc 1 30 15 is_stmt 0 view .LVU26
+ 125 0030 4042     		rsbs	r0, r0, #0
+ 126              	.LVL9:
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccyeZj2S.s 			page 4
+
+
+  30:Core/Src/motor.c ****         WRITE_REG(GPIOA->BSRR, GPIO_BSRR_BS_5 | GPIO_BSRR_BR_6);
+ 127              		.loc 1 30 15 view .LVU27
+ 128 0032 80B2     		uxth	r0, r0
+ 129              	.LVL10:
+  31:Core/Src/motor.c ****         WRITE_REG(TIM2->CCR3, (uint16_t)speed);
+ 130              		.loc 1 31 9 is_stmt 1 view .LVU28
+ 131 0034 034B     		ldr	r3, .L13
+ 132 0036 054A     		ldr	r2, .L13+8
+ 133 0038 9A61     		str	r2, [r3, #24]
+  32:Core/Src/motor.c ****     }
+ 134              		.loc 1 32 9 view .LVU29
+ 135 003a 4FF08043 		mov	r3, #1073741824
+ 136 003e D863     		str	r0, [r3, #60]
+ 137 0040 EAE7     		b	.L7
+ 138              	.L14:
+ 139 0042 00BF     		.align	2
+ 140              	.L13:
+ 141 0044 00000240 		.word	1073872896
+ 142 0048 40002000 		.word	2097216
+ 143 004c 20004000 		.word	4194336
+ 144              		.cfi_endproc
+ 145              	.LFE131:
+ 147              		.section	.text.right_motor,"ax",%progbits
+ 148              		.align	1
+ 149              		.global	right_motor
+ 150              		.syntax unified
+ 151              		.thumb
+ 152              		.thumb_func
+ 154              	right_motor:
+ 155              	.LVL11:
+ 156              	.LFB132:
+  41:Core/Src/motor.c **** 
+  42:Core/Src/motor.c **** /**
+  43:Core/Src/motor.c ****  * @brief Управление правым мотором.
+  44:Core/Src/motor.c ****  * @note
+  45:Core/Src/motor.c ****  *  Направление: PA7, PB6
+  46:Core/Src/motor.c ****  *  PWM: TIM2_CH2 (PB3)
+  47:Core/Src/motor.c ****  * @param speed Скорость от -999 до 999
+  48:Core/Src/motor.c ****  */
+  49:Core/Src/motor.c **** void right_motor(int16_t speed)
+  50:Core/Src/motor.c **** {
+ 157              		.loc 1 50 1 view -0
+ 158              		.cfi_startproc
+ 159              		@ args = 0, pretend = 0, frame = 0
+ 160              		@ frame_needed = 0, uses_anonymous_args = 0
+ 161              		.loc 1 50 1 is_stmt 0 view .LVU31
+ 162 0000 08B5     		push	{r3, lr}
+ 163              	.LCFI1:
+ 164              		.cfi_def_cfa_offset 8
+ 165              		.cfi_offset 3, -8
+ 166              		.cfi_offset 14, -4
+  51:Core/Src/motor.c ****     speed = clamp_speed(speed);
+ 167              		.loc 1 51 5 is_stmt 1 view .LVU32
+ 168              		.loc 1 51 13 is_stmt 0 view .LVU33
+ 169 0002 FFF7FEFF 		bl	clamp_speed
+ 170              	.LVL12:
+  52:Core/Src/motor.c **** 
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccyeZj2S.s 			page 5
+
+
+  53:Core/Src/motor.c ****     if (speed > 0)
+ 171              		.loc 1 53 5 is_stmt 1 view .LVU34
+ 172              		.loc 1 53 8 is_stmt 0 view .LVU35
+ 173 0006 0028     		cmp	r0, #0
+ 174              		.loc 1 53 8 view .LVU36
+ 175 0008 0CDD     		ble	.L16
+  54:Core/Src/motor.c ****     {
+  55:Core/Src/motor.c ****         WRITE_REG(GPIOA->BSRR, GPIO_BSRR_BS_7);
+ 176              		.loc 1 55 9 is_stmt 1 view .LVU37
+ 177 000a 154B     		ldr	r3, .L21
+ 178 000c 8022     		movs	r2, #128
+ 179 000e 9A61     		str	r2, [r3, #24]
+  56:Core/Src/motor.c ****         WRITE_REG(GPIOB->BSRR, GPIO_BSRR_BR_6);
+ 180              		.loc 1 56 9 view .LVU38
+ 181 0010 03F58063 		add	r3, r3, #1024
+ 182 0014 4FF48002 		mov	r2, #4194304
+ 183 0018 9A61     		str	r2, [r3, #24]
+  57:Core/Src/motor.c ****         WRITE_REG(TIM2->CCR2, (uint16_t)speed);
+ 184              		.loc 1 57 9 view .LVU39
+ 185 001a 80B2     		uxth	r0, r0
+ 186              	.LVL13:
+ 187              		.loc 1 57 9 is_stmt 0 view .LVU40
+ 188 001c 4FF08043 		mov	r3, #1073741824
+ 189 0020 9863     		str	r0, [r3, #56]
+ 190              	.LVL14:
+ 191              	.L15:
+  58:Core/Src/motor.c ****     }
+  59:Core/Src/motor.c ****     else if (speed < 0)
+  60:Core/Src/motor.c ****     {
+  61:Core/Src/motor.c ****         speed = -speed;
+  62:Core/Src/motor.c ****         WRITE_REG(GPIOA->BSRR, GPIO_BSRR_BR_7);
+  63:Core/Src/motor.c ****         WRITE_REG(GPIOB->BSRR, GPIO_BSRR_BS_6);
+  64:Core/Src/motor.c ****         WRITE_REG(TIM2->CCR2, (uint16_t)speed);
+  65:Core/Src/motor.c ****     }
+  66:Core/Src/motor.c ****     else
+  67:Core/Src/motor.c ****     {
+  68:Core/Src/motor.c ****         /* Плавная остановка без жесткого торможения */
+  69:Core/Src/motor.c ****         WRITE_REG(GPIOA->BSRR, GPIO_BSRR_BS_7);
+  70:Core/Src/motor.c ****         WRITE_REG(GPIOB->BSRR, GPIO_BSRR_BR_6);
+  71:Core/Src/motor.c ****         WRITE_REG(TIM2->CCR2, 0U);
+  72:Core/Src/motor.c ****     }
+  73:Core/Src/motor.c **** }...
+ 192              		.loc 1 73 1 view .LVU41
+ 193 0022 08BD     		pop	{r3, pc}
+ 194              	.LVL15:
+ 195              	.L16:
+  59:Core/Src/motor.c ****     else if (speed < 0)
+ 196              		.loc 1 59 10 is_stmt 1 view .LVU42
+  59:Core/Src/motor.c ****     else if (speed < 0)
+ 197              		.loc 1 59 13 is_stmt 0 view .LVU43
+ 198 0024 0028     		cmp	r0, #0
+ 199 0026 0CDB     		blt	.L20
+  69:Core/Src/motor.c ****         WRITE_REG(GPIOA->BSRR, GPIO_BSRR_BS_7);
+ 200              		.loc 1 69 9 is_stmt 1 view .LVU44
+ 201 0028 0D4B     		ldr	r3, .L21
+ 202 002a 8022     		movs	r2, #128
+ 203 002c 9A61     		str	r2, [r3, #24]
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccyeZj2S.s 			page 6
+
+
+  70:Core/Src/motor.c ****         WRITE_REG(GPIOB->BSRR, GPIO_BSRR_BR_6);
+ 204              		.loc 1 70 9 view .LVU45
+ 205 002e 03F58063 		add	r3, r3, #1024
+ 206 0032 4FF48002 		mov	r2, #4194304
+ 207 0036 9A61     		str	r2, [r3, #24]
+  71:Core/Src/motor.c ****         WRITE_REG(TIM2->CCR2, 0U);
+ 208              		.loc 1 71 9 view .LVU46
+ 209 0038 4FF08043 		mov	r3, #1073741824
+ 210 003c 0022     		movs	r2, #0
+ 211 003e 9A63     		str	r2, [r3, #56]
+ 212              		.loc 1 73 1 is_stmt 0 view .LVU47
+ 213 0040 EFE7     		b	.L15
+ 214              	.L20:
+  61:Core/Src/motor.c ****         speed = -speed;
+ 215              		.loc 1 61 9 is_stmt 1 view .LVU48
+  61:Core/Src/motor.c ****         speed = -speed;
+ 216              		.loc 1 61 15 is_stmt 0 view .LVU49
+ 217 0042 4042     		rsbs	r0, r0, #0
+ 218              	.LVL16:
+  61:Core/Src/motor.c ****         speed = -speed;
+ 219              		.loc 1 61 15 view .LVU50
+ 220 0044 80B2     		uxth	r0, r0
+ 221              	.LVL17:
+  62:Core/Src/motor.c ****         WRITE_REG(GPIOA->BSRR, GPIO_BSRR_BR_7);
+ 222              		.loc 1 62 9 is_stmt 1 view .LVU51
+ 223 0046 064B     		ldr	r3, .L21
+ 224 0048 4FF40002 		mov	r2, #8388608
+ 225 004c 9A61     		str	r2, [r3, #24]
+  63:Core/Src/motor.c ****         WRITE_REG(GPIOB->BSRR, GPIO_BSRR_BS_6);
+ 226              		.loc 1 63 9 view .LVU52
+ 227 004e 03F58063 		add	r3, r3, #1024
+ 228 0052 4022     		movs	r2, #64
+ 229 0054 9A61     		str	r2, [r3, #24]
+  64:Core/Src/motor.c ****         WRITE_REG(TIM2->CCR2, (uint16_t)speed);
+ 230              		.loc 1 64 9 view .LVU53
+ 231 0056 4FF08043 		mov	r3, #1073741824
+ 232 005a 9863     		str	r0, [r3, #56]
+ 233 005c E1E7     		b	.L15
+ 234              	.L22:
+ 235 005e 00BF     		.align	2
+ 236              	.L21:
+ 237 0060 00000240 		.word	1073872896
+ 238              		.cfi_endproc
+ 239              	.LFE132:
+ 241              		.text
+ 242              	.Letext0:
+ 243              		.file 2 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/machine/_default_types.
+ 244              		.file 3 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/sys/_stdint.h"
+ 245              		.file 4 "CMSIS/Devices/STM32F4xx/Inc/STM32F411RE/stm32f411xe.h"
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccyeZj2S.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 motor.c
+C:\Users\VICTUS\AppData\Local\Temp\ccyeZj2S.s:21     .text.clamp_speed:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccyeZj2S.s:26     .text.clamp_speed:00000000 clamp_speed
+C:\Users\VICTUS\AppData\Local\Temp\ccyeZj2S.s:59     .text.clamp_speed:00000018 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccyeZj2S.s:64     .text.left_motor:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccyeZj2S.s:70     .text.left_motor:00000000 left_motor
+C:\Users\VICTUS\AppData\Local\Temp\ccyeZj2S.s:141    .text.left_motor:00000044 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccyeZj2S.s:148    .text.right_motor:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccyeZj2S.s:154    .text.right_motor:00000000 right_motor
+C:\Users\VICTUS\AppData\Local\Temp\ccyeZj2S.s:237    .text.right_motor:00000060 $d
+
+NO UNDEFINED SYMBOLS

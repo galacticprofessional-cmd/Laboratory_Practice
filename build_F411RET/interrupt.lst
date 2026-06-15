@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -15,752 +15,265 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
   12              		.eabi_attribute 30, 1
   13              		.eabi_attribute 34, 1
   14              		.eabi_attribute 18, 4
-  15              		.file	"init_LB2_hw.c"
+  15              		.file	"interrupt.c"
   16              		.text
   17              	.Ltext0:
   18              		.cfi_sections	.debug_frame
-  19              		.file 1 "Core/Src/init_LB2_hw.c"
-  20              		.section	.text.SysTick_Handler,"ax",%progbits
+  19              		.file 1 "Core/Src/interrupt.c"
+  20              		.section	.text.led_toggle,"ax",%progbits
   21              		.align	1
-  22              		.global	SysTick_Handler
-  23              		.syntax unified
-  24              		.thumb
-  25              		.thumb_func
-  27              	SysTick_Handler:
-  28              	.LFB130:
-   1:Core/Src/init_LB2_hw.c **** #include "init_LB2_hw.h"
-   2:Core/Src/init_LB2_hw.c **** 
-   3:Core/Src/init_LB2_hw.c **** /* ===================== ТАБЛИЦА ЧАСТОТ ===================== */
-   4:Core/Src/init_LB2_hw.c **** 
-   5:Core/Src/init_LB2_hw.c **** static const uint32_t g_blinkHalfPeriods[3] = {1667U, 333U, 227U};
-   6:Core/Src/init_LB2_hw.c **** 
-   7:Core/Src/init_LB2_hw.c **** /* ===================== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ===================== */
-   8:Core/Src/init_LB2_hw.c **** 
-   9:Core/Src/init_LB2_hw.c **** volatile uint32_t g_ms = 0;
-  10:Core/Src/init_LB2_hw.c **** 
-  11:Core/Src/init_LB2_hw.c **** volatile uint32_t g_btn_last_irq_ms    = 0;
-  12:Core/Src/init_LB2_hw.c **** volatile uint8_t  g_btn_press_event    = 0;
-  13:Core/Src/init_LB2_hw.c **** volatile uint8_t  g_btn_release_event  = 0;
-  14:Core/Src/init_LB2_hw.c **** volatile uint8_t  g_btn_is_pressed     = 0;
-  15:Core/Src/init_LB2_hw.c **** volatile uint32_t g_btn_press_start_ms = 0;
-  16:Core/Src/init_LB2_hw.c **** 
-  17:Core/Src/init_LB2_hw.c **** /* MCU Viewer */
-  18:Core/Src/init_LB2_hw.c **** volatile uint32_t mcu_btn_press_count    = 0;
-  19:Core/Src/init_LB2_hw.c **** volatile uint32_t mcu_action_short_count = 0;
-  20:Core/Src/init_LB2_hw.c **** volatile uint32_t mcu_action_2s_count    = 0;
-  21:Core/Src/init_LB2_hw.c **** volatile uint32_t mcu_action_4s_count    = 0;
-  22:Core/Src/init_LB2_hw.c **** 
-  23:Core/Src/init_LB2_hw.c **** /* LEDs */
-  24:Core/Src/init_LB2_hw.c **** volatile int      currentLed       = -1;
-  25:Core/Src/init_LB2_hw.c **** volatile uint8_t  blinkModeEnabled = 1;
-  26:Core/Src/init_LB2_hw.c **** volatile uint8_t  blinkFreqIndex   = 0;
-  27:Core/Src/init_LB2_hw.c **** volatile uint8_t  blinkLedIsOn     = 0;
-  28:Core/Src/init_LB2_hw.c **** volatile uint32_t lastBlinkTime_ms = 0;
-  29:Core/Src/init_LB2_hw.c **** 
-  30:Core/Src/init_LB2_hw.c **** /* ===================== SysTick ===================== */
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 2
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  26              	led_toggle:
+  27              	.LFB130:
+   1:Core/Src/interrupt.c **** #include "interrupt.h"
+   2:Core/Src/interrupt.c **** #include "motor.h"
+   3:Core/Src/interrupt.c **** #include "sensors.h"
+   4:Core/Src/interrupt.c **** 
+   5:Core/Src/interrupt.c **** /* ===================== НАСТРОЙКИ СКОРОСТЕЙ ===================== */
+   6:Core/Src/interrupt.c **** /* Все значения — скважность ШИМ 0..1000 (ARR таймера = 999).     
+   7:Core/Src/interrupt.c **** 
+   8:Core/Src/interrupt.c **** #define BASE_SPEED   400   // базовая скорость движения по прямой
+   9:Core/Src/interrupt.c **** #define MAX_SPEED    650   // потолок на одно колесо (защита от пере
+  10:Core/Src/interrupt.c **** #define TURN_SPEED   300   // скорость доворота при ПОЛНОЙ потере л
+  11:Core/Src/interrupt.c **** 
+  12:Core/Src/interrupt.c **** /* ===================== КОЭФФИЦИЕНТЫ ПИД ======================= */
+  13:Core/Src/interrupt.c **** /* СТАРТОВЫЕ значения. Их ОБЯЗАТЕЛЬНО подбирать под св�
+  14:Core/Src/interrupt.c **** /* (см. процедуру настройки в ответе).                            */
+  15:Core/Src/interrupt.c **** 
+  16:Core/Src/interrupt.c **** #define KP    50    // пропорциональный: насколько резко реагир
+  17:Core/Src/interrupt.c **** #define KI     0    // интегральный: НАЧНИ СТРОГО С НУЛЯ
+  18:Core/Src/interrupt.c **** #define KD   200    // дифференциальный: гасит раскачку/перелёт
+  19:Core/Src/interrupt.c **** 
+  20:Core/Src/interrupt.c **** #define I_LIMIT 150  // анти-windup: ограничение интегральной части
+  21:Core/Src/interrupt.c **** 
+  22:Core/Src/interrupt.c **** #define MIN_PRESS_DURATION 50  // антидребезг кнопки, мс (тиков SysTick)
+  23:Core/Src/interrupt.c **** 
+  24:Core/Src/interrupt.c **** /* ===================== ВНУТРЕННЕЕ СОСТОЯНИЕ =================== */
+  25:Core/Src/interrupt.c **** 
+  26:Core/Src/interrupt.c **** static volatile uint32_t ticks = 0;
+  27:Core/Src/interrupt.c **** static volatile uint32_t press_time = 0;
+  28:Core/Src/interrupt.c **** static volatile uint8_t  button_permission = 0;
+  29:Core/Src/interrupt.c **** static volatile uint8_t  tim2_flag = 0;
+  30:Core/Src/interrupt.c **** 
+  31:Core/Src/interrupt.c **** /* Память ПИД-регулятора */
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 2
 
 
-  31:Core/Src/init_LB2_hw.c **** 
-  32:Core/Src/init_LB2_hw.c **** void SysTick_Handler(void)
-  33:Core/Src/init_LB2_hw.c **** {
-  29              		.loc 1 33 1 view -0
-  30              		.cfi_startproc
-  31              		@ args = 0, pretend = 0, frame = 0
-  32              		@ frame_needed = 0, uses_anonymous_args = 0
-  33              		@ link register save eliminated.
-  34:Core/Src/init_LB2_hw.c ****     g_ms++;
-  34              		.loc 1 34 5 view .LVU1
-  35              		.loc 1 34 9 is_stmt 0 view .LVU2
-  36 0000 024A     		ldr	r2, .L2
-  37 0002 1368     		ldr	r3, [r2]
-  38 0004 0133     		adds	r3, r3, #1
-  39 0006 1360     		str	r3, [r2]
-  35:Core/Src/init_LB2_hw.c **** }
-  40              		.loc 1 35 1 view .LVU3
-  41 0008 7047     		bx	lr
+  32:Core/Src/interrupt.c **** static volatile int32_t last_error = 0;
+  33:Core/Src/interrupt.c **** static volatile int32_t integral   = 0;
+  34:Core/Src/interrupt.c **** 
+  35:Core/Src/interrupt.c **** /* Счётчик перекрёстков */
+  36:Core/Src/interrupt.c **** static volatile uint8_t cross_count = 0;
+  37:Core/Src/interrupt.c **** static volatile uint8_t is_on_cross = 0;
+  38:Core/Src/interrupt.c **** 
+  39:Core/Src/interrupt.c **** static void led_toggle(void)
+  40:Core/Src/interrupt.c **** {
+  28              		.loc 1 40 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  41:Core/Src/interrupt.c ****     GPIOC->ODR ^= GPIO_ODR_ODR_2;
+  33              		.loc 1 41 5 view .LVU1
+  34              		.loc 1 41 10 is_stmt 0 view .LVU2
+  35 0000 024A     		ldr	r2, .L2
+  36 0002 5369     		ldr	r3, [r2, #20]
+  37              		.loc 1 41 16 view .LVU3
+  38 0004 83F00403 		eor	r3, r3, #4
+  39 0008 5361     		str	r3, [r2, #20]
+  42:Core/Src/interrupt.c **** }
+  40              		.loc 1 42 1 view .LVU4
+  41 000a 7047     		bx	lr
   42              	.L3:
-  43 000a 00BF     		.align	2
+  43              		.align	2
   44              	.L2:
-  45 000c 00000000 		.word	g_ms
+  45 000c 00080240 		.word	1073874944
   46              		.cfi_endproc
   47              	.LFE130:
-  49              		.section	.text.EXTI2_IRQHandler,"ax",%progbits
+  49              		.section	.text.SysTick_Handler,"ax",%progbits
   50              		.align	1
-  51              		.global	EXTI2_IRQHandler
+  51              		.global	SysTick_Handler
   52              		.syntax unified
   53              		.thumb
   54              		.thumb_func
-  56              	EXTI2_IRQHandler:
+  56              	SysTick_Handler:
   57              	.LFB131:
-  36:Core/Src/init_LB2_hw.c **** 
-  37:Core/Src/init_LB2_hw.c **** /* ===================== EXTI ===================== */
-  38:Core/Src/init_LB2_hw.c **** 
-  39:Core/Src/init_LB2_hw.c **** void EXTI2_IRQHandler(void)
-  40:Core/Src/init_LB2_hw.c **** {
-  58              		.loc 1 40 1 is_stmt 1 view -0
+  43:Core/Src/interrupt.c **** 
+  44:Core/Src/interrupt.c **** void SysTick_Handler(void)
+  45:Core/Src/interrupt.c **** {
+  58              		.loc 1 45 1 is_stmt 1 view -0
   59              		.cfi_startproc
   60              		@ args = 0, pretend = 0, frame = 0
   61              		@ frame_needed = 0, uses_anonymous_args = 0
-  62              		@ link register save eliminated.
-  41:Core/Src/init_LB2_hw.c ****     if (READ_BIT(EXTI->PR, EXTI_PR_PR2))
-  63              		.loc 1 41 5 view .LVU5
-  64              		.loc 1 41 9 is_stmt 0 view .LVU6
-  65 0000 114B     		ldr	r3, .L8
-  66 0002 5B69     		ldr	r3, [r3, #20]
-  67              		.loc 1 41 8 view .LVU7
-  68 0004 13F0040F 		tst	r3, #4
-  69 0008 19D0     		beq	.L4
-  70              	.LBB4:
-  42:Core/Src/init_LB2_hw.c ****     {
-  43:Core/Src/init_LB2_hw.c ****         uint32_t now = g_ms;
-  71              		.loc 1 43 9 is_stmt 1 view .LVU8
-  72              		.loc 1 43 18 is_stmt 0 view .LVU9
-  73 000a 104B     		ldr	r3, .L8+4
-  74 000c 1A68     		ldr	r2, [r3]
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 3
+  62 0000 08B5     		push	{r3, lr}
+  63              	.LCFI0:
+  64              		.cfi_def_cfa_offset 8
+  65              		.cfi_offset 3, -8
+  66              		.cfi_offset 14, -4
+  46:Core/Src/interrupt.c ****     static uint32_t led_counter = 0;
+  67              		.loc 1 46 5 view .LVU6
+  47:Core/Src/interrupt.c ****     led_counter++;
+  68              		.loc 1 47 5 view .LVU7
+  69              		.loc 1 47 16 is_stmt 0 view .LVU8
+  70 0002 0D4A     		ldr	r2, .L11
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 3
 
 
-  75              	.LVL0:
-  44:Core/Src/init_LB2_hw.c **** 
-  45:Core/Src/init_LB2_hw.c ****         if ((now - g_btn_last_irq_ms) >= BTN_DEBOUNCE_MS)
-  76              		.loc 1 45 9 is_stmt 1 view .LVU10
-  77              		.loc 1 45 18 is_stmt 0 view .LVU11
-  78 000e 104B     		ldr	r3, .L8+8
-  79 0010 1B68     		ldr	r3, [r3]
-  80 0012 D31A     		subs	r3, r2, r3
-  81              		.loc 1 45 12 view .LVU12
-  82 0014 632B     		cmp	r3, #99
-  83 0016 0DD9     		bls	.L6
-  46:Core/Src/init_LB2_hw.c ****         {
-  47:Core/Src/init_LB2_hw.c ****             g_btn_last_irq_ms = now;
-  84              		.loc 1 47 13 is_stmt 1 view .LVU13
-  85              		.loc 1 47 31 is_stmt 0 view .LVU14
-  86 0018 0D4B     		ldr	r3, .L8+8
-  87 001a 1A60     		str	r2, [r3]
-  48:Core/Src/init_LB2_hw.c **** 
-  49:Core/Src/init_LB2_hw.c ****             if (READ_BIT(GPIOD->IDR, GPIO_IDR_IDR_2))
-  88              		.loc 1 49 13 is_stmt 1 view .LVU15
-  89              		.loc 1 49 17 is_stmt 0 view .LVU16
-  90 001c 0D4B     		ldr	r3, .L8+12
-  91 001e 1B69     		ldr	r3, [r3, #16]
-  92              		.loc 1 49 16 view .LVU17
-  93 0020 13F0040F 		tst	r3, #4
-  94 0024 0CD0     		beq	.L7
-  50:Core/Src/init_LB2_hw.c ****             {
-  51:Core/Src/init_LB2_hw.c ****                 g_btn_press_event = 1;
-  95              		.loc 1 51 17 is_stmt 1 view .LVU18
-  96              		.loc 1 51 35 is_stmt 0 view .LVU19
-  97 0026 0C4B     		ldr	r3, .L8+16
-  98 0028 0122     		movs	r2, #1
-  99              	.LVL1:
- 100              		.loc 1 51 35 view .LVU20
- 101 002a 1A70     		strb	r2, [r3]
- 102              	.LVL2:
-  52:Core/Src/init_LB2_hw.c ****                 mcu_btn_press_count++;
- 103              		.loc 1 52 17 is_stmt 1 view .LVU21
- 104              		.loc 1 52 36 is_stmt 0 view .LVU22
- 105 002c 0B4A     		ldr	r2, .L8+20
- 106 002e 1368     		ldr	r3, [r2]
- 107 0030 0133     		adds	r3, r3, #1
- 108 0032 1360     		str	r3, [r2]
- 109              	.L6:
-  53:Core/Src/init_LB2_hw.c ****             }
-  54:Core/Src/init_LB2_hw.c ****             else
-  55:Core/Src/init_LB2_hw.c ****             {
-  56:Core/Src/init_LB2_hw.c ****                 g_btn_release_event = 1;
-  57:Core/Src/init_LB2_hw.c ****             }
-  58:Core/Src/init_LB2_hw.c ****         }
-  59:Core/Src/init_LB2_hw.c ****         SET_BIT(EXTI->PR, EXTI_PR_PR2);
- 110              		.loc 1 59 9 is_stmt 1 view .LVU23
- 111 0034 044A     		ldr	r2, .L8
- 112 0036 5369     		ldr	r3, [r2, #20]
- 113 0038 43F00403 		orr	r3, r3, #4
- 114 003c 5361     		str	r3, [r2, #20]
- 115              	.LVL3:
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 4
+  71 0004 1368     		ldr	r3, [r2]
+  72 0006 0133     		adds	r3, r3, #1
+  73 0008 1360     		str	r3, [r2]
+  48:Core/Src/interrupt.c ****     uint32_t current_interval = (button_permission == 1) ? 100U : 500U;
+  74              		.loc 1 48 5 is_stmt 1 view .LVU9
+  75              		.loc 1 48 52 is_stmt 0 view .LVU10
+  76 000a 0C4A     		ldr	r2, .L11+4
+  77 000c 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
+  78 000e D2B2     		uxtb	r2, r2
+  79              		.loc 1 48 65 view .LVU11
+  80 0010 012A     		cmp	r2, #1
+  81 0012 08D0     		beq	.L9
+  82              		.loc 1 48 65 discriminator 2 view .LVU12
+  83 0014 4FF4FA72 		mov	r2, #500
+  84              	.L5:
+  85              	.LVL0:
+  49:Core/Src/interrupt.c **** 
+  50:Core/Src/interrupt.c ****     if (led_counter >= current_interval)
+  86              		.loc 1 50 5 is_stmt 1 view .LVU13
+  87              		.loc 1 50 8 is_stmt 0 view .LVU14
+  88 0018 9342     		cmp	r3, r2
+  89 001a 06D2     		bcs	.L10
+  90              	.LVL1:
+  91              	.L6:
+  51:Core/Src/interrupt.c ****     {
+  52:Core/Src/interrupt.c ****         led_toggle();
+  53:Core/Src/interrupt.c ****         led_counter = 0;
+  54:Core/Src/interrupt.c ****     }
+  55:Core/Src/interrupt.c ****     ticks++;
+  92              		.loc 1 55 5 is_stmt 1 view .LVU15
+  93              		.loc 1 55 10 is_stmt 0 view .LVU16
+  94 001c 084A     		ldr	r2, .L11+8
+  95 001e 1368     		ldr	r3, [r2]
+  96 0020 0133     		adds	r3, r3, #1
+  97 0022 1360     		str	r3, [r2]
+  56:Core/Src/interrupt.c **** }
+  98              		.loc 1 56 1 view .LVU17
+  99 0024 08BD     		pop	{r3, pc}
+ 100              	.LVL2:
+ 101              	.L9:
+  48:Core/Src/interrupt.c **** 
+ 102              		.loc 1 48 65 discriminator 1 view .LVU18
+ 103 0026 6422     		movs	r2, #100
+ 104 0028 F6E7     		b	.L5
+ 105              	.LVL3:
+ 106              	.L10:
+  52:Core/Src/interrupt.c ****         led_counter = 0;
+ 107              		.loc 1 52 9 is_stmt 1 view .LVU19
+ 108 002a FFF7FEFF 		bl	led_toggle
+ 109              	.LVL4:
+  53:Core/Src/interrupt.c ****     }
+ 110              		.loc 1 53 9 view .LVU20
+  53:Core/Src/interrupt.c ****     }
+ 111              		.loc 1 53 21 is_stmt 0 view .LVU21
+ 112 002e 024B     		ldr	r3, .L11
+ 113 0030 0022     		movs	r2, #0
+ 114 0032 1A60     		str	r2, [r3]
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 4
 
 
- 116              	.L4:
- 117              		.loc 1 59 9 is_stmt 0 view .LVU24
- 118              	.LBE4:
-  60:Core/Src/init_LB2_hw.c ****     }
-  61:Core/Src/init_LB2_hw.c **** }
- 119              		.loc 1 61 1 view .LVU25
- 120 003e 7047     		bx	lr
- 121              	.LVL4:
- 122              	.L7:
- 123              	.LBB5:
-  56:Core/Src/init_LB2_hw.c ****             }
- 124              		.loc 1 56 17 is_stmt 1 view .LVU26
-  56:Core/Src/init_LB2_hw.c ****             }
- 125              		.loc 1 56 37 is_stmt 0 view .LVU27
- 126 0040 074B     		ldr	r3, .L8+24
- 127 0042 0122     		movs	r2, #1
- 128              	.LVL5:
-  56:Core/Src/init_LB2_hw.c ****             }
- 129              		.loc 1 56 37 view .LVU28
- 130 0044 1A70     		strb	r2, [r3]
- 131              	.LVL6:
-  56:Core/Src/init_LB2_hw.c ****             }
- 132              		.loc 1 56 37 view .LVU29
- 133 0046 F5E7     		b	.L6
- 134              	.L9:
- 135              		.align	2
- 136              	.L8:
- 137 0048 003C0140 		.word	1073822720
- 138 004c 00000000 		.word	g_ms
- 139 0050 00000000 		.word	g_btn_last_irq_ms
- 140 0054 000C0240 		.word	1073875968
- 141 0058 00000000 		.word	g_btn_press_event
- 142 005c 00000000 		.word	mcu_btn_press_count
- 143 0060 00000000 		.word	g_btn_release_event
- 144              	.LBE5:
- 145              		.cfi_endproc
- 146              	.LFE131:
- 148              		.section	.text.LED_On_Index,"ax",%progbits
- 149              		.align	1
- 150              		.global	LED_On_Index
- 151              		.syntax unified
- 152              		.thumb
- 153              		.thumb_func
- 155              	LED_On_Index:
- 156              	.LVL7:
- 157              	.LFB132:
-  62:Core/Src/init_LB2_hw.c **** 
-  63:Core/Src/init_LB2_hw.c **** /* ===================== LED ===================== */
-  64:Core/Src/init_LB2_hw.c **** 
-  65:Core/Src/init_LB2_hw.c **** void LED_On_Index(int n)
-  66:Core/Src/init_LB2_hw.c **** {
- 158              		.loc 1 66 1 is_stmt 1 view -0
- 159              		.cfi_startproc
- 160              		@ args = 0, pretend = 0, frame = 0
- 161              		@ frame_needed = 0, uses_anonymous_args = 0
- 162              		@ link register save eliminated.
-  67:Core/Src/init_LB2_hw.c ****     switch (n)
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 5
+ 115 0034 F2E7     		b	.L6
+ 116              	.L12:
+ 117 0036 00BF     		.align	2
+ 118              	.L11:
+ 119 0038 00000000 		.word	led_counter.0
+ 120 003c 00000000 		.word	button_permission
+ 121 0040 00000000 		.word	ticks
+ 122              		.cfi_endproc
+ 123              	.LFE131:
+ 125              		.section	.text.get_ticks,"ax",%progbits
+ 126              		.align	1
+ 127              		.global	get_ticks
+ 128              		.syntax unified
+ 129              		.thumb
+ 130              		.thumb_func
+ 132              	get_ticks:
+ 133              	.LFB132:
+  57:Core/Src/interrupt.c **** 
+  58:Core/Src/interrupt.c **** uint32_t get_ticks(void)
+  59:Core/Src/interrupt.c **** {
+ 134              		.loc 1 59 1 is_stmt 1 view -0
+ 135              		.cfi_startproc
+ 136              		@ args = 0, pretend = 0, frame = 0
+ 137              		@ frame_needed = 0, uses_anonymous_args = 0
+ 138              		@ link register save eliminated.
+  60:Core/Src/interrupt.c ****     return ticks;
+ 139              		.loc 1 60 5 view .LVU23
+ 140              		.loc 1 60 12 is_stmt 0 view .LVU24
+ 141 0000 014B     		ldr	r3, .L14
+ 142 0002 1868     		ldr	r0, [r3]
+  61:Core/Src/interrupt.c **** }
+ 143              		.loc 1 61 1 view .LVU25
+ 144 0004 7047     		bx	lr
+ 145              	.L15:
+ 146 0006 00BF     		.align	2
+ 147              	.L14:
+ 148 0008 00000000 		.word	ticks
+ 149              		.cfi_endproc
+ 150              	.LFE132:
+ 152              		.section	.text.button_interrupt_init,"ax",%progbits
+ 153              		.align	1
+ 154              		.global	button_interrupt_init
+ 155              		.syntax unified
+ 156              		.thumb
+ 157              		.thumb_func
+ 159              	button_interrupt_init:
+ 160              	.LFB133:
+  62:Core/Src/interrupt.c **** 
+  63:Core/Src/interrupt.c **** void button_interrupt_init(void)
+  64:Core/Src/interrupt.c **** {
+ 161              		.loc 1 64 1 is_stmt 1 view -0
+ 162              		.cfi_startproc
+ 163              		@ args = 0, pretend = 0, frame = 0
+ 164              		@ frame_needed = 0, uses_anonymous_args = 0
+ 165              		@ link register save eliminated.
+  65:Core/Src/interrupt.c ****     SET_BIT(RCC->APB2ENR, RCC_APB2ENR_SYSCFGEN);
+ 166              		.loc 1 65 5 view .LVU27
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 5
 
 
- 163              		.loc 1 67 5 view .LVU31
- 164 0000 0628     		cmp	r0, #6
- 165 0002 2ED8     		bhi	.L10
- 166 0004 DFE800F0 		tbb	[pc, r0]
- 167              	.L13:
- 168 0008 04       		.byte	(.L19-.L13)/2
- 169 0009 0A       		.byte	(.L18-.L13)/2
- 170 000a 10       		.byte	(.L17-.L13)/2
- 171 000b 16       		.byte	(.L16-.L13)/2
- 172 000c 1C       		.byte	(.L15-.L13)/2
- 173 000d 22       		.byte	(.L14-.L13)/2
- 174 000e 28       		.byte	(.L12-.L13)/2
- 175 000f 00       		.p2align 1
- 176              	.L19:
-  68:Core/Src/init_LB2_hw.c ****     {
-  69:Core/Src/init_LB2_hw.c ****         case 0: SET_BIT(GPIOA->BSRR, GPIO_BSRR_BS8);  break;
- 177              		.loc 1 69 17 view .LVU32
- 178 0010 144A     		ldr	r2, .L21
- 179 0012 9369     		ldr	r3, [r2, #24]
- 180 0014 43F48073 		orr	r3, r3, #256
- 181 0018 9361     		str	r3, [r2, #24]
- 182              		.loc 1 69 55 view .LVU33
- 183 001a 7047     		bx	lr
- 184              	.L18:
-  70:Core/Src/init_LB2_hw.c ****         case 1: SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS10); break;
- 185              		.loc 1 70 17 view .LVU34
- 186 001c 124A     		ldr	r2, .L21+4
- 187 001e 9369     		ldr	r3, [r2, #24]
- 188 0020 43F48063 		orr	r3, r3, #1024
- 189 0024 9361     		str	r3, [r2, #24]
- 190              		.loc 1 70 55 view .LVU35
- 191 0026 7047     		bx	lr
- 192              	.L17:
-  71:Core/Src/init_LB2_hw.c ****         case 2: SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS4);  break;
- 193              		.loc 1 71 17 view .LVU36
- 194 0028 0F4A     		ldr	r2, .L21+4
- 195 002a 9369     		ldr	r3, [r2, #24]
- 196 002c 43F01003 		orr	r3, r3, #16
- 197 0030 9361     		str	r3, [r2, #24]
- 198              		.loc 1 71 55 view .LVU37
- 199 0032 7047     		bx	lr
- 200              	.L16:
-  72:Core/Src/init_LB2_hw.c ****         case 3: SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS5);  break;
- 201              		.loc 1 72 17 view .LVU38
- 202 0034 0C4A     		ldr	r2, .L21+4
- 203 0036 9369     		ldr	r3, [r2, #24]
- 204 0038 43F02003 		orr	r3, r3, #32
- 205 003c 9361     		str	r3, [r2, #24]
- 206              		.loc 1 72 55 view .LVU39
- 207 003e 7047     		bx	lr
- 208              	.L15:
-  73:Core/Src/init_LB2_hw.c ****         case 4: SET_BIT(GPIOB->BSRR, GPIO_BSRR_BS3);  break;
- 209              		.loc 1 73 17 view .LVU40
- 210 0040 094A     		ldr	r2, .L21+4
- 211 0042 9369     		ldr	r3, [r2, #24]
- 212 0044 43F00803 		orr	r3, r3, #8
- 213 0048 9361     		str	r3, [r2, #24]
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 6
-
-
- 214              		.loc 1 73 55 view .LVU41
- 215 004a 7047     		bx	lr
- 216              	.L14:
-  74:Core/Src/init_LB2_hw.c ****         case 5: SET_BIT(GPIOA->BSRR, GPIO_BSRR_BS10); break;
- 217              		.loc 1 74 17 view .LVU42
- 218 004c 054A     		ldr	r2, .L21
- 219 004e 9369     		ldr	r3, [r2, #24]
- 220 0050 43F48063 		orr	r3, r3, #1024
- 221 0054 9361     		str	r3, [r2, #24]
- 222              		.loc 1 74 55 view .LVU43
- 223 0056 7047     		bx	lr
- 224              	.L12:
-  75:Core/Src/init_LB2_hw.c ****         case 6: SET_BIT(GPIOA->BSRR, GPIO_BSRR_BS5);  break;
- 225              		.loc 1 75 17 view .LVU44
- 226 0058 024A     		ldr	r2, .L21
- 227 005a 9369     		ldr	r3, [r2, #24]
- 228 005c 43F02003 		orr	r3, r3, #32
- 229 0060 9361     		str	r3, [r2, #24]
- 230              		.loc 1 75 55 view .LVU45
- 231              	.L10:
-  76:Core/Src/init_LB2_hw.c ****     }
-  77:Core/Src/init_LB2_hw.c **** }
- 232              		.loc 1 77 1 is_stmt 0 view .LVU46
- 233 0062 7047     		bx	lr
- 234              	.L22:
- 235              		.align	2
- 236              	.L21:
- 237 0064 00000240 		.word	1073872896
- 238 0068 00040240 		.word	1073873920
- 239              		.cfi_endproc
- 240              	.LFE132:
- 242              		.section	.text.LED_Off_Index,"ax",%progbits
- 243              		.align	1
- 244              		.global	LED_Off_Index
- 245              		.syntax unified
- 246              		.thumb
- 247              		.thumb_func
- 249              	LED_Off_Index:
- 250              	.LVL8:
- 251              	.LFB133:
-  78:Core/Src/init_LB2_hw.c **** 
-  79:Core/Src/init_LB2_hw.c **** void LED_Off_Index(int n)
-  80:Core/Src/init_LB2_hw.c **** {
- 252              		.loc 1 80 1 is_stmt 1 view -0
- 253              		.cfi_startproc
- 254              		@ args = 0, pretend = 0, frame = 0
- 255              		@ frame_needed = 0, uses_anonymous_args = 0
- 256              		@ link register save eliminated.
-  81:Core/Src/init_LB2_hw.c ****     switch (n)
- 257              		.loc 1 81 5 view .LVU48
- 258 0000 0628     		cmp	r0, #6
- 259 0002 2ED8     		bhi	.L23
- 260 0004 DFE800F0 		tbb	[pc, r0]
- 261              	.L26:
- 262 0008 04       		.byte	(.L32-.L26)/2
- 263 0009 0A       		.byte	(.L31-.L26)/2
- 264 000a 10       		.byte	(.L30-.L26)/2
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 7
-
-
- 265 000b 16       		.byte	(.L29-.L26)/2
- 266 000c 1C       		.byte	(.L28-.L26)/2
- 267 000d 22       		.byte	(.L27-.L26)/2
- 268 000e 28       		.byte	(.L25-.L26)/2
- 269 000f 00       		.p2align 1
- 270              	.L32:
-  82:Core/Src/init_LB2_hw.c ****     {
-  83:Core/Src/init_LB2_hw.c ****         case 0: SET_BIT(GPIOA->BSRR, GPIO_BSRR_BR8);  break;
- 271              		.loc 1 83 17 view .LVU49
- 272 0010 144A     		ldr	r2, .L34
- 273 0012 9369     		ldr	r3, [r2, #24]
- 274 0014 43F08073 		orr	r3, r3, #16777216
- 275 0018 9361     		str	r3, [r2, #24]
- 276              		.loc 1 83 55 view .LVU50
- 277 001a 7047     		bx	lr
- 278              	.L31:
-  84:Core/Src/init_LB2_hw.c ****         case 1: SET_BIT(GPIOB->BSRR, GPIO_BSRR_BR10); break;
- 279              		.loc 1 84 17 view .LVU51
- 280 001c 124A     		ldr	r2, .L34+4
- 281 001e 9369     		ldr	r3, [r2, #24]
- 282 0020 43F08063 		orr	r3, r3, #67108864
- 283 0024 9361     		str	r3, [r2, #24]
- 284              		.loc 1 84 55 view .LVU52
- 285 0026 7047     		bx	lr
- 286              	.L30:
-  85:Core/Src/init_LB2_hw.c ****         case 2: SET_BIT(GPIOB->BSRR, GPIO_BSRR_BR4);  break;
- 287              		.loc 1 85 17 view .LVU53
- 288 0028 0F4A     		ldr	r2, .L34+4
- 289 002a 9369     		ldr	r3, [r2, #24]
- 290 002c 43F48013 		orr	r3, r3, #1048576
- 291 0030 9361     		str	r3, [r2, #24]
- 292              		.loc 1 85 55 view .LVU54
- 293 0032 7047     		bx	lr
- 294              	.L29:
-  86:Core/Src/init_LB2_hw.c ****         case 3: SET_BIT(GPIOB->BSRR, GPIO_BSRR_BR5);  break;
- 295              		.loc 1 86 17 view .LVU55
- 296 0034 0C4A     		ldr	r2, .L34+4
- 297 0036 9369     		ldr	r3, [r2, #24]
- 298 0038 43F40013 		orr	r3, r3, #2097152
- 299 003c 9361     		str	r3, [r2, #24]
- 300              		.loc 1 86 55 view .LVU56
- 301 003e 7047     		bx	lr
- 302              	.L28:
-  87:Core/Src/init_LB2_hw.c ****         case 4: SET_BIT(GPIOB->BSRR, GPIO_BSRR_BR3);  break;
- 303              		.loc 1 87 17 view .LVU57
- 304 0040 094A     		ldr	r2, .L34+4
- 305 0042 9369     		ldr	r3, [r2, #24]
- 306 0044 43F40023 		orr	r3, r3, #524288
- 307 0048 9361     		str	r3, [r2, #24]
- 308              		.loc 1 87 55 view .LVU58
- 309 004a 7047     		bx	lr
- 310              	.L27:
-  88:Core/Src/init_LB2_hw.c ****         case 5: SET_BIT(GPIOA->BSRR, GPIO_BSRR_BR10); break;
- 311              		.loc 1 88 17 view .LVU59
- 312 004c 054A     		ldr	r2, .L34
- 313 004e 9369     		ldr	r3, [r2, #24]
- 314 0050 43F08063 		orr	r3, r3, #67108864
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 8
-
-
- 315 0054 9361     		str	r3, [r2, #24]
- 316              		.loc 1 88 55 view .LVU60
- 317 0056 7047     		bx	lr
- 318              	.L25:
-  89:Core/Src/init_LB2_hw.c ****         case 6: SET_BIT(GPIOA->BSRR, GPIO_BSRR_BR5);  break;
- 319              		.loc 1 89 17 view .LVU61
- 320 0058 024A     		ldr	r2, .L34
- 321 005a 9369     		ldr	r3, [r2, #24]
- 322 005c 43F40013 		orr	r3, r3, #2097152
- 323 0060 9361     		str	r3, [r2, #24]
- 324              		.loc 1 89 55 view .LVU62
- 325              	.L23:
-  90:Core/Src/init_LB2_hw.c ****     }
-  91:Core/Src/init_LB2_hw.c **** }
- 326              		.loc 1 91 1 is_stmt 0 view .LVU63
- 327 0062 7047     		bx	lr
- 328              	.L35:
- 329              		.align	2
- 330              	.L34:
- 331 0064 00000240 		.word	1073872896
- 332 0068 00040240 		.word	1073873920
- 333              		.cfi_endproc
- 334              	.LFE133:
- 336              		.section	.text.LED_AllOff,"ax",%progbits
- 337              		.align	1
- 338              		.global	LED_AllOff
- 339              		.syntax unified
- 340              		.thumb
- 341              		.thumb_func
- 343              	LED_AllOff:
- 344              	.LFB134:
-  92:Core/Src/init_LB2_hw.c **** 
-  93:Core/Src/init_LB2_hw.c **** void LED_AllOff(void)
-  94:Core/Src/init_LB2_hw.c **** {
- 345              		.loc 1 94 1 is_stmt 1 view -0
- 346              		.cfi_startproc
- 347              		@ args = 0, pretend = 0, frame = 0
- 348              		@ frame_needed = 0, uses_anonymous_args = 0
- 349              		@ link register save eliminated.
-  95:Core/Src/init_LB2_hw.c ****     SET_BIT(GPIOA->BSRR, GPIO_BSRR_BR8 | GPIO_BSRR_BR10 | GPIO_BSRR_BR5);
- 350              		.loc 1 95 5 view .LVU65
- 351 0000 054A     		ldr	r2, .L37
- 352 0002 9369     		ldr	r3, [r2, #24]
- 353 0004 43F0A463 		orr	r3, r3, #85983232
- 354 0008 9361     		str	r3, [r2, #24]
-  96:Core/Src/init_LB2_hw.c ****     SET_BIT(GPIOB->BSRR, GPIO_BSRR_BR3 | GPIO_BSRR_BR4 | GPIO_BSRR_BR5 | GPIO_BSRR_BR10);
- 355              		.loc 1 96 5 view .LVU66
- 356 000a 02F58062 		add	r2, r2, #1024
- 357 000e 9369     		ldr	r3, [r2, #24]
- 358 0010 43F08763 		orr	r3, r3, #70778880
- 359 0014 9361     		str	r3, [r2, #24]
-  97:Core/Src/init_LB2_hw.c **** }
- 360              		.loc 1 97 1 is_stmt 0 view .LVU67
- 361 0016 7047     		bx	lr
- 362              	.L38:
- 363              		.align	2
- 364              	.L37:
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 9
-
-
- 365 0018 00000240 		.word	1073872896
- 366              		.cfi_endproc
- 367              	.LFE134:
- 369              		.section	.text.LED_Next,"ax",%progbits
- 370              		.align	1
- 371              		.global	LED_Next
- 372              		.syntax unified
- 373              		.thumb
- 374              		.thumb_func
- 376              	LED_Next:
- 377              	.LFB135:
-  98:Core/Src/init_LB2_hw.c **** 
-  99:Core/Src/init_LB2_hw.c **** void LED_Next(void)
- 100:Core/Src/init_LB2_hw.c **** {
- 378              		.loc 1 100 1 is_stmt 1 view -0
- 379              		.cfi_startproc
- 380              		@ args = 0, pretend = 0, frame = 0
- 381              		@ frame_needed = 0, uses_anonymous_args = 0
- 382 0000 08B5     		push	{r3, lr}
- 383              	.LCFI0:
- 384              		.cfi_def_cfa_offset 8
- 385              		.cfi_offset 3, -8
- 386              		.cfi_offset 14, -4
- 101:Core/Src/init_LB2_hw.c ****     if (currentLed >= 0)
- 387              		.loc 1 101 5 view .LVU69
- 388              		.loc 1 101 20 is_stmt 0 view .LVU70
- 389 0002 104B     		ldr	r3, .L43
- 390 0004 1B68     		ldr	r3, [r3]
- 391              		.loc 1 101 8 view .LVU71
- 392 0006 002B     		cmp	r3, #0
- 393 0008 16DA     		bge	.L42
- 394              	.L40:
- 102:Core/Src/init_LB2_hw.c ****         LED_Off_Index(currentLed);
- 103:Core/Src/init_LB2_hw.c **** 
- 104:Core/Src/init_LB2_hw.c ****     currentLed = (currentLed + 1) % LED_COUNT;
- 395              		.loc 1 104 5 is_stmt 1 view .LVU72
- 396              		.loc 1 104 30 is_stmt 0 view .LVU73
- 397 000a 0E49     		ldr	r1, .L43
- 398 000c 0A68     		ldr	r2, [r1]
- 399 000e 0132     		adds	r2, r2, #1
- 400              		.loc 1 104 35 view .LVU74
- 401 0010 0D4B     		ldr	r3, .L43+4
- 402 0012 A3FB0203 		umull	r0, r3, r3, r2
- 403 0016 9B08     		lsrs	r3, r3, #2
- 404 0018 03EB4303 		add	r3, r3, r3, lsl #1
- 405 001c 5800     		lsls	r0, r3, #1
- 406 001e 131A     		subs	r3, r2, r0
- 407              		.loc 1 104 16 view .LVU75
- 408 0020 0B60     		str	r3, [r1]
- 105:Core/Src/init_LB2_hw.c **** 
- 106:Core/Src/init_LB2_hw.c ****     LED_On_Index(currentLed);
- 409              		.loc 1 106 5 is_stmt 1 view .LVU76
- 410 0022 0868     		ldr	r0, [r1]
- 411 0024 FFF7FEFF 		bl	LED_On_Index
- 412              	.LVL9:
- 107:Core/Src/init_LB2_hw.c ****     blinkLedIsOn = 1;
- 413              		.loc 1 107 5 view .LVU77
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 10
-
-
- 414              		.loc 1 107 18 is_stmt 0 view .LVU78
- 415 0028 084B     		ldr	r3, .L43+8
- 416 002a 0122     		movs	r2, #1
- 417 002c 1A70     		strb	r2, [r3]
- 108:Core/Src/init_LB2_hw.c ****     lastBlinkTime_ms = g_ms;
- 418              		.loc 1 108 5 is_stmt 1 view .LVU79
- 419              		.loc 1 108 22 is_stmt 0 view .LVU80
- 420 002e 084B     		ldr	r3, .L43+12
- 421 0030 1A68     		ldr	r2, [r3]
- 422 0032 084B     		ldr	r3, .L43+16
- 423 0034 1A60     		str	r2, [r3]
- 109:Core/Src/init_LB2_hw.c **** }
- 424              		.loc 1 109 1 view .LVU81
- 425 0036 08BD     		pop	{r3, pc}
- 426              	.L42:
- 102:Core/Src/init_LB2_hw.c **** 
- 427              		.loc 1 102 9 is_stmt 1 view .LVU82
- 428 0038 024B     		ldr	r3, .L43
- 429 003a 1868     		ldr	r0, [r3]
- 430 003c FFF7FEFF 		bl	LED_Off_Index
- 431              	.LVL10:
- 432 0040 E3E7     		b	.L40
- 433              	.L44:
- 434 0042 00BF     		.align	2
- 435              	.L43:
- 436 0044 00000000 		.word	currentLed
- 437 0048 ABAAAAAA 		.word	-1431655765
- 438 004c 00000000 		.word	blinkLedIsOn
- 439 0050 00000000 		.word	g_ms
- 440 0054 00000000 		.word	lastBlinkTime_ms
- 441              		.cfi_endproc
- 442              	.LFE135:
- 444              		.section	.text.GPIO_Init_LEDs,"ax",%progbits
- 445              		.align	1
- 446              		.global	GPIO_Init_LEDs
- 447              		.syntax unified
- 448              		.thumb
- 449              		.thumb_func
- 451              	GPIO_Init_LEDs:
- 452              	.LFB136:
- 110:Core/Src/init_LB2_hw.c **** 
- 111:Core/Src/init_LB2_hw.c **** /* ===================== INIT ===================== */
- 112:Core/Src/init_LB2_hw.c **** 
- 113:Core/Src/init_LB2_hw.c **** void GPIO_Init_LEDs(void)
- 114:Core/Src/init_LB2_hw.c **** {
- 453              		.loc 1 114 1 view -0
- 454              		.cfi_startproc
- 455              		@ args = 0, pretend = 0, frame = 0
- 456              		@ frame_needed = 0, uses_anonymous_args = 0
- 457 0000 08B5     		push	{r3, lr}
- 458              	.LCFI1:
- 459              		.cfi_def_cfa_offset 8
- 460              		.cfi_offset 3, -8
- 461              		.cfi_offset 14, -4
- 115:Core/Src/init_LB2_hw.c ****     SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOAEN | RCC_AHB1ENR_GPIOBEN);
- 462              		.loc 1 115 5 view .LVU84
- 463 0002 0C4A     		ldr	r2, .L47
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 11
-
-
- 464 0004 136B     		ldr	r3, [r2, #48]
- 465 0006 43F00303 		orr	r3, r3, #3
- 466 000a 1363     		str	r3, [r2, #48]
- 116:Core/Src/init_LB2_hw.c **** 
- 117:Core/Src/init_LB2_hw.c ****     SET_BIT(GPIOA->MODER, GPIO_MODER_MODER8_0 |
- 467              		.loc 1 117 5 view .LVU85
- 468 000c A2F56052 		sub	r2, r2, #14336
- 469 0010 1368     		ldr	r3, [r2]
- 470 0012 43F48813 		orr	r3, r3, #1114112
- 471 0016 43F48063 		orr	r3, r3, #1024
- 472 001a 1360     		str	r3, [r2]
- 118:Core/Src/init_LB2_hw.c ****                           GPIO_MODER_MODER10_0|
- 119:Core/Src/init_LB2_hw.c ****                           GPIO_MODER_MODER5_0);
- 120:Core/Src/init_LB2_hw.c **** 
- 121:Core/Src/init_LB2_hw.c ****     SET_BIT(GPIOB->MODER, GPIO_MODER_MODER3_0  |
- 473              		.loc 1 121 5 view .LVU86
- 474 001c 02F58062 		add	r2, r2, #1024
- 475 0020 1368     		ldr	r3, [r2]
- 476 0022 43F48013 		orr	r3, r3, #1048576
- 477 0026 43F4A863 		orr	r3, r3, #1344
- 478 002a 1360     		str	r3, [r2]
- 122:Core/Src/init_LB2_hw.c ****                           GPIO_MODER_MODER4_0 |
- 123:Core/Src/init_LB2_hw.c ****                           GPIO_MODER_MODER5_0 |
- 124:Core/Src/init_LB2_hw.c ****                           GPIO_MODER_MODER10_0);
- 125:Core/Src/init_LB2_hw.c **** 
- 126:Core/Src/init_LB2_hw.c ****     // OTYPER не настраивается, потому что по умолчанию GPIO р�
- 127:Core/Src/init_LB2_hw.c ****     // а для обычного светодиода открытый сток (open-drain) не 
- 128:Core/Src/init_LB2_hw.c **** 
- 129:Core/Src/init_LB2_hw.c ****     // OSPEEDR не настраивается, потому что скорость вывода �
- 130:Core/Src/init_LB2_hw.c ****     // и по умолчанию стоит безопасное значение с минима�
- 131:Core/Src/init_LB2_hw.c **** 
- 132:Core/Src/init_LB2_hw.c ****     LED_AllOff();
- 479              		.loc 1 132 5 view .LVU87
- 480 002c FFF7FEFF 		bl	LED_AllOff
- 481              	.LVL11:
- 133:Core/Src/init_LB2_hw.c **** }
- 482              		.loc 1 133 1 is_stmt 0 view .LVU88
- 483 0030 08BD     		pop	{r3, pc}
- 484              	.L48:
- 485 0032 00BF     		.align	2
- 486              	.L47:
- 487 0034 00380240 		.word	1073887232
- 488              		.cfi_endproc
- 489              	.LFE136:
- 491              		.section	.text.GPIO_Init_Button_PD2_Pulldown,"ax",%progbits
- 492              		.align	1
- 493              		.global	GPIO_Init_Button_PD2_Pulldown
- 494              		.syntax unified
- 495              		.thumb
- 496              		.thumb_func
- 498              	GPIO_Init_Button_PD2_Pulldown:
- 499              	.LFB137:
- 134:Core/Src/init_LB2_hw.c **** 
- 135:Core/Src/init_LB2_hw.c **** void GPIO_Init_Button_PD2_Pulldown(void)
- 136:Core/Src/init_LB2_hw.c **** {
- 500              		.loc 1 136 1 is_stmt 1 view -0
- 501              		.cfi_startproc
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 12
-
-
- 502              		@ args = 0, pretend = 0, frame = 0
- 503              		@ frame_needed = 0, uses_anonymous_args = 0
- 504              		@ link register save eliminated.
- 137:Core/Src/init_LB2_hw.c ****     SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIODEN);
- 505              		.loc 1 137 5 view .LVU90
- 506 0000 094A     		ldr	r2, .L50
- 507 0002 136B     		ldr	r3, [r2, #48]
- 508 0004 43F00803 		orr	r3, r3, #8
- 509 0008 1363     		str	r3, [r2, #48]
- 138:Core/Src/init_LB2_hw.c **** 
- 139:Core/Src/init_LB2_hw.c ****     CLEAR_BIT(GPIOD->MODER, GPIO_MODER_MODER2);
- 510              		.loc 1 139 5 view .LVU91
- 511 000a 084B     		ldr	r3, .L50+4
- 512 000c 1A68     		ldr	r2, [r3]
- 513 000e 22F03002 		bic	r2, r2, #48
- 514 0012 1A60     		str	r2, [r3]
- 140:Core/Src/init_LB2_hw.c ****     CLEAR_BIT(GPIOD->PUPDR, GPIO_PUPDR_PUPDR2);
- 515              		.loc 1 140 5 view .LVU92
- 516 0014 DA68     		ldr	r2, [r3, #12]
- 517 0016 22F03002 		bic	r2, r2, #48
- 518 001a DA60     		str	r2, [r3, #12]
- 141:Core/Src/init_LB2_hw.c ****     SET_BIT(GPIOD->PUPDR, GPIO_PUPDR_PUPDR2_1);
- 519              		.loc 1 141 5 view .LVU93
- 520 001c DA68     		ldr	r2, [r3, #12]
- 521 001e 42F02002 		orr	r2, r2, #32
- 522 0022 DA60     		str	r2, [r3, #12]
- 142:Core/Src/init_LB2_hw.c **** }
- 523              		.loc 1 142 1 is_stmt 0 view .LVU94
- 524 0024 7047     		bx	lr
- 525              	.L51:
- 526 0026 00BF     		.align	2
- 527              	.L50:
- 528 0028 00380240 		.word	1073887232
- 529 002c 000C0240 		.word	1073875968
- 530              		.cfi_endproc
- 531              	.LFE137:
- 533              		.section	.text.EXTI_Init_PD2,"ax",%progbits
- 534              		.align	1
- 535              		.global	EXTI_Init_PD2
- 536              		.syntax unified
- 537              		.thumb
- 538              		.thumb_func
- 540              	EXTI_Init_PD2:
- 541              	.LFB138:
- 143:Core/Src/init_LB2_hw.c **** 
- 144:Core/Src/init_LB2_hw.c **** void EXTI_Init_PD2(void)
- 145:Core/Src/init_LB2_hw.c **** {
- 542              		.loc 1 145 1 is_stmt 1 view -0
- 543              		.cfi_startproc
- 544              		@ args = 0, pretend = 0, frame = 0
- 545              		@ frame_needed = 0, uses_anonymous_args = 0
- 546              		@ link register save eliminated.
- 146:Core/Src/init_LB2_hw.c ****     SET_BIT(RCC->APB2ENR, RCC_APB2ENR_SYSCFGEN);
- 547              		.loc 1 146 5 view .LVU96
- 548 0000 114A     		ldr	r2, .L53
- 549 0002 536C     		ldr	r3, [r2, #68]
- 550 0004 43F48043 		orr	r3, r3, #16384
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 13
-
-
- 551 0008 5364     		str	r3, [r2, #68]
- 147:Core/Src/init_LB2_hw.c **** 
- 148:Core/Src/init_LB2_hw.c ****     MODIFY_REG(SYSCFG->EXTICR[0],
- 552              		.loc 1 148 5 view .LVU97
- 553 000a A2F58032 		sub	r2, r2, #65536
- 554 000e 9368     		ldr	r3, [r2, #8]
- 555 0010 23F47063 		bic	r3, r3, #3840
- 556 0014 43F44073 		orr	r3, r3, #768
- 557 0018 9360     		str	r3, [r2, #8]
- 149:Core/Src/init_LB2_hw.c ****                SYSCFG_EXTICR1_EXTI2,
- 150:Core/Src/init_LB2_hw.c ****                SYSCFG_EXTICR1_EXTI2_PD);
- 151:Core/Src/init_LB2_hw.c **** 
- 152:Core/Src/init_LB2_hw.c ****     SET_BIT(EXTI->IMR, EXTI_IMR_MR2);
- 558              		.loc 1 152 5 view .LVU98
- 559 001a 0C4B     		ldr	r3, .L53+4
- 560 001c 1A68     		ldr	r2, [r3]
- 561 001e 42F00402 		orr	r2, r2, #4
- 562 0022 1A60     		str	r2, [r3]
- 153:Core/Src/init_LB2_hw.c ****     SET_BIT(EXTI->RTSR, EXTI_RTSR_TR2);
- 563              		.loc 1 153 5 view .LVU99
- 564 0024 9A68     		ldr	r2, [r3, #8]
- 565 0026 42F00402 		orr	r2, r2, #4
- 566 002a 9A60     		str	r2, [r3, #8]
- 154:Core/Src/init_LB2_hw.c ****     SET_BIT(EXTI->FTSR, EXTI_FTSR_TR2);
- 567              		.loc 1 154 5 view .LVU100
- 568 002c DA68     		ldr	r2, [r3, #12]
- 569 002e 42F00402 		orr	r2, r2, #4
- 570 0032 DA60     		str	r2, [r3, #12]
- 155:Core/Src/init_LB2_hw.c ****     SET_BIT(EXTI->PR, EXTI_PR_PR2);
- 571              		.loc 1 155 5 view .LVU101
- 572 0034 5A69     		ldr	r2, [r3, #20]
- 573 0036 42F00402 		orr	r2, r2, #4
- 574 003a 5A61     		str	r2, [r3, #20]
- 156:Core/Src/init_LB2_hw.c **** 
- 157:Core/Src/init_LB2_hw.c ****     NVIC_EnableIRQ(EXTI2_IRQn);
- 575              		.loc 1 157 5 view .LVU102
- 576              	.LVL12:
- 577              	.LBB6:
- 578              	.LBI6:
- 579              		.file 2 "CMSIS/Include/core_cm4.h"
+ 167 0000 104A     		ldr	r2, .L17
+ 168 0002 536C     		ldr	r3, [r2, #68]
+ 169 0004 43F48043 		orr	r3, r3, #16384
+ 170 0008 5364     		str	r3, [r2, #68]
+  66:Core/Src/interrupt.c ****     MODIFY_REG(SYSCFG->EXTICR[13 / 4], 0xFU << ((13 % 4) * 4), 0x2U << ((13 % 4) * 4));
+ 171              		.loc 1 66 5 view .LVU28
+ 172 000a A2F58032 		sub	r2, r2, #65536
+ 173 000e 5369     		ldr	r3, [r2, #20]
+ 174 0010 23F0F003 		bic	r3, r3, #240
+ 175 0014 43F02003 		orr	r3, r3, #32
+ 176 0018 5361     		str	r3, [r2, #20]
+  67:Core/Src/interrupt.c ****     SET_BIT(EXTI->IMR, EXTI_IMR_IM13);
+ 177              		.loc 1 67 5 view .LVU29
+ 178 001a 0B4B     		ldr	r3, .L17+4
+ 179 001c 1A68     		ldr	r2, [r3]
+ 180 001e 42F40052 		orr	r2, r2, #8192
+ 181 0022 1A60     		str	r2, [r3]
+  68:Core/Src/interrupt.c ****     SET_BIT(EXTI->FTSR, EXTI_FTSR_TR13);
+ 182              		.loc 1 68 5 view .LVU30
+ 183 0024 DA68     		ldr	r2, [r3, #12]
+ 184 0026 42F40052 		orr	r2, r2, #8192
+ 185 002a DA60     		str	r2, [r3, #12]
+  69:Core/Src/interrupt.c ****     SET_BIT(EXTI->RTSR, EXTI_RTSR_TR13);
+ 186              		.loc 1 69 5 view .LVU31
+ 187 002c 9A68     		ldr	r2, [r3, #8]
+ 188 002e 42F40052 		orr	r2, r2, #8192
+ 189 0032 9A60     		str	r2, [r3, #8]
+  70:Core/Src/interrupt.c ****     NVIC_SetPriority(EXTI15_10_IRQn, 2);
+ 190              		.loc 1 70 5 view .LVU32
+ 191              	.LVL5:
+ 192              	.LBB6:
+ 193              	.LBI6:
+ 194              		.file 2 "CMSIS/Include/core_cm4.h"
    1:CMSIS/Include/core_cm4.h **** /**************************************************************************//**
    2:CMSIS/Include/core_cm4.h ****  * @file     core_cm4.h
    3:CMSIS/Include/core_cm4.h ****  * @brief    CMSIS Cortex-M4 Core Peripheral Access Layer Header File
@@ -778,9 +291,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
   15:CMSIS/Include/core_cm4.h ****  *
   16:CMSIS/Include/core_cm4.h ****  * www.apache.org/licenses/LICENSE-2.0
   17:CMSIS/Include/core_cm4.h ****  *
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 14
-
-
   18:CMSIS/Include/core_cm4.h ****  * Unless required by applicable law or agreed to in writing, software
   19:CMSIS/Include/core_cm4.h ****  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
   20:CMSIS/Include/core_cm4.h ****  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -788,6 +298,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
   22:CMSIS/Include/core_cm4.h ****  * limitations under the License.
   23:CMSIS/Include/core_cm4.h ****  */
   24:CMSIS/Include/core_cm4.h **** 
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 6
+
+
   25:CMSIS/Include/core_cm4.h **** #if   defined ( __ICCARM__ )
   26:CMSIS/Include/core_cm4.h ****   #pragma system_include         /* treat file as system include file for MISRA check */
   27:CMSIS/Include/core_cm4.h **** #elif defined (__clang__)
@@ -838,9 +351,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
   72:CMSIS/Include/core_cm4.h **** 
   73:CMSIS/Include/core_cm4.h **** /** __FPU_USED indicates whether an FPU is used or not.
   74:CMSIS/Include/core_cm4.h ****     For this, __FPU_PRESENT has to be checked prior to making use of FPU specific registers and fun
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 15
-
-
   75:CMSIS/Include/core_cm4.h **** */
   76:CMSIS/Include/core_cm4.h **** #if defined ( __CC_ARM )
   77:CMSIS/Include/core_cm4.h ****   #if defined __TARGET_FPU_VFP
@@ -848,6 +358,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
   79:CMSIS/Include/core_cm4.h ****       #define __FPU_USED       1U
   80:CMSIS/Include/core_cm4.h ****     #else
   81:CMSIS/Include/core_cm4.h ****       #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 7
+
+
   82:CMSIS/Include/core_cm4.h ****       #define __FPU_USED       0U
   83:CMSIS/Include/core_cm4.h ****     #endif
   84:CMSIS/Include/core_cm4.h ****   #else
@@ -898,9 +411,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  129:CMSIS/Include/core_cm4.h ****       #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)
  130:CMSIS/Include/core_cm4.h ****       #define __FPU_USED       0U
  131:CMSIS/Include/core_cm4.h ****     #endif
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 16
-
-
  132:CMSIS/Include/core_cm4.h ****   #else
  133:CMSIS/Include/core_cm4.h ****     #define __FPU_USED         0U
  134:CMSIS/Include/core_cm4.h ****   #endif
@@ -908,6 +418,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  136:CMSIS/Include/core_cm4.h **** #elif defined ( __TASKING__ )
  137:CMSIS/Include/core_cm4.h ****   #if defined __FPU_VFP__
  138:CMSIS/Include/core_cm4.h ****     #if defined (__FPU_PRESENT) && (__FPU_PRESENT == 1U)
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 8
+
+
  139:CMSIS/Include/core_cm4.h ****       #define __FPU_USED       1U
  140:CMSIS/Include/core_cm4.h ****     #else
  141:CMSIS/Include/core_cm4.h ****       #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)
@@ -958,9 +471,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  186:CMSIS/Include/core_cm4.h **** 
  187:CMSIS/Include/core_cm4.h ****   #ifndef __FPU_PRESENT
  188:CMSIS/Include/core_cm4.h ****     #define __FPU_PRESENT             0U
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 17
-
-
  189:CMSIS/Include/core_cm4.h ****     #warning "__FPU_PRESENT not defined in device header file; using default!"
  190:CMSIS/Include/core_cm4.h ****   #endif
  191:CMSIS/Include/core_cm4.h **** 
@@ -968,6 +478,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  193:CMSIS/Include/core_cm4.h ****     #define __MPU_PRESENT             0U
  194:CMSIS/Include/core_cm4.h ****     #warning "__MPU_PRESENT not defined in device header file; using default!"
  195:CMSIS/Include/core_cm4.h ****   #endif
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 9
+
+
  196:CMSIS/Include/core_cm4.h **** 
  197:CMSIS/Include/core_cm4.h ****   #ifndef __NVIC_PRIO_BITS
  198:CMSIS/Include/core_cm4.h ****     #define __NVIC_PRIO_BITS          3U
@@ -1018,9 +531,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  243:CMSIS/Include/core_cm4.h ****  ******************************************************************************/
  244:CMSIS/Include/core_cm4.h **** /**
  245:CMSIS/Include/core_cm4.h ****   \defgroup CMSIS_core_register Defines and Type Definitions
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 18
-
-
  246:CMSIS/Include/core_cm4.h ****   \brief Type definitions and defines for Cortex-M processor based devices.
  247:CMSIS/Include/core_cm4.h **** */
  248:CMSIS/Include/core_cm4.h **** 
@@ -1028,6 +538,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  250:CMSIS/Include/core_cm4.h ****   \ingroup    CMSIS_core_register
  251:CMSIS/Include/core_cm4.h ****   \defgroup   CMSIS_CORE  Status and Control Registers
  252:CMSIS/Include/core_cm4.h ****   \brief      Core Register type definitions.
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 10
+
+
  253:CMSIS/Include/core_cm4.h ****   @{
  254:CMSIS/Include/core_cm4.h ****  */
  255:CMSIS/Include/core_cm4.h **** 
@@ -1078,9 +591,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  300:CMSIS/Include/core_cm4.h ****   struct
  301:CMSIS/Include/core_cm4.h ****   {
  302:CMSIS/Include/core_cm4.h ****     uint32_t ISR:9;                      /*!< bit:  0.. 8  Exception number */
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 19
-
-
  303:CMSIS/Include/core_cm4.h ****     uint32_t _reserved0:23;              /*!< bit:  9..31  Reserved */
  304:CMSIS/Include/core_cm4.h ****   } b;                                   /*!< Structure used for bit  access */
  305:CMSIS/Include/core_cm4.h ****   uint32_t w;                            /*!< Type      used for word access */
@@ -1088,6 +598,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  307:CMSIS/Include/core_cm4.h **** 
  308:CMSIS/Include/core_cm4.h **** /* IPSR Register Definitions */
  309:CMSIS/Include/core_cm4.h **** #define IPSR_ISR_Pos                        0U                                            /*!< IPSR
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 11
+
+
  310:CMSIS/Include/core_cm4.h **** #define IPSR_ISR_Msk                       (0x1FFUL /*<< IPSR_ISR_Pos*/)                  /*!< IPSR
  311:CMSIS/Include/core_cm4.h **** 
  312:CMSIS/Include/core_cm4.h **** 
@@ -1138,9 +651,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  357:CMSIS/Include/core_cm4.h **** 
  358:CMSIS/Include/core_cm4.h **** #define xPSR_GE_Pos                        16U                                            /*!< xPSR
  359:CMSIS/Include/core_cm4.h **** #define xPSR_GE_Msk                        (0xFUL << xPSR_GE_Pos)                         /*!< xPSR
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 20
-
-
  360:CMSIS/Include/core_cm4.h **** 
  361:CMSIS/Include/core_cm4.h **** #define xPSR_ICI_IT_1_Pos                  10U                                            /*!< xPSR
  362:CMSIS/Include/core_cm4.h **** #define xPSR_ICI_IT_1_Msk                  (0x3FUL << xPSR_ICI_IT_1_Pos)                  /*!< xPSR
@@ -1148,6 +658,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  364:CMSIS/Include/core_cm4.h **** #define xPSR_ISR_Pos                        0U                                            /*!< xPSR
  365:CMSIS/Include/core_cm4.h **** #define xPSR_ISR_Msk                       (0x1FFUL /*<< xPSR_ISR_Pos*/)                  /*!< xPSR
  366:CMSIS/Include/core_cm4.h **** 
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 12
+
+
  367:CMSIS/Include/core_cm4.h **** 
  368:CMSIS/Include/core_cm4.h **** /**
  369:CMSIS/Include/core_cm4.h ****   \brief  Union type to access the Control Registers (CONTROL).
@@ -1198,9 +711,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  414:CMSIS/Include/core_cm4.h ****   __IOM uint32_t ICPR[8U];               /*!< Offset: 0x180 (R/W)  Interrupt Clear Pending Register
  415:CMSIS/Include/core_cm4.h ****         uint32_t RESERVED3[24U];
  416:CMSIS/Include/core_cm4.h ****   __IOM uint32_t IABR[8U];               /*!< Offset: 0x200 (R/W)  Interrupt Active bit Register */
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 21
-
-
  417:CMSIS/Include/core_cm4.h ****         uint32_t RESERVED4[56U];
  418:CMSIS/Include/core_cm4.h ****   __IOM uint8_t  IP[240U];               /*!< Offset: 0x300 (R/W)  Interrupt Priority Register (8Bi
  419:CMSIS/Include/core_cm4.h ****         uint32_t RESERVED5[644U];
@@ -1208,6 +718,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  421:CMSIS/Include/core_cm4.h **** }  NVIC_Type;
  422:CMSIS/Include/core_cm4.h **** 
  423:CMSIS/Include/core_cm4.h **** /* Software Triggered Interrupt Register Definitions */
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 13
+
+
  424:CMSIS/Include/core_cm4.h **** #define NVIC_STIR_INTID_Pos                 0U                                         /*!< STIR: I
  425:CMSIS/Include/core_cm4.h **** #define NVIC_STIR_INTID_Msk                (0x1FFUL /*<< NVIC_STIR_INTID_Pos*/)        /*!< STIR: I
  426:CMSIS/Include/core_cm4.h **** 
@@ -1258,9 +771,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  471:CMSIS/Include/core_cm4.h **** 
  472:CMSIS/Include/core_cm4.h **** #define SCB_CPUID_ARCHITECTURE_Pos         16U                                            /*!< SCB 
  473:CMSIS/Include/core_cm4.h **** #define SCB_CPUID_ARCHITECTURE_Msk         (0xFUL << SCB_CPUID_ARCHITECTURE_Pos)          /*!< SCB 
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 22
-
-
  474:CMSIS/Include/core_cm4.h **** 
  475:CMSIS/Include/core_cm4.h **** #define SCB_CPUID_PARTNO_Pos                4U                                            /*!< SCB 
  476:CMSIS/Include/core_cm4.h **** #define SCB_CPUID_PARTNO_Msk               (0xFFFUL << SCB_CPUID_PARTNO_Pos)              /*!< SCB 
@@ -1268,6 +778,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  478:CMSIS/Include/core_cm4.h **** #define SCB_CPUID_REVISION_Pos              0U                                            /*!< SCB 
  479:CMSIS/Include/core_cm4.h **** #define SCB_CPUID_REVISION_Msk             (0xFUL /*<< SCB_CPUID_REVISION_Pos*/)          /*!< SCB 
  480:CMSIS/Include/core_cm4.h **** 
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 14
+
+
  481:CMSIS/Include/core_cm4.h **** /* SCB Interrupt Control State Register Definitions */
  482:CMSIS/Include/core_cm4.h **** #define SCB_ICSR_NMIPENDSET_Pos            31U                                            /*!< SCB 
  483:CMSIS/Include/core_cm4.h **** #define SCB_ICSR_NMIPENDSET_Msk            (1UL << SCB_ICSR_NMIPENDSET_Pos)               /*!< SCB 
@@ -1318,9 +831,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  528:CMSIS/Include/core_cm4.h **** 
  529:CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_SYSRESETREQ_Pos           2U                                            /*!< SCB 
  530:CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_SYSRESETREQ_Msk          (1UL << SCB_AIRCR_SYSRESETREQ_Pos)             /*!< SCB 
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 23
-
-
  531:CMSIS/Include/core_cm4.h **** 
  532:CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_VECTCLRACTIVE_Pos         1U                                            /*!< SCB 
  533:CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_VECTCLRACTIVE_Msk        (1UL << SCB_AIRCR_VECTCLRACTIVE_Pos)           /*!< SCB 
@@ -1328,6 +838,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  535:CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_VECTRESET_Pos             0U                                            /*!< SCB 
  536:CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_VECTRESET_Msk            (1UL /*<< SCB_AIRCR_VECTRESET_Pos*/)           /*!< SCB 
  537:CMSIS/Include/core_cm4.h **** 
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 15
+
+
  538:CMSIS/Include/core_cm4.h **** /* SCB System Control Register Definitions */
  539:CMSIS/Include/core_cm4.h **** #define SCB_SCR_SEVONPEND_Pos               4U                                            /*!< SCB 
  540:CMSIS/Include/core_cm4.h **** #define SCB_SCR_SEVONPEND_Msk              (1UL << SCB_SCR_SEVONPEND_Pos)                 /*!< SCB 
@@ -1378,9 +891,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  585:CMSIS/Include/core_cm4.h **** 
  586:CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_USGFAULTPENDED_Pos       12U                                            /*!< SCB 
  587:CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_USGFAULTPENDED_Msk       (1UL << SCB_SHCSR_USGFAULTPENDED_Pos)          /*!< SCB 
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 24
-
-
  588:CMSIS/Include/core_cm4.h **** 
  589:CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_SYSTICKACT_Pos           11U                                            /*!< SCB 
  590:CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_SYSTICKACT_Msk           (1UL << SCB_SHCSR_SYSTICKACT_Pos)              /*!< SCB 
@@ -1388,6 +898,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  592:CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_PENDSVACT_Pos            10U                                            /*!< SCB 
  593:CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_PENDSVACT_Msk            (1UL << SCB_SHCSR_PENDSVACT_Pos)               /*!< SCB 
  594:CMSIS/Include/core_cm4.h **** 
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 16
+
+
  595:CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_MONITORACT_Pos            8U                                            /*!< SCB 
  596:CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_MONITORACT_Msk           (1UL << SCB_SHCSR_MONITORACT_Pos)              /*!< SCB 
  597:CMSIS/Include/core_cm4.h **** 
@@ -1438,9 +951,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  642:CMSIS/Include/core_cm4.h **** 
  643:CMSIS/Include/core_cm4.h **** #define SCB_CFSR_LSPERR_Pos               (SCB_CFSR_BUSFAULTSR_Pos + 5U)                  /*!< SCB 
  644:CMSIS/Include/core_cm4.h **** #define SCB_CFSR_LSPERR_Msk               (1UL << SCB_CFSR_LSPERR_Pos)                    /*!< SCB 
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 25
-
-
  645:CMSIS/Include/core_cm4.h **** 
  646:CMSIS/Include/core_cm4.h **** #define SCB_CFSR_STKERR_Pos               (SCB_CFSR_BUSFAULTSR_Pos + 4U)                  /*!< SCB 
  647:CMSIS/Include/core_cm4.h **** #define SCB_CFSR_STKERR_Msk               (1UL << SCB_CFSR_STKERR_Pos)                    /*!< SCB 
@@ -1448,6 +958,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  649:CMSIS/Include/core_cm4.h **** #define SCB_CFSR_UNSTKERR_Pos             (SCB_CFSR_BUSFAULTSR_Pos + 3U)                  /*!< SCB 
  650:CMSIS/Include/core_cm4.h **** #define SCB_CFSR_UNSTKERR_Msk             (1UL << SCB_CFSR_UNSTKERR_Pos)                  /*!< SCB 
  651:CMSIS/Include/core_cm4.h **** 
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 17
+
+
  652:CMSIS/Include/core_cm4.h **** #define SCB_CFSR_IMPRECISERR_Pos          (SCB_CFSR_BUSFAULTSR_Pos + 2U)                  /*!< SCB 
  653:CMSIS/Include/core_cm4.h **** #define SCB_CFSR_IMPRECISERR_Msk          (1UL << SCB_CFSR_IMPRECISERR_Pos)               /*!< SCB 
  654:CMSIS/Include/core_cm4.h **** 
@@ -1498,9 +1011,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  699:CMSIS/Include/core_cm4.h **** 
  700:CMSIS/Include/core_cm4.h **** #define SCB_DFSR_BKPT_Pos                   1U                                            /*!< SCB 
  701:CMSIS/Include/core_cm4.h **** #define SCB_DFSR_BKPT_Msk                  (1UL << SCB_DFSR_BKPT_Pos)                     /*!< SCB 
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 26
-
-
  702:CMSIS/Include/core_cm4.h **** 
  703:CMSIS/Include/core_cm4.h **** #define SCB_DFSR_HALTED_Pos                 0U                                            /*!< SCB 
  704:CMSIS/Include/core_cm4.h **** #define SCB_DFSR_HALTED_Msk                (1UL /*<< SCB_DFSR_HALTED_Pos*/)               /*!< SCB 
@@ -1508,6 +1018,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  706:CMSIS/Include/core_cm4.h **** /*@} end of group CMSIS_SCB */
  707:CMSIS/Include/core_cm4.h **** 
  708:CMSIS/Include/core_cm4.h **** 
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 18
+
+
  709:CMSIS/Include/core_cm4.h **** /**
  710:CMSIS/Include/core_cm4.h ****   \ingroup  CMSIS_core_register
  711:CMSIS/Include/core_cm4.h ****   \defgroup CMSIS_SCnSCB System Controls not in SCB (SCnSCB)
@@ -1558,9 +1071,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  756:CMSIS/Include/core_cm4.h **** /**
  757:CMSIS/Include/core_cm4.h ****   \brief  Structure type to access the System Timer (SysTick).
  758:CMSIS/Include/core_cm4.h ****  */
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 27
-
-
  759:CMSIS/Include/core_cm4.h **** typedef struct
  760:CMSIS/Include/core_cm4.h **** {
  761:CMSIS/Include/core_cm4.h ****   __IOM uint32_t CTRL;                   /*!< Offset: 0x000 (R/W)  SysTick Control and Status Regis
@@ -1568,6 +1078,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  763:CMSIS/Include/core_cm4.h ****   __IOM uint32_t VAL;                    /*!< Offset: 0x008 (R/W)  SysTick Current Value Register *
  764:CMSIS/Include/core_cm4.h ****   __IM  uint32_t CALIB;                  /*!< Offset: 0x00C (R/ )  SysTick Calibration Register */
  765:CMSIS/Include/core_cm4.h **** } SysTick_Type;
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 19
+
+
  766:CMSIS/Include/core_cm4.h **** 
  767:CMSIS/Include/core_cm4.h **** /* SysTick Control / Status Register Definitions */
  768:CMSIS/Include/core_cm4.h **** #define SysTick_CTRL_COUNTFLAG_Pos         16U                                            /*!< SysT
@@ -1618,9 +1131,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  813:CMSIS/Include/core_cm4.h ****   __OM  union
  814:CMSIS/Include/core_cm4.h ****   {
  815:CMSIS/Include/core_cm4.h ****     __OM  uint8_t    u8;                 /*!< Offset: 0x000 ( /W)  ITM Stimulus Port 8-bit */
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 28
-
-
  816:CMSIS/Include/core_cm4.h ****     __OM  uint16_t   u16;                /*!< Offset: 0x000 ( /W)  ITM Stimulus Port 16-bit */
  817:CMSIS/Include/core_cm4.h ****     __OM  uint32_t   u32;                /*!< Offset: 0x000 ( /W)  ITM Stimulus Port 32-bit */
  818:CMSIS/Include/core_cm4.h ****   }  PORT [32U];                         /*!< Offset: 0x000 ( /W)  ITM Stimulus Port Registers */
@@ -1628,6 +1138,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  820:CMSIS/Include/core_cm4.h ****   __IOM uint32_t TER;                    /*!< Offset: 0xE00 (R/W)  ITM Trace Enable Register */
  821:CMSIS/Include/core_cm4.h ****         uint32_t RESERVED1[15U];
  822:CMSIS/Include/core_cm4.h ****   __IOM uint32_t TPR;                    /*!< Offset: 0xE40 (R/W)  ITM Trace Privilege Register */
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 20
+
+
  823:CMSIS/Include/core_cm4.h ****         uint32_t RESERVED2[15U];
  824:CMSIS/Include/core_cm4.h ****   __IOM uint32_t TCR;                    /*!< Offset: 0xE80 (R/W)  ITM Trace Control Register */
  825:CMSIS/Include/core_cm4.h ****         uint32_t RESERVED3[29U];
@@ -1678,9 +1191,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  870:CMSIS/Include/core_cm4.h **** #define ITM_TCR_SYNCENA_Pos                 2U                                            /*!< ITM 
  871:CMSIS/Include/core_cm4.h **** #define ITM_TCR_SYNCENA_Msk                (1UL << ITM_TCR_SYNCENA_Pos)                   /*!< ITM 
  872:CMSIS/Include/core_cm4.h **** 
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 29
-
-
  873:CMSIS/Include/core_cm4.h **** #define ITM_TCR_TSENA_Pos                   1U                                            /*!< ITM 
  874:CMSIS/Include/core_cm4.h **** #define ITM_TCR_TSENA_Msk                  (1UL << ITM_TCR_TSENA_Pos)                     /*!< ITM 
  875:CMSIS/Include/core_cm4.h **** 
@@ -1688,6 +1198,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  877:CMSIS/Include/core_cm4.h **** #define ITM_TCR_ITMENA_Msk                 (1UL /*<< ITM_TCR_ITMENA_Pos*/)                /*!< ITM 
  878:CMSIS/Include/core_cm4.h **** 
  879:CMSIS/Include/core_cm4.h **** /* ITM Integration Write Register Definitions */
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 21
+
+
  880:CMSIS/Include/core_cm4.h **** #define ITM_IWR_ATVALIDM_Pos                0U                                            /*!< ITM 
  881:CMSIS/Include/core_cm4.h **** #define ITM_IWR_ATVALIDM_Msk               (1UL /*<< ITM_IWR_ATVALIDM_Pos*/)              /*!< ITM 
  882:CMSIS/Include/core_cm4.h **** 
@@ -1738,9 +1251,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  927:CMSIS/Include/core_cm4.h ****         uint32_t RESERVED0[1U];
  928:CMSIS/Include/core_cm4.h ****   __IOM uint32_t COMP1;                  /*!< Offset: 0x030 (R/W)  Comparator Register 1 */
  929:CMSIS/Include/core_cm4.h ****   __IOM uint32_t MASK1;                  /*!< Offset: 0x034 (R/W)  Mask Register 1 */
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 30
-
-
  930:CMSIS/Include/core_cm4.h ****   __IOM uint32_t FUNCTION1;              /*!< Offset: 0x038 (R/W)  Function Register 1 */
  931:CMSIS/Include/core_cm4.h ****         uint32_t RESERVED1[1U];
  932:CMSIS/Include/core_cm4.h ****   __IOM uint32_t COMP2;                  /*!< Offset: 0x040 (R/W)  Comparator Register 2 */
@@ -1748,6 +1258,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  934:CMSIS/Include/core_cm4.h ****   __IOM uint32_t FUNCTION2;              /*!< Offset: 0x048 (R/W)  Function Register 2 */
  935:CMSIS/Include/core_cm4.h ****         uint32_t RESERVED2[1U];
  936:CMSIS/Include/core_cm4.h ****   __IOM uint32_t COMP3;                  /*!< Offset: 0x050 (R/W)  Comparator Register 3 */
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 22
+
+
  937:CMSIS/Include/core_cm4.h ****   __IOM uint32_t MASK3;                  /*!< Offset: 0x054 (R/W)  Mask Register 3 */
  938:CMSIS/Include/core_cm4.h ****   __IOM uint32_t FUNCTION3;              /*!< Offset: 0x058 (R/W)  Function Register 3 */
  939:CMSIS/Include/core_cm4.h **** } DWT_Type;
@@ -1798,9 +1311,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  984:CMSIS/Include/core_cm4.h **** #define DWT_CTRL_CYCTAP_Pos                 9U                                         /*!< DWT CTR
  985:CMSIS/Include/core_cm4.h **** #define DWT_CTRL_CYCTAP_Msk                (0x1UL << DWT_CTRL_CYCTAP_Pos)              /*!< DWT CTR
  986:CMSIS/Include/core_cm4.h **** 
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 31
-
-
  987:CMSIS/Include/core_cm4.h **** #define DWT_CTRL_POSTINIT_Pos               5U                                         /*!< DWT CTR
  988:CMSIS/Include/core_cm4.h **** #define DWT_CTRL_POSTINIT_Msk              (0xFUL << DWT_CTRL_POSTINIT_Pos)            /*!< DWT CTR
  989:CMSIS/Include/core_cm4.h **** 
@@ -1808,6 +1318,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
  991:CMSIS/Include/core_cm4.h **** #define DWT_CTRL_POSTPRESET_Msk            (0xFUL << DWT_CTRL_POSTPRESET_Pos)          /*!< DWT CTR
  992:CMSIS/Include/core_cm4.h **** 
  993:CMSIS/Include/core_cm4.h **** #define DWT_CTRL_CYCCNTENA_Pos              0U                                         /*!< DWT CTR
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 23
+
+
  994:CMSIS/Include/core_cm4.h **** #define DWT_CTRL_CYCCNTENA_Msk             (0x1UL /*<< DWT_CTRL_CYCCNTENA_Pos*/)       /*!< DWT CTR
  995:CMSIS/Include/core_cm4.h **** 
  996:CMSIS/Include/core_cm4.h **** /* DWT CPI Count Register Definitions */
@@ -1858,9 +1371,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1041:CMSIS/Include/core_cm4.h **** 
 1042:CMSIS/Include/core_cm4.h **** #define DWT_FUNCTION_EMITRANGE_Pos          5U                                         /*!< DWT FUN
 1043:CMSIS/Include/core_cm4.h **** #define DWT_FUNCTION_EMITRANGE_Msk         (0x1UL << DWT_FUNCTION_EMITRANGE_Pos)       /*!< DWT FUN
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 32
-
-
 1044:CMSIS/Include/core_cm4.h **** 
 1045:CMSIS/Include/core_cm4.h **** #define DWT_FUNCTION_FUNCTION_Pos           0U                                         /*!< DWT FUN
 1046:CMSIS/Include/core_cm4.h **** #define DWT_FUNCTION_FUNCTION_Msk          (0xFUL /*<< DWT_FUNCTION_FUNCTION_Pos*/)    /*!< DWT FUN
@@ -1868,6 +1378,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1048:CMSIS/Include/core_cm4.h **** /*@}*/ /* end of group CMSIS_DWT */
 1049:CMSIS/Include/core_cm4.h **** 
 1050:CMSIS/Include/core_cm4.h **** 
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 24
+
+
 1051:CMSIS/Include/core_cm4.h **** /**
 1052:CMSIS/Include/core_cm4.h ****   \ingroup  CMSIS_core_register
 1053:CMSIS/Include/core_cm4.h ****   \defgroup CMSIS_TPI     Trace Port Interface (TPI)
@@ -1918,9 +1431,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1098:CMSIS/Include/core_cm4.h **** #define TPI_FFSR_FtNonStop_Pos              3U                                         /*!< TPI FFS
 1099:CMSIS/Include/core_cm4.h **** #define TPI_FFSR_FtNonStop_Msk             (0x1UL << TPI_FFSR_FtNonStop_Pos)           /*!< TPI FFS
 1100:CMSIS/Include/core_cm4.h **** 
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 33
-
-
 1101:CMSIS/Include/core_cm4.h **** #define TPI_FFSR_TCPresent_Pos              2U                                         /*!< TPI FFS
 1102:CMSIS/Include/core_cm4.h **** #define TPI_FFSR_TCPresent_Msk             (0x1UL << TPI_FFSR_TCPresent_Pos)           /*!< TPI FFS
 1103:CMSIS/Include/core_cm4.h **** 
@@ -1928,6 +1438,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1105:CMSIS/Include/core_cm4.h **** #define TPI_FFSR_FtStopped_Msk             (0x1UL << TPI_FFSR_FtStopped_Pos)           /*!< TPI FFS
 1106:CMSIS/Include/core_cm4.h **** 
 1107:CMSIS/Include/core_cm4.h **** #define TPI_FFSR_FlInProg_Pos               0U                                         /*!< TPI FFS
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 25
+
+
 1108:CMSIS/Include/core_cm4.h **** #define TPI_FFSR_FlInProg_Msk              (0x1UL /*<< TPI_FFSR_FlInProg_Pos*/)        /*!< TPI FFS
 1109:CMSIS/Include/core_cm4.h **** 
 1110:CMSIS/Include/core_cm4.h **** /* TPI Formatter and Flush Control Register Definitions */
@@ -1978,9 +1491,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1155:CMSIS/Include/core_cm4.h **** #define TPI_FIFO1_ITM_bytecount_Msk        (0x3UL << TPI_FIFO1_ITM_bytecount_Pos)      /*!< TPI FIF
 1156:CMSIS/Include/core_cm4.h **** 
 1157:CMSIS/Include/core_cm4.h **** #define TPI_FIFO1_ETM_ATVALID_Pos          26U                                         /*!< TPI FIF
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 34
-
-
 1158:CMSIS/Include/core_cm4.h **** #define TPI_FIFO1_ETM_ATVALID_Msk          (0x3UL << TPI_FIFO1_ETM_ATVALID_Pos)        /*!< TPI FIF
 1159:CMSIS/Include/core_cm4.h **** 
 1160:CMSIS/Include/core_cm4.h **** #define TPI_FIFO1_ETM_bytecount_Pos        24U                                         /*!< TPI FIF
@@ -1988,6 +1498,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1162:CMSIS/Include/core_cm4.h **** 
 1163:CMSIS/Include/core_cm4.h **** #define TPI_FIFO1_ITM2_Pos                 16U                                         /*!< TPI FIF
 1164:CMSIS/Include/core_cm4.h **** #define TPI_FIFO1_ITM2_Msk                 (0xFFUL << TPI_FIFO1_ITM2_Pos)              /*!< TPI FIF
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 26
+
+
 1165:CMSIS/Include/core_cm4.h **** 
 1166:CMSIS/Include/core_cm4.h **** #define TPI_FIFO1_ITM1_Pos                  8U                                         /*!< TPI FIF
 1167:CMSIS/Include/core_cm4.h **** #define TPI_FIFO1_ITM1_Msk                 (0xFFUL << TPI_FIFO1_ITM1_Pos)              /*!< TPI FIF
@@ -2038,9 +1551,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1212:CMSIS/Include/core_cm4.h **** #if defined (__MPU_PRESENT) && (__MPU_PRESENT == 1U)
 1213:CMSIS/Include/core_cm4.h **** /**
 1214:CMSIS/Include/core_cm4.h ****   \ingroup  CMSIS_core_register
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 35
-
-
 1215:CMSIS/Include/core_cm4.h ****   \defgroup CMSIS_MPU     Memory Protection Unit (MPU)
 1216:CMSIS/Include/core_cm4.h ****   \brief    Type definitions for the Memory Protection Unit (MPU)
 1217:CMSIS/Include/core_cm4.h ****   @{
@@ -2048,6 +1558,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1219:CMSIS/Include/core_cm4.h **** 
 1220:CMSIS/Include/core_cm4.h **** /**
 1221:CMSIS/Include/core_cm4.h ****   \brief  Structure type to access the Memory Protection Unit (MPU).
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 27
+
+
 1222:CMSIS/Include/core_cm4.h ****  */
 1223:CMSIS/Include/core_cm4.h **** typedef struct
 1224:CMSIS/Include/core_cm4.h **** {
@@ -2098,9 +1611,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1269:CMSIS/Include/core_cm4.h **** #define MPU_RBAR_VALID_Msk                 (1UL << MPU_RBAR_VALID_Pos)                    /*!< MPU 
 1270:CMSIS/Include/core_cm4.h **** 
 1271:CMSIS/Include/core_cm4.h **** #define MPU_RBAR_REGION_Pos                 0U                                            /*!< MPU 
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 36
-
-
 1272:CMSIS/Include/core_cm4.h **** #define MPU_RBAR_REGION_Msk                (0xFUL /*<< MPU_RBAR_REGION_Pos*/)             /*!< MPU 
 1273:CMSIS/Include/core_cm4.h **** 
 1274:CMSIS/Include/core_cm4.h **** /* MPU Region Attribute and Size Register Definitions */
@@ -2108,6 +1618,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1276:CMSIS/Include/core_cm4.h **** #define MPU_RASR_ATTRS_Msk                 (0xFFFFUL << MPU_RASR_ATTRS_Pos)               /*!< MPU 
 1277:CMSIS/Include/core_cm4.h **** 
 1278:CMSIS/Include/core_cm4.h **** #define MPU_RASR_XN_Pos                    28U                                            /*!< MPU 
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 28
+
+
 1279:CMSIS/Include/core_cm4.h **** #define MPU_RASR_XN_Msk                    (1UL << MPU_RASR_XN_Pos)                       /*!< MPU 
 1280:CMSIS/Include/core_cm4.h **** 
 1281:CMSIS/Include/core_cm4.h **** #define MPU_RASR_AP_Pos                    24U                                            /*!< MPU 
@@ -2158,9 +1671,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1326:CMSIS/Include/core_cm4.h ****   __IM  uint32_t MVFR1;                  /*!< Offset: 0x014 (R/ )  Media and FP Feature Register 1 
 1327:CMSIS/Include/core_cm4.h **** } FPU_Type;
 1328:CMSIS/Include/core_cm4.h **** 
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 37
-
-
 1329:CMSIS/Include/core_cm4.h **** /* Floating-Point Context Control Register Definitions */
 1330:CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_ASPEN_Pos                31U                                            /*!< FPCC
 1331:CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_ASPEN_Msk                (1UL << FPU_FPCCR_ASPEN_Pos)                   /*!< FPCC
@@ -2168,6 +1678,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1333:CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_LSPEN_Pos                30U                                            /*!< FPCC
 1334:CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_LSPEN_Msk                (1UL << FPU_FPCCR_LSPEN_Pos)                   /*!< FPCC
 1335:CMSIS/Include/core_cm4.h **** 
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 29
+
+
 1336:CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_MONRDY_Pos                8U                                            /*!< FPCC
 1337:CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_MONRDY_Msk               (1UL << FPU_FPCCR_MONRDY_Pos)                  /*!< FPCC
 1338:CMSIS/Include/core_cm4.h **** 
@@ -2218,9 +1731,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1383:CMSIS/Include/core_cm4.h **** 
 1384:CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Divide_Pos               16U                                            /*!< MVFR
 1385:CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Divide_Msk               (0xFUL << FPU_MVFR0_Divide_Pos)                /*!< MVFR
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 38
-
-
 1386:CMSIS/Include/core_cm4.h **** 
 1387:CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_FP_excep_trapping_Pos    12U                                            /*!< MVFR
 1388:CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_FP_excep_trapping_Msk    (0xFUL << FPU_MVFR0_FP_excep_trapping_Pos)     /*!< MVFR
@@ -2228,6 +1738,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1390:CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Double_precision_Pos      8U                                            /*!< MVFR
 1391:CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Double_precision_Msk     (0xFUL << FPU_MVFR0_Double_precision_Pos)      /*!< MVFR
 1392:CMSIS/Include/core_cm4.h **** 
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 30
+
+
 1393:CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Single_precision_Pos      4U                                            /*!< MVFR
 1394:CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Single_precision_Msk     (0xFUL << FPU_MVFR0_Single_precision_Pos)      /*!< MVFR
 1395:CMSIS/Include/core_cm4.h **** 
@@ -2278,9 +1791,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1440:CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_RETIRE_ST_Pos    24U                                            /*!< Core
 1441:CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_RETIRE_ST_Msk    (1UL << CoreDebug_DHCSR_S_RETIRE_ST_Pos)       /*!< Core
 1442:CMSIS/Include/core_cm4.h **** 
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 39
-
-
 1443:CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_LOCKUP_Pos       19U                                            /*!< Core
 1444:CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_LOCKUP_Msk       (1UL << CoreDebug_DHCSR_S_LOCKUP_Pos)          /*!< Core
 1445:CMSIS/Include/core_cm4.h **** 
@@ -2288,6 +1798,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1447:CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_SLEEP_Msk        (1UL << CoreDebug_DHCSR_S_SLEEP_Pos)           /*!< Core
 1448:CMSIS/Include/core_cm4.h **** 
 1449:CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_HALT_Pos         17U                                            /*!< Core
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 31
+
+
 1450:CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_HALT_Msk         (1UL << CoreDebug_DHCSR_S_HALT_Pos)            /*!< Core
 1451:CMSIS/Include/core_cm4.h **** 
 1452:CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_REGRDY_Pos       16U                                            /*!< Core
@@ -2338,9 +1851,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1497:CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_INTERR_Msk      (1UL << CoreDebug_DEMCR_VC_INTERR_Pos)         /*!< Core
 1498:CMSIS/Include/core_cm4.h **** 
 1499:CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_BUSERR_Pos       8U                                            /*!< Core
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 40
-
-
 1500:CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_BUSERR_Msk      (1UL << CoreDebug_DEMCR_VC_BUSERR_Pos)         /*!< Core
 1501:CMSIS/Include/core_cm4.h **** 
 1502:CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_STATERR_Pos      7U                                            /*!< Core
@@ -2348,6 +1858,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1504:CMSIS/Include/core_cm4.h **** 
 1505:CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_CHKERR_Pos       6U                                            /*!< Core
 1506:CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_CHKERR_Msk      (1UL << CoreDebug_DEMCR_VC_CHKERR_Pos)         /*!< Core
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 32
+
+
 1507:CMSIS/Include/core_cm4.h **** 
 1508:CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_NOCPERR_Pos      5U                                            /*!< Core
 1509:CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_NOCPERR_Msk     (1UL << CoreDebug_DEMCR_VC_NOCPERR_Pos)        /*!< Core
@@ -2398,9 +1911,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1554:CMSIS/Include/core_cm4.h **** #define SCS_BASE            (0xE000E000UL)                            /*!< System Control Space Bas
 1555:CMSIS/Include/core_cm4.h **** #define ITM_BASE            (0xE0000000UL)                            /*!< ITM Base Address */
 1556:CMSIS/Include/core_cm4.h **** #define DWT_BASE            (0xE0001000UL)                            /*!< DWT Base Address */
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 41
-
-
 1557:CMSIS/Include/core_cm4.h **** #define TPI_BASE            (0xE0040000UL)                            /*!< TPI Base Address */
 1558:CMSIS/Include/core_cm4.h **** #define CoreDebug_BASE      (0xE000EDF0UL)                            /*!< Core Debug Base Address 
 1559:CMSIS/Include/core_cm4.h **** #define SysTick_BASE        (SCS_BASE +  0x0010UL)                    /*!< SysTick Base Address */
@@ -2408,6 +1918,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1561:CMSIS/Include/core_cm4.h **** #define SCB_BASE            (SCS_BASE +  0x0D00UL)                    /*!< System Control Block Bas
 1562:CMSIS/Include/core_cm4.h **** 
 1563:CMSIS/Include/core_cm4.h **** #define SCnSCB              ((SCnSCB_Type    *)     SCS_BASE      )   /*!< System control Register 
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 33
+
+
 1564:CMSIS/Include/core_cm4.h **** #define SCB                 ((SCB_Type       *)     SCB_BASE      )   /*!< SCB configuration struct
 1565:CMSIS/Include/core_cm4.h **** #define SysTick             ((SysTick_Type   *)     SysTick_BASE  )   /*!< SysTick configuration st
 1566:CMSIS/Include/core_cm4.h **** #define NVIC                ((NVIC_Type      *)     NVIC_BASE     )   /*!< NVIC configuration struc
@@ -2458,9 +1971,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1611:CMSIS/Include/core_cm4.h **** #else
 1612:CMSIS/Include/core_cm4.h ****   #define NVIC_SetPriorityGrouping    __NVIC_SetPriorityGrouping
 1613:CMSIS/Include/core_cm4.h ****   #define NVIC_GetPriorityGrouping    __NVIC_GetPriorityGrouping
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 42
-
-
 1614:CMSIS/Include/core_cm4.h ****   #define NVIC_EnableIRQ              __NVIC_EnableIRQ
 1615:CMSIS/Include/core_cm4.h ****   #define NVIC_GetEnableIRQ           __NVIC_GetEnableIRQ
 1616:CMSIS/Include/core_cm4.h ****   #define NVIC_DisableIRQ             __NVIC_DisableIRQ
@@ -2468,6 +1978,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1618:CMSIS/Include/core_cm4.h ****   #define NVIC_SetPendingIRQ          __NVIC_SetPendingIRQ
 1619:CMSIS/Include/core_cm4.h ****   #define NVIC_ClearPendingIRQ        __NVIC_ClearPendingIRQ
 1620:CMSIS/Include/core_cm4.h ****   #define NVIC_GetActive              __NVIC_GetActive
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 34
+
+
 1621:CMSIS/Include/core_cm4.h ****   #define NVIC_SetPriority            __NVIC_SetPriority
 1622:CMSIS/Include/core_cm4.h ****   #define NVIC_GetPriority            __NVIC_GetPriority
 1623:CMSIS/Include/core_cm4.h ****   #define NVIC_SystemReset            __NVIC_SystemReset
@@ -2518,9 +2031,6 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1668:CMSIS/Include/core_cm4.h **** }
 1669:CMSIS/Include/core_cm4.h **** 
 1670:CMSIS/Include/core_cm4.h **** 
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 43
-
-
 1671:CMSIS/Include/core_cm4.h **** /**
 1672:CMSIS/Include/core_cm4.h ****   \brief   Get Priority Grouping
 1673:CMSIS/Include/core_cm4.h ****   \details Reads the priority grouping field from the NVIC Interrupt Controller.
@@ -2528,6 +2038,9 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1675:CMSIS/Include/core_cm4.h ****  */
 1676:CMSIS/Include/core_cm4.h **** __STATIC_INLINE uint32_t __NVIC_GetPriorityGrouping(void)
 1677:CMSIS/Include/core_cm4.h **** {
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 35
+
+
 1678:CMSIS/Include/core_cm4.h ****   return ((uint32_t)((SCB->AIRCR & SCB_AIRCR_PRIGROUP_Msk) >> SCB_AIRCR_PRIGROUP_Pos));
 1679:CMSIS/Include/core_cm4.h **** }
 1680:CMSIS/Include/core_cm4.h **** 
@@ -2539,610 +2052,1103 @@ ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 1
 1686:CMSIS/Include/core_cm4.h ****   \note    IRQn must not be negative.
 1687:CMSIS/Include/core_cm4.h ****  */
 1688:CMSIS/Include/core_cm4.h **** __STATIC_INLINE void __NVIC_EnableIRQ(IRQn_Type IRQn)
- 580              		.loc 2 1688 22 view .LVU103
- 581              	.LBB7:
 1689:CMSIS/Include/core_cm4.h **** {
 1690:CMSIS/Include/core_cm4.h ****   if ((int32_t)(IRQn) >= 0)
- 582              		.loc 2 1690 3 view .LVU104
 1691:CMSIS/Include/core_cm4.h ****   {
 1692:CMSIS/Include/core_cm4.h ****     NVIC->ISER[(((uint32_t)IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)IRQn) & 0x1FUL));
- 583              		.loc 2 1692 5 view .LVU105
- 584              		.loc 2 1692 43 is_stmt 0 view .LVU106
- 585 003c 044B     		ldr	r3, .L53+8
- 586 003e 4FF48072 		mov	r2, #256
- 587 0042 1A60     		str	r2, [r3]
- 588              	.LVL13:
- 589              		.loc 2 1692 43 view .LVU107
- 590              	.LBE7:
- 591              	.LBE6:
- 158:Core/Src/init_LB2_hw.c **** }
- 592              		.loc 1 158 1 view .LVU108
- 593 0044 7047     		bx	lr
- 594              	.L54:
- 595 0046 00BF     		.align	2
- 596              	.L53:
- 597 0048 00380240 		.word	1073887232
- 598 004c 003C0140 		.word	1073822720
- 599 0050 00E100E0 		.word	-536813312
- 600              		.cfi_endproc
- 601              	.LFE138:
- 603              		.section	.text.SysTick_Init_1ms,"ax",%progbits
- 604              		.align	1
- 605              		.global	SysTick_Init_1ms
- 606              		.syntax unified
- 607              		.thumb
- 608              		.thumb_func
- 610              	SysTick_Init_1ms:
- 611              	.LFB139:
- 159:Core/Src/init_LB2_hw.c **** 
- 160:Core/Src/init_LB2_hw.c **** void SysTick_Init_1ms(void)
- 161:Core/Src/init_LB2_hw.c **** {
- 612              		.loc 1 161 1 is_stmt 1 view -0
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 44
+1693:CMSIS/Include/core_cm4.h ****   }
+1694:CMSIS/Include/core_cm4.h **** }
+1695:CMSIS/Include/core_cm4.h **** 
+1696:CMSIS/Include/core_cm4.h **** 
+1697:CMSIS/Include/core_cm4.h **** /**
+1698:CMSIS/Include/core_cm4.h ****   \brief   Get Interrupt Enable status
+1699:CMSIS/Include/core_cm4.h ****   \details Returns a device specific interrupt enable status from the NVIC interrupt controller.
+1700:CMSIS/Include/core_cm4.h ****   \param [in]      IRQn  Device specific interrupt number.
+1701:CMSIS/Include/core_cm4.h ****   \return             0  Interrupt is not enabled.
+1702:CMSIS/Include/core_cm4.h ****   \return             1  Interrupt is enabled.
+1703:CMSIS/Include/core_cm4.h ****   \note    IRQn must not be negative.
+1704:CMSIS/Include/core_cm4.h ****  */
+1705:CMSIS/Include/core_cm4.h **** __STATIC_INLINE uint32_t __NVIC_GetEnableIRQ(IRQn_Type IRQn)
+1706:CMSIS/Include/core_cm4.h **** {
+1707:CMSIS/Include/core_cm4.h ****   if ((int32_t)(IRQn) >= 0)
+1708:CMSIS/Include/core_cm4.h ****   {
+1709:CMSIS/Include/core_cm4.h ****     return((uint32_t)(((NVIC->ISER[(((uint32_t)IRQn) >> 5UL)] & (1UL << (((uint32_t)IRQn) & 0x1FUL)
+1710:CMSIS/Include/core_cm4.h ****   }
+1711:CMSIS/Include/core_cm4.h ****   else
+1712:CMSIS/Include/core_cm4.h ****   {
+1713:CMSIS/Include/core_cm4.h ****     return(0U);
+1714:CMSIS/Include/core_cm4.h ****   }
+1715:CMSIS/Include/core_cm4.h **** }
+1716:CMSIS/Include/core_cm4.h **** 
+1717:CMSIS/Include/core_cm4.h **** 
+1718:CMSIS/Include/core_cm4.h **** /**
+1719:CMSIS/Include/core_cm4.h ****   \brief   Disable Interrupt
+1720:CMSIS/Include/core_cm4.h ****   \details Disables a device specific interrupt in the NVIC interrupt controller.
+1721:CMSIS/Include/core_cm4.h ****   \param [in]      IRQn  Device specific interrupt number.
+1722:CMSIS/Include/core_cm4.h ****   \note    IRQn must not be negative.
+1723:CMSIS/Include/core_cm4.h ****  */
+1724:CMSIS/Include/core_cm4.h **** __STATIC_INLINE void __NVIC_DisableIRQ(IRQn_Type IRQn)
+1725:CMSIS/Include/core_cm4.h **** {
+1726:CMSIS/Include/core_cm4.h ****   if ((int32_t)(IRQn) >= 0)
+1727:CMSIS/Include/core_cm4.h ****   {
+1728:CMSIS/Include/core_cm4.h ****     NVIC->ICER[(((uint32_t)IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)IRQn) & 0x1FUL));
+1729:CMSIS/Include/core_cm4.h ****     __DSB();
+1730:CMSIS/Include/core_cm4.h ****     __ISB();
+1731:CMSIS/Include/core_cm4.h ****   }
+1732:CMSIS/Include/core_cm4.h **** }
+1733:CMSIS/Include/core_cm4.h **** 
+1734:CMSIS/Include/core_cm4.h **** 
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 36
 
 
- 613              		.cfi_startproc
- 614              		@ args = 0, pretend = 0, frame = 0
- 615              		@ frame_needed = 0, uses_anonymous_args = 0
- 616 0000 08B5     		push	{r3, lr}
- 617              	.LCFI2:
- 618              		.cfi_def_cfa_offset 8
- 619              		.cfi_offset 3, -8
- 620              		.cfi_offset 14, -4
- 162:Core/Src/init_LB2_hw.c ****     SystemCoreClockUpdate();
- 621              		.loc 1 162 5 view .LVU110
- 622 0002 FFF7FEFF 		bl	SystemCoreClockUpdate
- 623              	.LVL14:
- 163:Core/Src/init_LB2_hw.c **** 
- 164:Core/Src/init_LB2_hw.c ****     SysTick->LOAD = SystemCoreClock / 1000 - 1;
- 624              		.loc 1 164 5 view .LVU111
- 625              		.loc 1 164 37 is_stmt 0 view .LVU112
- 626 0006 074B     		ldr	r3, .L57
- 627 0008 1B68     		ldr	r3, [r3]
- 628 000a 074A     		ldr	r2, .L57+4
- 629 000c A2FB0323 		umull	r2, r3, r2, r3
- 630 0010 9B09     		lsrs	r3, r3, #6
- 631              		.loc 1 164 44 view .LVU113
- 632 0012 013B     		subs	r3, r3, #1
- 633              		.loc 1 164 19 view .LVU114
- 634 0014 4FF0E022 		mov	r2, #-536813568
- 635 0018 5361     		str	r3, [r2, #20]
- 165:Core/Src/init_LB2_hw.c ****     SysTick->VAL  = 0;
- 636              		.loc 1 165 5 is_stmt 1 view .LVU115
- 637              		.loc 1 165 19 is_stmt 0 view .LVU116
- 638 001a 0023     		movs	r3, #0
- 639 001c 9361     		str	r3, [r2, #24]
- 166:Core/Src/init_LB2_hw.c ****     SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk |
- 640              		.loc 1 166 5 is_stmt 1 view .LVU117
- 641              		.loc 1 166 19 is_stmt 0 view .LVU118
- 642 001e 0723     		movs	r3, #7
- 643 0020 1361     		str	r3, [r2, #16]
- 167:Core/Src/init_LB2_hw.c ****                     SysTick_CTRL_TICKINT_Msk   |
- 168:Core/Src/init_LB2_hw.c ****                     SysTick_CTRL_ENABLE_Msk;
- 169:Core/Src/init_LB2_hw.c **** }
- 644              		.loc 1 169 1 view .LVU119
- 645 0022 08BD     		pop	{r3, pc}
- 646              	.L58:
- 647              		.align	2
- 648              	.L57:
- 649 0024 00000000 		.word	SystemCoreClock
- 650 0028 D34D6210 		.word	274877907
- 651              		.cfi_endproc
- 652              	.LFE139:
- 654              		.section	.text.Button_Process,"ax",%progbits
- 655              		.align	1
- 656              		.global	Button_Process
- 657              		.syntax unified
- 658              		.thumb
- 659              		.thumb_func
- 661              	Button_Process:
- 662              	.LFB140:
- 170:Core/Src/init_LB2_hw.c **** 
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 45
+1735:CMSIS/Include/core_cm4.h **** /**
+1736:CMSIS/Include/core_cm4.h ****   \brief   Get Pending Interrupt
+1737:CMSIS/Include/core_cm4.h ****   \details Reads the NVIC pending register and returns the pending bit for the specified device spe
+1738:CMSIS/Include/core_cm4.h ****   \param [in]      IRQn  Device specific interrupt number.
+1739:CMSIS/Include/core_cm4.h ****   \return             0  Interrupt status is not pending.
+1740:CMSIS/Include/core_cm4.h ****   \return             1  Interrupt status is pending.
+1741:CMSIS/Include/core_cm4.h ****   \note    IRQn must not be negative.
+1742:CMSIS/Include/core_cm4.h ****  */
+1743:CMSIS/Include/core_cm4.h **** __STATIC_INLINE uint32_t __NVIC_GetPendingIRQ(IRQn_Type IRQn)
+1744:CMSIS/Include/core_cm4.h **** {
+1745:CMSIS/Include/core_cm4.h ****   if ((int32_t)(IRQn) >= 0)
+1746:CMSIS/Include/core_cm4.h ****   {
+1747:CMSIS/Include/core_cm4.h ****     return((uint32_t)(((NVIC->ISPR[(((uint32_t)IRQn) >> 5UL)] & (1UL << (((uint32_t)IRQn) & 0x1FUL)
+1748:CMSIS/Include/core_cm4.h ****   }
+1749:CMSIS/Include/core_cm4.h ****   else
+1750:CMSIS/Include/core_cm4.h ****   {
+1751:CMSIS/Include/core_cm4.h ****     return(0U);
+1752:CMSIS/Include/core_cm4.h ****   }
+1753:CMSIS/Include/core_cm4.h **** }
+1754:CMSIS/Include/core_cm4.h **** 
+1755:CMSIS/Include/core_cm4.h **** 
+1756:CMSIS/Include/core_cm4.h **** /**
+1757:CMSIS/Include/core_cm4.h ****   \brief   Set Pending Interrupt
+1758:CMSIS/Include/core_cm4.h ****   \details Sets the pending bit of a device specific interrupt in the NVIC pending register.
+1759:CMSIS/Include/core_cm4.h ****   \param [in]      IRQn  Device specific interrupt number.
+1760:CMSIS/Include/core_cm4.h ****   \note    IRQn must not be negative.
+1761:CMSIS/Include/core_cm4.h ****  */
+1762:CMSIS/Include/core_cm4.h **** __STATIC_INLINE void __NVIC_SetPendingIRQ(IRQn_Type IRQn)
+1763:CMSIS/Include/core_cm4.h **** {
+1764:CMSIS/Include/core_cm4.h ****   if ((int32_t)(IRQn) >= 0)
+1765:CMSIS/Include/core_cm4.h ****   {
+1766:CMSIS/Include/core_cm4.h ****     NVIC->ISPR[(((uint32_t)IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)IRQn) & 0x1FUL));
+1767:CMSIS/Include/core_cm4.h ****   }
+1768:CMSIS/Include/core_cm4.h **** }
+1769:CMSIS/Include/core_cm4.h **** 
+1770:CMSIS/Include/core_cm4.h **** 
+1771:CMSIS/Include/core_cm4.h **** /**
+1772:CMSIS/Include/core_cm4.h ****   \brief   Clear Pending Interrupt
+1773:CMSIS/Include/core_cm4.h ****   \details Clears the pending bit of a device specific interrupt in the NVIC pending register.
+1774:CMSIS/Include/core_cm4.h ****   \param [in]      IRQn  Device specific interrupt number.
+1775:CMSIS/Include/core_cm4.h ****   \note    IRQn must not be negative.
+1776:CMSIS/Include/core_cm4.h ****  */
+1777:CMSIS/Include/core_cm4.h **** __STATIC_INLINE void __NVIC_ClearPendingIRQ(IRQn_Type IRQn)
+1778:CMSIS/Include/core_cm4.h **** {
+1779:CMSIS/Include/core_cm4.h ****   if ((int32_t)(IRQn) >= 0)
+1780:CMSIS/Include/core_cm4.h ****   {
+1781:CMSIS/Include/core_cm4.h ****     NVIC->ICPR[(((uint32_t)IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)IRQn) & 0x1FUL));
+1782:CMSIS/Include/core_cm4.h ****   }
+1783:CMSIS/Include/core_cm4.h **** }
+1784:CMSIS/Include/core_cm4.h **** 
+1785:CMSIS/Include/core_cm4.h **** 
+1786:CMSIS/Include/core_cm4.h **** /**
+1787:CMSIS/Include/core_cm4.h ****   \brief   Get Active Interrupt
+1788:CMSIS/Include/core_cm4.h ****   \details Reads the active register in the NVIC and returns the active bit for the device specific
+1789:CMSIS/Include/core_cm4.h ****   \param [in]      IRQn  Device specific interrupt number.
+1790:CMSIS/Include/core_cm4.h ****   \return             0  Interrupt status is not active.
+1791:CMSIS/Include/core_cm4.h ****   \return             1  Interrupt status is active.
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 37
 
 
- 171:Core/Src/init_LB2_hw.c **** /* ===================== ЛОГИКА ===================== */
- 172:Core/Src/init_LB2_hw.c **** 
- 173:Core/Src/init_LB2_hw.c **** void Button_Process(void)
- 174:Core/Src/init_LB2_hw.c **** {
- 663              		.loc 1 174 1 is_stmt 1 view -0
- 664              		.cfi_startproc
- 665              		@ args = 0, pretend = 0, frame = 0
- 666              		@ frame_needed = 0, uses_anonymous_args = 0
- 667 0000 08B5     		push	{r3, lr}
- 668              	.LCFI3:
- 669              		.cfi_def_cfa_offset 8
- 670              		.cfi_offset 3, -8
- 671              		.cfi_offset 14, -4
- 175:Core/Src/init_LB2_hw.c ****     uint32_t now = g_ms;
- 672              		.loc 1 175 5 view .LVU121
- 673              		.loc 1 175 14 is_stmt 0 view .LVU122
- 674 0002 234B     		ldr	r3, .L66
- 675 0004 1A68     		ldr	r2, [r3]
- 676              	.LVL15:
- 176:Core/Src/init_LB2_hw.c **** 
- 177:Core/Src/init_LB2_hw.c ****     if (g_btn_press_event)
- 677              		.loc 1 177 5 is_stmt 1 view .LVU123
- 678              		.loc 1 177 9 is_stmt 0 view .LVU124
- 679 0006 234B     		ldr	r3, .L66+4
- 680 0008 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
- 681              		.loc 1 177 8 view .LVU125
- 682 000a 3BB1     		cbz	r3, .L60
- 178:Core/Src/init_LB2_hw.c ****     {
- 179:Core/Src/init_LB2_hw.c ****         g_btn_press_event = 0;
- 683              		.loc 1 179 9 is_stmt 1 view .LVU126
- 684              		.loc 1 179 27 is_stmt 0 view .LVU127
- 685 000c 214B     		ldr	r3, .L66+4
- 686 000e 0021     		movs	r1, #0
- 687 0010 1970     		strb	r1, [r3]
- 180:Core/Src/init_LB2_hw.c ****         g_btn_is_pressed = 1;
- 688              		.loc 1 180 9 is_stmt 1 view .LVU128
- 689              		.loc 1 180 26 is_stmt 0 view .LVU129
- 690 0012 214B     		ldr	r3, .L66+8
- 691 0014 0121     		movs	r1, #1
- 692 0016 1970     		strb	r1, [r3]
- 181:Core/Src/init_LB2_hw.c ****         g_btn_press_start_ms = now;
- 693              		.loc 1 181 9 is_stmt 1 view .LVU130
- 694              		.loc 1 181 30 is_stmt 0 view .LVU131
- 695 0018 204B     		ldr	r3, .L66+12
- 696 001a 1A60     		str	r2, [r3]
- 697              	.L60:
- 182:Core/Src/init_LB2_hw.c ****     }
- 183:Core/Src/init_LB2_hw.c **** 
- 184:Core/Src/init_LB2_hw.c ****     if (g_btn_release_event)
- 698              		.loc 1 184 5 is_stmt 1 view .LVU132
- 699              		.loc 1 184 9 is_stmt 0 view .LVU133
- 700 001c 204B     		ldr	r3, .L66+16
- 701 001e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
- 702              		.loc 1 184 8 view .LVU134
- 703 0020 002B     		cmp	r3, #0
- 704 0022 34D0     		beq	.L59
- 705              	.LBB8:
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 46
+1792:CMSIS/Include/core_cm4.h ****   \note    IRQn must not be negative.
+1793:CMSIS/Include/core_cm4.h ****  */
+1794:CMSIS/Include/core_cm4.h **** __STATIC_INLINE uint32_t __NVIC_GetActive(IRQn_Type IRQn)
+1795:CMSIS/Include/core_cm4.h **** {
+1796:CMSIS/Include/core_cm4.h ****   if ((int32_t)(IRQn) >= 0)
+1797:CMSIS/Include/core_cm4.h ****   {
+1798:CMSIS/Include/core_cm4.h ****     return((uint32_t)(((NVIC->IABR[(((uint32_t)IRQn) >> 5UL)] & (1UL << (((uint32_t)IRQn) & 0x1FUL)
+1799:CMSIS/Include/core_cm4.h ****   }
+1800:CMSIS/Include/core_cm4.h ****   else
+1801:CMSIS/Include/core_cm4.h ****   {
+1802:CMSIS/Include/core_cm4.h ****     return(0U);
+1803:CMSIS/Include/core_cm4.h ****   }
+1804:CMSIS/Include/core_cm4.h **** }
+1805:CMSIS/Include/core_cm4.h **** 
+1806:CMSIS/Include/core_cm4.h **** 
+1807:CMSIS/Include/core_cm4.h **** /**
+1808:CMSIS/Include/core_cm4.h ****   \brief   Set Interrupt Priority
+1809:CMSIS/Include/core_cm4.h ****   \details Sets the priority of a device specific interrupt or a processor exception.
+1810:CMSIS/Include/core_cm4.h ****            The interrupt number can be positive to specify a device specific interrupt,
+1811:CMSIS/Include/core_cm4.h ****            or negative to specify a processor exception.
+1812:CMSIS/Include/core_cm4.h ****   \param [in]      IRQn  Interrupt number.
+1813:CMSIS/Include/core_cm4.h ****   \param [in]  priority  Priority to set.
+1814:CMSIS/Include/core_cm4.h ****   \note    The priority cannot be set for every processor exception.
+1815:CMSIS/Include/core_cm4.h ****  */
+1816:CMSIS/Include/core_cm4.h **** __STATIC_INLINE void __NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
+ 195              		.loc 2 1816 22 view .LVU33
+ 196              	.LBB7:
+1817:CMSIS/Include/core_cm4.h **** {
+1818:CMSIS/Include/core_cm4.h ****   if ((int32_t)(IRQn) >= 0)
+ 197              		.loc 2 1818 3 view .LVU34
+1819:CMSIS/Include/core_cm4.h ****   {
+1820:CMSIS/Include/core_cm4.h ****     NVIC->IP[((uint32_t)IRQn)]               = (uint8_t)((priority << (8U - __NVIC_PRIO_BITS)) & (u
+ 198              		.loc 2 1820 5 view .LVU35
+ 199              		.loc 2 1820 46 is_stmt 0 view .LVU36
+ 200 0034 054B     		ldr	r3, .L17+8
+ 201 0036 2022     		movs	r2, #32
+ 202 0038 83F82823 		strb	r2, [r3, #808]
+ 203              	.LVL6:
+ 204              		.loc 2 1820 46 view .LVU37
+ 205              	.LBE7:
+ 206              	.LBE6:
+  71:Core/Src/interrupt.c ****     NVIC_EnableIRQ(EXTI15_10_IRQn);
+ 207              		.loc 1 71 5 is_stmt 1 view .LVU38
+ 208              	.LBB8:
+ 209              	.LBI8:
+1688:CMSIS/Include/core_cm4.h **** {
+ 210              		.loc 2 1688 22 view .LVU39
+ 211              	.LBB9:
+1690:CMSIS/Include/core_cm4.h ****   {
+ 212              		.loc 2 1690 3 view .LVU40
+1692:CMSIS/Include/core_cm4.h ****   }
+ 213              		.loc 2 1692 5 view .LVU41
+1692:CMSIS/Include/core_cm4.h ****   }
+ 214              		.loc 2 1692 43 is_stmt 0 view .LVU42
+ 215 003c 4FF48072 		mov	r2, #256
+ 216 0040 5A60     		str	r2, [r3, #4]
+ 217              	.LVL7:
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 38
 
 
- 185:Core/Src/init_LB2_hw.c ****     {
- 186:Core/Src/init_LB2_hw.c ****         g_btn_release_event = 0;
- 706              		.loc 1 186 9 is_stmt 1 view .LVU135
- 707              		.loc 1 186 29 is_stmt 0 view .LVU136
- 708 0024 0023     		movs	r3, #0
- 709 0026 1E49     		ldr	r1, .L66+16
- 710 0028 0B70     		strb	r3, [r1]
- 187:Core/Src/init_LB2_hw.c ****         g_btn_is_pressed = 0;
- 711              		.loc 1 187 9 is_stmt 1 view .LVU137
- 712              		.loc 1 187 26 is_stmt 0 view .LVU138
- 713 002a 1B49     		ldr	r1, .L66+8
- 714 002c 0B70     		strb	r3, [r1]
- 188:Core/Src/init_LB2_hw.c **** 
- 189:Core/Src/init_LB2_hw.c ****         uint32_t dt = now - g_btn_press_start_ms;
- 715              		.loc 1 189 9 is_stmt 1 view .LVU139
- 716              		.loc 1 189 27 is_stmt 0 view .LVU140
- 717 002e 1B4B     		ldr	r3, .L66+12
- 718 0030 1B68     		ldr	r3, [r3]
- 719              		.loc 1 189 18 view .LVU141
- 720 0032 D31A     		subs	r3, r2, r3
- 721              	.LVL16:
- 190:Core/Src/init_LB2_hw.c **** 
- 191:Core/Src/init_LB2_hw.c ****         if (dt < PRESS_2S_MS)
- 722              		.loc 1 191 9 is_stmt 1 view .LVU142
- 723              		.loc 1 191 12 is_stmt 0 view .LVU143
- 724 0034 B3F5FA6F 		cmp	r3, #2000
- 725 0038 17D3     		bcc	.L65
- 192:Core/Src/init_LB2_hw.c ****         {
- 193:Core/Src/init_LB2_hw.c ****             mcu_action_short_count++;
- 194:Core/Src/init_LB2_hw.c ****             LED_Next();
- 195:Core/Src/init_LB2_hw.c ****         }
- 196:Core/Src/init_LB2_hw.c ****         else if (dt < PRESS_4S_MS && blinkModeEnabled)
- 726              		.loc 1 196 14 is_stmt 1 view .LVU144
- 727              		.loc 1 196 17 is_stmt 0 view .LVU145
- 728 003a B3F57A6F 		cmp	r3, #4000
- 729 003e 1BD2     		bcs	.L63
- 730              		.loc 1 196 35 discriminator 1 view .LVU146
- 731 0040 184B     		ldr	r3, .L66+20
- 732              	.LVL17:
- 733              		.loc 1 196 35 discriminator 1 view .LVU147
- 734 0042 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
- 735 0044 C3B1     		cbz	r3, .L63
- 197:Core/Src/init_LB2_hw.c ****         {
- 198:Core/Src/init_LB2_hw.c ****             mcu_action_2s_count++;
- 736              		.loc 1 198 13 is_stmt 1 view .LVU148
- 737              		.loc 1 198 32 is_stmt 0 view .LVU149
- 738 0046 1849     		ldr	r1, .L66+24
- 739 0048 0B68     		ldr	r3, [r1]
- 740 004a 0133     		adds	r3, r3, #1
- 741 004c 0B60     		str	r3, [r1]
- 199:Core/Src/init_LB2_hw.c ****             blinkFreqIndex = (blinkFreqIndex + 1) % 3;
- 742              		.loc 1 199 13 is_stmt 1 view .LVU150
- 743              		.loc 1 199 46 is_stmt 0 view .LVU151
- 744 004e 1748     		ldr	r0, .L66+28
- 745 0050 0178     		ldrb	r1, [r0]	@ zero_extendqisi2
- 746 0052 0131     		adds	r1, r1, #1
- 747              		.loc 1 199 51 view .LVU152
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 47
+1692:CMSIS/Include/core_cm4.h ****   }
+ 218              		.loc 2 1692 43 view .LVU43
+ 219              	.LBE9:
+ 220              	.LBE8:
+  72:Core/Src/interrupt.c **** }
+ 221              		.loc 1 72 1 view .LVU44
+ 222 0042 7047     		bx	lr
+ 223              	.L18:
+ 224              		.align	2
+ 225              	.L17:
+ 226 0044 00380240 		.word	1073887232
+ 227 0048 003C0140 		.word	1073822720
+ 228 004c 00E100E0 		.word	-536813312
+ 229              		.cfi_endproc
+ 230              	.LFE133:
+ 232              		.section	.text.EXTI15_10_IRQHandler,"ax",%progbits
+ 233              		.align	1
+ 234              		.global	EXTI15_10_IRQHandler
+ 235              		.syntax unified
+ 236              		.thumb
+ 237              		.thumb_func
+ 239              	EXTI15_10_IRQHandler:
+ 240              	.LFB134:
+  73:Core/Src/interrupt.c **** 
+  74:Core/Src/interrupt.c **** void EXTI15_10_IRQHandler(void)
+  75:Core/Src/interrupt.c **** {
+ 241              		.loc 1 75 1 is_stmt 1 view -0
+ 242              		.cfi_startproc
+ 243              		@ args = 0, pretend = 0, frame = 0
+ 244              		@ frame_needed = 0, uses_anonymous_args = 0
+ 245              		@ link register save eliminated.
+  76:Core/Src/interrupt.c ****     if (READ_BIT(EXTI->PR, EXTI_PR_PR13) != 0)
+ 246              		.loc 1 76 5 view .LVU46
+ 247              		.loc 1 76 9 is_stmt 0 view .LVU47
+ 248 0000 174B     		ldr	r3, .L23
+ 249 0002 5B69     		ldr	r3, [r3, #20]
+ 250              		.loc 1 76 8 view .LVU48
+ 251 0004 13F4005F 		tst	r3, #8192
+ 252 0008 0DD0     		beq	.L19
+  77:Core/Src/interrupt.c ****     {
+  78:Core/Src/interrupt.c ****         if (READ_BIT(GPIOC->IDR, GPIO_IDR_IDR_13) == 0)
+ 253              		.loc 1 78 9 is_stmt 1 view .LVU49
+ 254              		.loc 1 78 13 is_stmt 0 view .LVU50
+ 255 000a 164B     		ldr	r3, .L23+4
+ 256 000c 1B69     		ldr	r3, [r3, #16]
+ 257              		.loc 1 78 12 view .LVU51
+ 258 000e 13F4005F 		tst	r3, #8192
+ 259 0012 09D1     		bne	.L21
+  79:Core/Src/interrupt.c ****         {
+  80:Core/Src/interrupt.c ****             press_time = ticks;
+ 260              		.loc 1 80 13 is_stmt 1 view .LVU52
+ 261              		.loc 1 80 24 is_stmt 0 view .LVU53
+ 262 0014 144B     		ldr	r3, .L23+8
+ 263 0016 1A68     		ldr	r2, [r3]
+ 264 0018 144B     		ldr	r3, .L23+12
+ 265 001a 1A60     		str	r2, [r3]
+ 266              	.L22:
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 39
 
 
- 748 0054 164B     		ldr	r3, .L66+32
- 749 0056 83FB01C3 		smull	ip, r3, r3, r1
- 750 005a 03EB4303 		add	r3, r3, r3, lsl #1
- 751 005e CB1A     		subs	r3, r1, r3
- 752              		.loc 1 199 28 view .LVU153
- 753 0060 DBB2     		uxtb	r3, r3
- 754 0062 0370     		strb	r3, [r0]
- 200:Core/Src/init_LB2_hw.c ****             lastBlinkTime_ms = now;
- 755              		.loc 1 200 13 is_stmt 1 view .LVU154
- 756              		.loc 1 200 30 is_stmt 0 view .LVU155
- 757 0064 134B     		ldr	r3, .L66+36
- 758 0066 1A60     		str	r2, [r3]
- 759 0068 11E0     		b	.L59
- 760              	.LVL18:
- 761              	.L65:
- 193:Core/Src/init_LB2_hw.c ****             LED_Next();
- 762              		.loc 1 193 13 is_stmt 1 view .LVU156
- 193:Core/Src/init_LB2_hw.c ****             LED_Next();
- 763              		.loc 1 193 35 is_stmt 0 view .LVU157
- 764 006a 134A     		ldr	r2, .L66+40
- 765              	.LVL19:
- 193:Core/Src/init_LB2_hw.c ****             LED_Next();
- 766              		.loc 1 193 35 view .LVU158
- 767 006c 1368     		ldr	r3, [r2]
- 768              	.LVL20:
- 193:Core/Src/init_LB2_hw.c ****             LED_Next();
- 769              		.loc 1 193 35 view .LVU159
- 770 006e 0133     		adds	r3, r3, #1
- 771 0070 1360     		str	r3, [r2]
- 194:Core/Src/init_LB2_hw.c ****         }
- 772              		.loc 1 194 13 is_stmt 1 view .LVU160
- 773 0072 FFF7FEFF 		bl	LED_Next
- 774              	.LVL21:
- 775 0076 0AE0     		b	.L59
- 776              	.LVL22:
- 777              	.L63:
- 201:Core/Src/init_LB2_hw.c ****         }
- 202:Core/Src/init_LB2_hw.c ****         else
- 203:Core/Src/init_LB2_hw.c ****         {
- 204:Core/Src/init_LB2_hw.c ****             mcu_action_4s_count++;
- 778              		.loc 1 204 13 view .LVU161
- 779              		.loc 1 204 32 is_stmt 0 view .LVU162
- 780 0078 1049     		ldr	r1, .L66+44
- 781 007a 0B68     		ldr	r3, [r1]
- 782 007c 0133     		adds	r3, r3, #1
- 783 007e 0B60     		str	r3, [r1]
- 205:Core/Src/init_LB2_hw.c ****             blinkModeEnabled ^= 1;
- 784              		.loc 1 205 13 is_stmt 1 view .LVU163
- 785              		.loc 1 205 30 is_stmt 0 view .LVU164
- 786 0080 0849     		ldr	r1, .L66+20
- 787 0082 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
- 788 0084 83F00103 		eor	r3, r3, #1
- 789 0088 0B70     		strb	r3, [r1]
- 206:Core/Src/init_LB2_hw.c ****             lastBlinkTime_ms = now;
- 790              		.loc 1 206 13 is_stmt 1 view .LVU165
- 791              		.loc 1 206 30 is_stmt 0 view .LVU166
- 792 008a 0A4B     		ldr	r3, .L66+36
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 48
+  81:Core/Src/interrupt.c ****         }
+  82:Core/Src/interrupt.c ****         else
+  83:Core/Src/interrupt.c ****         {
+  84:Core/Src/interrupt.c ****             uint32_t release_time = ticks;
+  85:Core/Src/interrupt.c ****             if ((release_time - press_time) >= MIN_PRESS_DURATION)
+  86:Core/Src/interrupt.c ****             {
+  87:Core/Src/interrupt.c ****                 button_permission = !button_permission;
+  88:Core/Src/interrupt.c **** 
+  89:Core/Src/interrupt.c ****                 /* При перезапуске сбрасываем счётчики И памя�
+  90:Core/Src/interrupt.c ****                 if (button_permission == 1)
+  91:Core/Src/interrupt.c ****                 {
+  92:Core/Src/interrupt.c ****                     cross_count = 0;
+  93:Core/Src/interrupt.c ****                     is_on_cross = 0;
+  94:Core/Src/interrupt.c ****                     last_error  = 0;
+  95:Core/Src/interrupt.c ****                     integral    = 0;
+  96:Core/Src/interrupt.c ****                 }
+  97:Core/Src/interrupt.c ****             }
+  98:Core/Src/interrupt.c ****         }
+  99:Core/Src/interrupt.c ****         SET_BIT(EXTI->PR, EXTI_PR_PR13);
+ 267              		.loc 1 99 9 is_stmt 1 view .LVU54
+ 268 001c 104A     		ldr	r2, .L23
+ 269 001e 5369     		ldr	r3, [r2, #20]
+ 270 0020 43F40053 		orr	r3, r3, #8192
+ 271 0024 5361     		str	r3, [r2, #20]
+ 272              	.L19:
+ 100:Core/Src/interrupt.c ****     }
+ 101:Core/Src/interrupt.c **** }
+ 273              		.loc 1 101 1 is_stmt 0 view .LVU55
+ 274 0026 7047     		bx	lr
+ 275              	.L21:
+ 276              	.LBB10:
+  84:Core/Src/interrupt.c ****             if ((release_time - press_time) >= MIN_PRESS_DURATION)
+ 277              		.loc 1 84 13 is_stmt 1 view .LVU56
+  84:Core/Src/interrupt.c ****             if ((release_time - press_time) >= MIN_PRESS_DURATION)
+ 278              		.loc 1 84 22 is_stmt 0 view .LVU57
+ 279 0028 0F4B     		ldr	r3, .L23+8
+ 280 002a 1B68     		ldr	r3, [r3]
+ 281              	.LVL8:
+  85:Core/Src/interrupt.c ****             {
+ 282              		.loc 1 85 13 is_stmt 1 view .LVU58
+  85:Core/Src/interrupt.c ****             {
+ 283              		.loc 1 85 31 is_stmt 0 view .LVU59
+ 284 002c 0F4A     		ldr	r2, .L23+12
+ 285 002e 1268     		ldr	r2, [r2]
+ 286 0030 9B1A     		subs	r3, r3, r2
+ 287              	.LVL9:
+  85:Core/Src/interrupt.c ****             {
+ 288              		.loc 1 85 16 view .LVU60
+ 289 0032 312B     		cmp	r3, #49
+ 290 0034 F2D9     		bls	.L22
+  87:Core/Src/interrupt.c **** 
+ 291              		.loc 1 87 17 is_stmt 1 view .LVU61
+  87:Core/Src/interrupt.c **** 
+ 292              		.loc 1 87 37 is_stmt 0 view .LVU62
+ 293 0036 0E4A     		ldr	r2, .L23+16
+ 294 0038 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 295 003a B3FA83F3 		clz	r3, r3
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 40
 
 
- 793 008c 1A60     		str	r2, [r3]
- 794              	.LVL23:
- 795              	.L59:
- 796              		.loc 1 206 30 view .LVU167
- 797              	.LBE8:
- 207:Core/Src/init_LB2_hw.c ****         }
- 208:Core/Src/init_LB2_hw.c ****     }
- 209:Core/Src/init_LB2_hw.c **** }
- 798              		.loc 1 209 1 view .LVU168
- 799 008e 08BD     		pop	{r3, pc}
- 800              	.L67:
- 801              		.align	2
- 802              	.L66:
- 803 0090 00000000 		.word	g_ms
- 804 0094 00000000 		.word	g_btn_press_event
- 805 0098 00000000 		.word	g_btn_is_pressed
- 806 009c 00000000 		.word	g_btn_press_start_ms
- 807 00a0 00000000 		.word	g_btn_release_event
- 808 00a4 00000000 		.word	blinkModeEnabled
- 809 00a8 00000000 		.word	mcu_action_2s_count
- 810 00ac 00000000 		.word	blinkFreqIndex
- 811 00b0 56555555 		.word	1431655766
- 812 00b4 00000000 		.word	lastBlinkTime_ms
- 813 00b8 00000000 		.word	mcu_action_short_count
- 814 00bc 00000000 		.word	mcu_action_4s_count
- 815              		.cfi_endproc
- 816              	.LFE140:
- 818              		.section	.text.Blink_Process,"ax",%progbits
- 819              		.align	1
- 820              		.global	Blink_Process
- 821              		.syntax unified
- 822              		.thumb
- 823              		.thumb_func
- 825              	Blink_Process:
- 826              	.LFB141:
- 210:Core/Src/init_LB2_hw.c **** 
- 211:Core/Src/init_LB2_hw.c **** void Blink_Process(void)
- 212:Core/Src/init_LB2_hw.c **** {
- 827              		.loc 1 212 1 is_stmt 1 view -0
- 828              		.cfi_startproc
- 829              		@ args = 0, pretend = 0, frame = 0
- 830              		@ frame_needed = 0, uses_anonymous_args = 0
- 831 0000 08B5     		push	{r3, lr}
- 832              	.LCFI4:
- 833              		.cfi_def_cfa_offset 8
- 834              		.cfi_offset 3, -8
- 835              		.cfi_offset 14, -4
- 213:Core/Src/init_LB2_hw.c ****     if (!blinkModeEnabled || currentLed < 0)
- 836              		.loc 1 213 5 view .LVU170
- 837              		.loc 1 213 9 is_stmt 0 view .LVU171
- 838 0002 134B     		ldr	r3, .L72
- 839 0004 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
- 840              		.loc 1 213 8 view .LVU172
- 841 0006 E3B1     		cbz	r3, .L68
- 842              		.loc 1 213 41 discriminator 1 view .LVU173
- 843 0008 124B     		ldr	r3, .L72+4
- 844 000a 1B68     		ldr	r3, [r3]
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 49
+ 296 003e 5B09     		lsrs	r3, r3, #5
+  87:Core/Src/interrupt.c **** 
+ 297              		.loc 1 87 35 view .LVU63
+ 298 0040 1370     		strb	r3, [r2]
+  90:Core/Src/interrupt.c ****                 {
+ 299              		.loc 1 90 17 is_stmt 1 view .LVU64
+  90:Core/Src/interrupt.c ****                 {
+ 300              		.loc 1 90 39 is_stmt 0 view .LVU65
+ 301 0042 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 302 0044 DBB2     		uxtb	r3, r3
+  90:Core/Src/interrupt.c ****                 {
+ 303              		.loc 1 90 20 view .LVU66
+ 304 0046 012B     		cmp	r3, #1
+ 305 0048 E8D1     		bne	.L22
+  92:Core/Src/interrupt.c ****                     is_on_cross = 0;
+ 306              		.loc 1 92 21 is_stmt 1 view .LVU67
+  92:Core/Src/interrupt.c ****                     is_on_cross = 0;
+ 307              		.loc 1 92 33 is_stmt 0 view .LVU68
+ 308 004a 0023     		movs	r3, #0
+ 309 004c 094A     		ldr	r2, .L23+20
+ 310 004e 1370     		strb	r3, [r2]
+  93:Core/Src/interrupt.c ****                     last_error  = 0;
+ 311              		.loc 1 93 21 is_stmt 1 view .LVU69
+  93:Core/Src/interrupt.c ****                     last_error  = 0;
+ 312              		.loc 1 93 33 is_stmt 0 view .LVU70
+ 313 0050 094A     		ldr	r2, .L23+24
+ 314 0052 1370     		strb	r3, [r2]
+  94:Core/Src/interrupt.c ****                     integral    = 0;
+ 315              		.loc 1 94 21 is_stmt 1 view .LVU71
+  94:Core/Src/interrupt.c ****                     integral    = 0;
+ 316              		.loc 1 94 33 is_stmt 0 view .LVU72
+ 317 0054 094A     		ldr	r2, .L23+28
+ 318 0056 1360     		str	r3, [r2]
+  95:Core/Src/interrupt.c ****                 }
+ 319              		.loc 1 95 21 is_stmt 1 view .LVU73
+  95:Core/Src/interrupt.c ****                 }
+ 320              		.loc 1 95 33 is_stmt 0 view .LVU74
+ 321 0058 094A     		ldr	r2, .L23+32
+ 322 005a 1360     		str	r3, [r2]
+ 323 005c DEE7     		b	.L22
+ 324              	.L24:
+ 325 005e 00BF     		.align	2
+ 326              	.L23:
+ 327 0060 003C0140 		.word	1073822720
+ 328 0064 00080240 		.word	1073874944
+ 329 0068 00000000 		.word	ticks
+ 330 006c 00000000 		.word	press_time
+ 331 0070 00000000 		.word	button_permission
+ 332 0074 00000000 		.word	cross_count
+ 333 0078 00000000 		.word	is_on_cross
+ 334 007c 00000000 		.word	last_error
+ 335 0080 00000000 		.word	integral
+ 336              	.LBE10:
+ 337              		.cfi_endproc
+ 338              	.LFE134:
+ 340              		.section	.text.get_button_permission,"ax",%progbits
+ 341              		.align	1
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 41
 
 
- 845              		.loc 1 213 27 discriminator 1 view .LVU174
- 846 000c 002B     		cmp	r3, #0
- 847 000e 18DB     		blt	.L68
- 214:Core/Src/init_LB2_hw.c ****         return;
- 215:Core/Src/init_LB2_hw.c **** 
- 216:Core/Src/init_LB2_hw.c ****     uint32_t now = g_ms;
- 848              		.loc 1 216 5 is_stmt 1 view .LVU175
- 849              		.loc 1 216 14 is_stmt 0 view .LVU176
- 850 0010 114B     		ldr	r3, .L72+8
- 851 0012 1A68     		ldr	r2, [r3]
- 852              	.LVL24:
- 217:Core/Src/init_LB2_hw.c ****     uint32_t period = g_blinkHalfPeriods[blinkFreqIndex];
- 853              		.loc 1 217 5 is_stmt 1 view .LVU177
- 854              		.loc 1 217 41 is_stmt 0 view .LVU178
- 855 0014 114B     		ldr	r3, .L72+12
- 856 0016 1978     		ldrb	r1, [r3]	@ zero_extendqisi2
- 857              		.loc 1 217 14 view .LVU179
- 858 0018 114B     		ldr	r3, .L72+16
- 859 001a 53F82110 		ldr	r1, [r3, r1, lsl #2]
- 860              	.LVL25:
- 218:Core/Src/init_LB2_hw.c **** 
- 219:Core/Src/init_LB2_hw.c ****     if ((now - lastBlinkTime_ms) >= period)
- 861              		.loc 1 219 5 is_stmt 1 view .LVU180
- 862              		.loc 1 219 14 is_stmt 0 view .LVU181
- 863 001e 114B     		ldr	r3, .L72+20
- 864 0020 1B68     		ldr	r3, [r3]
- 865 0022 D31A     		subs	r3, r2, r3
- 866              		.loc 1 219 8 view .LVU182
- 867 0024 8B42     		cmp	r3, r1
- 868 0026 0CD3     		bcc	.L68
- 220:Core/Src/init_LB2_hw.c ****     {
- 221:Core/Src/init_LB2_hw.c ****         lastBlinkTime_ms = now;
- 869              		.loc 1 221 9 is_stmt 1 view .LVU183
- 870              		.loc 1 221 26 is_stmt 0 view .LVU184
- 871 0028 0E4B     		ldr	r3, .L72+20
- 872 002a 1A60     		str	r2, [r3]
- 222:Core/Src/init_LB2_hw.c ****         blinkLedIsOn ^= 1;
- 873              		.loc 1 222 9 is_stmt 1 view .LVU185
- 874              		.loc 1 222 22 is_stmt 0 view .LVU186
- 875 002c 0E4B     		ldr	r3, .L72+24
- 876 002e 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
- 877              	.LVL26:
- 878              		.loc 1 222 22 view .LVU187
- 879 0030 82F00102 		eor	r2, r2, #1
- 880 0034 1A70     		strb	r2, [r3]
- 881              	.LVL27:
- 223:Core/Src/init_LB2_hw.c **** 
- 224:Core/Src/init_LB2_hw.c ****         if (blinkLedIsOn)
- 882              		.loc 1 224 9 is_stmt 1 view .LVU188
- 883              		.loc 1 224 13 is_stmt 0 view .LVU189
- 884 0036 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
- 885              		.loc 1 224 12 view .LVU190
- 886 0038 23B1     		cbz	r3, .L70
- 225:Core/Src/init_LB2_hw.c ****             LED_On_Index(currentLed);
- 887              		.loc 1 225 13 is_stmt 1 view .LVU191
- 888 003a 064B     		ldr	r3, .L72+4
- 889 003c 1868     		ldr	r0, [r3]
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 50
+ 342              		.global	get_button_permission
+ 343              		.syntax unified
+ 344              		.thumb
+ 345              		.thumb_func
+ 347              	get_button_permission:
+ 348              	.LFB135:
+ 102:Core/Src/interrupt.c **** 
+ 103:Core/Src/interrupt.c **** uint8_t get_button_permission(void)
+ 104:Core/Src/interrupt.c **** {
+ 349              		.loc 1 104 1 is_stmt 1 view -0
+ 350              		.cfi_startproc
+ 351              		@ args = 0, pretend = 0, frame = 0
+ 352              		@ frame_needed = 0, uses_anonymous_args = 0
+ 353              		@ link register save eliminated.
+ 105:Core/Src/interrupt.c ****     return button_permission;
+ 354              		.loc 1 105 5 view .LVU76
+ 355              		.loc 1 105 12 is_stmt 0 view .LVU77
+ 356 0000 014B     		ldr	r3, .L26
+ 357 0002 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 106:Core/Src/interrupt.c **** }
+ 358              		.loc 1 106 1 view .LVU78
+ 359 0004 7047     		bx	lr
+ 360              	.L27:
+ 361 0006 00BF     		.align	2
+ 362              	.L26:
+ 363 0008 00000000 		.word	button_permission
+ 364              		.cfi_endproc
+ 365              	.LFE135:
+ 367              		.section	.text.TIM2_IRQHandler,"ax",%progbits
+ 368              		.align	1
+ 369              		.global	TIM2_IRQHandler
+ 370              		.syntax unified
+ 371              		.thumb
+ 372              		.thumb_func
+ 374              	TIM2_IRQHandler:
+ 375              	.LFB136:
+ 107:Core/Src/interrupt.c **** 
+ 108:Core/Src/interrupt.c **** void TIM2_IRQHandler(void)
+ 109:Core/Src/interrupt.c **** {
+ 376              		.loc 1 109 1 is_stmt 1 view -0
+ 377              		.cfi_startproc
+ 378              		@ args = 0, pretend = 0, frame = 0
+ 379              		@ frame_needed = 0, uses_anonymous_args = 0
+ 380 0000 38B5     		push	{r3, r4, r5, lr}
+ 381              	.LCFI1:
+ 382              		.cfi_def_cfa_offset 16
+ 383              		.cfi_offset 3, -16
+ 384              		.cfi_offset 4, -12
+ 385              		.cfi_offset 5, -8
+ 386              		.cfi_offset 14, -4
+ 110:Core/Src/interrupt.c ****     if (READ_BIT(TIM2->SR, TIM_SR_UIF))
+ 387              		.loc 1 110 5 view .LVU80
+ 388              		.loc 1 110 9 is_stmt 0 view .LVU81
+ 389 0002 4FF08043 		mov	r3, #1073741824
+ 390 0006 1B69     		ldr	r3, [r3, #16]
+ 391              		.loc 1 110 8 view .LVU82
+ 392 0008 13F0010F 		tst	r3, #1
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 42
 
 
- 890 003e FFF7FEFF 		bl	LED_On_Index
- 891              	.LVL28:
- 892              	.L68:
- 226:Core/Src/init_LB2_hw.c ****         else
- 227:Core/Src/init_LB2_hw.c ****             LED_Off_Index(currentLed);
- 228:Core/Src/init_LB2_hw.c ****     }
- 229:Core/Src/init_LB2_hw.c **** }
- 893              		.loc 1 229 1 is_stmt 0 view .LVU192
- 894 0042 08BD     		pop	{r3, pc}
- 895              	.LVL29:
- 896              	.L70:
- 227:Core/Src/init_LB2_hw.c ****     }
- 897              		.loc 1 227 13 is_stmt 1 view .LVU193
- 898 0044 034B     		ldr	r3, .L72+4
- 899 0046 1868     		ldr	r0, [r3]
- 900 0048 FFF7FEFF 		bl	LED_Off_Index
- 901              	.LVL30:
- 227:Core/Src/init_LB2_hw.c ****     }
- 902              		.loc 1 227 13 is_stmt 0 view .LVU194
- 903 004c F9E7     		b	.L68
- 904              	.L73:
- 905 004e 00BF     		.align	2
- 906              	.L72:
- 907 0050 00000000 		.word	blinkModeEnabled
- 908 0054 00000000 		.word	currentLed
- 909 0058 00000000 		.word	g_ms
- 910 005c 00000000 		.word	blinkFreqIndex
- 911 0060 00000000 		.word	g_blinkHalfPeriods
- 912 0064 00000000 		.word	lastBlinkTime_ms
- 913 0068 00000000 		.word	blinkLedIsOn
- 914              		.cfi_endproc
- 915              	.LFE141:
- 917              		.global	lastBlinkTime_ms
- 918              		.section	.bss.lastBlinkTime_ms,"aw",%nobits
- 919              		.align	2
- 922              	lastBlinkTime_ms:
- 923 0000 00000000 		.space	4
- 924              		.global	blinkLedIsOn
- 925              		.section	.bss.blinkLedIsOn,"aw",%nobits
- 928              	blinkLedIsOn:
- 929 0000 00       		.space	1
- 930              		.global	blinkFreqIndex
- 931              		.section	.bss.blinkFreqIndex,"aw",%nobits
- 934              	blinkFreqIndex:
- 935 0000 00       		.space	1
- 936              		.global	blinkModeEnabled
- 937              		.section	.data.blinkModeEnabled,"aw"
- 940              	blinkModeEnabled:
- 941 0000 01       		.byte	1
- 942              		.global	currentLed
- 943              		.section	.data.currentLed,"aw"
- 944              		.align	2
- 947              	currentLed:
- 948 0000 FFFFFFFF 		.word	-1
- 949              		.global	mcu_action_4s_count
- 950              		.section	.bss.mcu_action_4s_count,"aw",%nobits
- 951              		.align	2
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 51
+ 393 000c 37D0     		beq	.L28
+ 394              	.LBB11:
+ 111:Core/Src/interrupt.c ****     {
+ 112:Core/Src/interrupt.c ****         CLEAR_BIT(TIM2->SR, TIM_SR_UIF);
+ 395              		.loc 1 112 9 is_stmt 1 view .LVU83
+ 396 000e 4FF08042 		mov	r2, #1073741824
+ 397 0012 1369     		ldr	r3, [r2, #16]
+ 398 0014 23F00103 		bic	r3, r3, #1
+ 399 0018 1361     		str	r3, [r2, #16]
+ 113:Core/Src/interrupt.c ****         tim2_flag = 1;
+ 400              		.loc 1 113 9 view .LVU84
+ 401              		.loc 1 113 19 is_stmt 0 view .LVU85
+ 402 001a 564B     		ldr	r3, .L51
+ 403 001c 0122     		movs	r2, #1
+ 404 001e 1A70     		strb	r2, [r3]
+ 114:Core/Src/interrupt.c **** 
+ 115:Core/Src/interrupt.c ****         if (button_permission == 0)
+ 405              		.loc 1 115 9 is_stmt 1 view .LVU86
+ 406              		.loc 1 115 31 is_stmt 0 view .LVU87
+ 407 0020 554B     		ldr	r3, .L51+4
+ 408 0022 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 409              		.loc 1 115 12 view .LVU88
+ 410 0024 2BB3     		cbz	r3, .L48
+ 116:Core/Src/interrupt.c ****         {
+ 117:Core/Src/interrupt.c ****             left_motor(0);
+ 118:Core/Src/interrupt.c ****             right_motor(0);
+ 119:Core/Src/interrupt.c ****             return;
+ 120:Core/Src/interrupt.c ****         }
+ 121:Core/Src/interrupt.c **** 
+ 122:Core/Src/interrupt.c ****         uint8_t s_left   = read_right_sensor();
+ 411              		.loc 1 122 9 is_stmt 1 view .LVU89
+ 412              		.loc 1 122 28 is_stmt 0 view .LVU90
+ 413 0026 FFF7FEFF 		bl	read_right_sensor
+ 414              	.LVL10:
+ 415 002a 0546     		mov	r5, r0
+ 416              	.LVL11:
+ 123:Core/Src/interrupt.c ****         uint8_t s_middle = read_middle_sensor();
+ 417              		.loc 1 123 9 is_stmt 1 view .LVU91
+ 418              		.loc 1 123 28 is_stmt 0 view .LVU92
+ 419 002c FFF7FEFF 		bl	read_middle_sensor
+ 420              	.LVL12:
+ 421 0030 0446     		mov	r4, r0
+ 422              	.LVL13:
+ 124:Core/Src/interrupt.c ****         uint8_t s_right  = read_left_sensor();
+ 423              		.loc 1 124 9 is_stmt 1 view .LVU93
+ 424              		.loc 1 124 28 is_stmt 0 view .LVU94
+ 425 0032 FFF7FEFF 		bl	read_left_sensor
+ 426              	.LVL14:
+ 125:Core/Src/interrupt.c **** 
+ 126:Core/Src/interrupt.c ****         /* === 1. ПЕРЕКРЁСТКИ И ФИНИШ === */
+ 127:Core/Src/interrupt.c ****         if (s_left && s_right)
+ 427              		.loc 1 127 9 is_stmt 1 view .LVU95
+ 428              		.loc 1 127 12 is_stmt 0 view .LVU96
+ 429 0036 002D     		cmp	r5, #0
+ 430 0038 30D0     		beq	.L31
+ 431              		.loc 1 127 20 discriminator 1 view .LVU97
+ 432 003a 0028     		cmp	r0, #0
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 43
 
 
- 954              	mcu_action_4s_count:
- 955 0000 00000000 		.space	4
- 956              		.global	mcu_action_2s_count
- 957              		.section	.bss.mcu_action_2s_count,"aw",%nobits
- 958              		.align	2
- 961              	mcu_action_2s_count:
- 962 0000 00000000 		.space	4
- 963              		.global	mcu_action_short_count
- 964              		.section	.bss.mcu_action_short_count,"aw",%nobits
- 965              		.align	2
- 968              	mcu_action_short_count:
- 969 0000 00000000 		.space	4
- 970              		.global	mcu_btn_press_count
- 971              		.section	.bss.mcu_btn_press_count,"aw",%nobits
- 972              		.align	2
- 975              	mcu_btn_press_count:
- 976 0000 00000000 		.space	4
- 977              		.global	g_btn_press_start_ms
- 978              		.section	.bss.g_btn_press_start_ms,"aw",%nobits
- 979              		.align	2
- 982              	g_btn_press_start_ms:
- 983 0000 00000000 		.space	4
- 984              		.global	g_btn_is_pressed
- 985              		.section	.bss.g_btn_is_pressed,"aw",%nobits
- 988              	g_btn_is_pressed:
- 989 0000 00       		.space	1
- 990              		.global	g_btn_release_event
- 991              		.section	.bss.g_btn_release_event,"aw",%nobits
- 994              	g_btn_release_event:
- 995 0000 00       		.space	1
- 996              		.global	g_btn_press_event
- 997              		.section	.bss.g_btn_press_event,"aw",%nobits
- 1000              	g_btn_press_event:
- 1001 0000 00       		.space	1
- 1002              		.global	g_btn_last_irq_ms
- 1003              		.section	.bss.g_btn_last_irq_ms,"aw",%nobits
- 1004              		.align	2
- 1007              	g_btn_last_irq_ms:
- 1008 0000 00000000 		.space	4
- 1009              		.global	g_ms
- 1010              		.section	.bss.g_ms,"aw",%nobits
- 1011              		.align	2
- 1014              	g_ms:
- 1015 0000 00000000 		.space	4
- 1016              		.section	.rodata.g_blinkHalfPeriods,"a"
- 1017              		.align	2
- 1020              	g_blinkHalfPeriods:
- 1021 0000 83060000 		.word	1667
- 1022 0004 4D010000 		.word	333
- 1023 0008 E3000000 		.word	227
- 1024              		.text
- 1025              	.Letext0:
- 1026              		.file 3 "CMSIS/Devices/STM32F4xx/Inc/STM32F411RE/stm32f411xe.h"
- 1027              		.file 4 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/machine/_default_types.
- 1028              		.file 5 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/sys/_stdint.h"
- 1029              		.file 6 "CMSIS/Devices/STM32F4xx/Inc/system_stm32f4xx.h"
- 1030              		.file 7 "Core/Inc/init_LB2_hw.h"
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 52
+ 433 003c 32D0     		beq	.L32
+ 128:Core/Src/interrupt.c ****         {
+ 129:Core/Src/interrupt.c ****             if (is_on_cross == 0)
+ 434              		.loc 1 129 13 is_stmt 1 view .LVU98
+ 435              		.loc 1 129 29 is_stmt 0 view .LVU99
+ 436 003e 4F4B     		ldr	r3, .L51+8
+ 437 0040 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 438              		.loc 1 129 16 view .LVU100
+ 439 0042 3BB9     		cbnz	r3, .L33
+ 130:Core/Src/interrupt.c ****             {
+ 131:Core/Src/interrupt.c ****                 cross_count++;
+ 440              		.loc 1 131 17 is_stmt 1 view .LVU101
+ 441              		.loc 1 131 28 is_stmt 0 view .LVU102
+ 442 0044 4E4A     		ldr	r2, .L51+12
+ 443 0046 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 444 0048 0133     		adds	r3, r3, #1
+ 445 004a DBB2     		uxtb	r3, r3
+ 446 004c 1370     		strb	r3, [r2]
+ 132:Core/Src/interrupt.c ****                 is_on_cross = 1;
+ 447              		.loc 1 132 17 is_stmt 1 view .LVU103
+ 448              		.loc 1 132 29 is_stmt 0 view .LVU104
+ 449 004e 4B4B     		ldr	r3, .L51+8
+ 450 0050 0122     		movs	r2, #1
+ 451 0052 1A70     		strb	r2, [r3]
+ 452              	.L33:
+ 133:Core/Src/interrupt.c ****             }
+ 134:Core/Src/interrupt.c **** 
+ 135:Core/Src/interrupt.c ****             if (cross_count >= 4)
+ 453              		.loc 1 135 13 is_stmt 1 view .LVU105
+ 454              		.loc 1 135 29 is_stmt 0 view .LVU106
+ 455 0054 4A4B     		ldr	r3, .L51+12
+ 456 0056 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 457 0058 DBB2     		uxtb	r3, r3
+ 458              		.loc 1 135 16 view .LVU107
+ 459 005a 032B     		cmp	r3, #3
+ 460 005c 10D9     		bls	.L34
+ 136:Core/Src/interrupt.c ****             {
+ 137:Core/Src/interrupt.c ****                 left_motor(0);
+ 461              		.loc 1 137 17 is_stmt 1 view .LVU108
+ 462 005e 0020     		movs	r0, #0
+ 463              	.LVL15:
+ 464              		.loc 1 137 17 is_stmt 0 view .LVU109
+ 465 0060 FFF7FEFF 		bl	left_motor
+ 466              	.LVL16:
+ 138:Core/Src/interrupt.c ****                 right_motor(0);
+ 467              		.loc 1 138 17 is_stmt 1 view .LVU110
+ 468 0064 0020     		movs	r0, #0
+ 469 0066 FFF7FEFF 		bl	right_motor
+ 470              	.LVL17:
+ 139:Core/Src/interrupt.c ****                 button_permission = 0;
+ 471              		.loc 1 139 17 view .LVU111
+ 472              		.loc 1 139 35 is_stmt 0 view .LVU112
+ 473 006a 434B     		ldr	r3, .L51+4
+ 474 006c 0022     		movs	r2, #0
+ 475 006e 1A70     		strb	r2, [r3]
+ 140:Core/Src/interrupt.c ****                 return;
+ 476              		.loc 1 140 17 is_stmt 1 view .LVU113
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 44
 
 
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 53
+ 477 0070 05E0     		b	.L28
+ 478              	.LVL18:
+ 479              	.L48:
+ 117:Core/Src/interrupt.c ****             right_motor(0);
+ 480              		.loc 1 117 13 view .LVU114
+ 481 0072 0020     		movs	r0, #0
+ 482 0074 FFF7FEFF 		bl	left_motor
+ 483              	.LVL19:
+ 118:Core/Src/interrupt.c ****             return;
+ 484              		.loc 1 118 13 view .LVU115
+ 485 0078 0020     		movs	r0, #0
+ 486 007a FFF7FEFF 		bl	right_motor
+ 487              	.LVL20:
+ 119:Core/Src/interrupt.c ****         }
+ 488              		.loc 1 119 13 view .LVU116
+ 489              	.L28:
+ 490              	.LBE11:
+ 141:Core/Src/interrupt.c ****             }
+ 142:Core/Src/interrupt.c **** 
+ 143:Core/Src/interrupt.c ****             /* Пробиваем перекрёсток прямо, регулятор обнул�
+ 144:Core/Src/interrupt.c ****             last_error = 0;
+ 145:Core/Src/interrupt.c ****             integral   = 0;
+ 146:Core/Src/interrupt.c ****             left_motor(BASE_SPEED);
+ 147:Core/Src/interrupt.c ****             right_motor(BASE_SPEED);
+ 148:Core/Src/interrupt.c ****             return;
+ 149:Core/Src/interrupt.c ****         }
+ 150:Core/Src/interrupt.c ****         else if (!s_left && !s_right)
+ 151:Core/Src/interrupt.c ****         {
+ 152:Core/Src/interrupt.c ****             is_on_cross = 0;
+ 153:Core/Src/interrupt.c ****         }
+ 154:Core/Src/interrupt.c **** 
+ 155:Core/Src/interrupt.c ****         /* === 2. ПОЛНАЯ ПОТЕРЯ ЛИНИИ (угол 90°, разрыв) === */
+ 156:Core/Src/interrupt.c ****         uint8_t active = s_left + s_middle + s_right;
+ 157:Core/Src/interrupt.c ****         if (active == 0)
+ 158:Core/Src/interrupt.c ****         {
+ 159:Core/Src/interrupt.c ****             /* Доворачиваем на месте в сторону последнего из
+ 160:Core/Src/interrupt.c ****             if (last_error < 0)        { left_motor(-TURN_SPEED); right_motor(TURN_SPEED);  }
+ 161:Core/Src/interrupt.c ****             else if (last_error > 0)   { left_motor(TURN_SPEED);  right_motor(-TURN_SPEED); }
+ 162:Core/Src/interrupt.c ****             else                       { left_motor(0);           right_motor(0);           }
+ 163:Core/Src/interrupt.c ****             return;
+ 164:Core/Src/interrupt.c ****         }
+ 165:Core/Src/interrupt.c **** 
+ 166:Core/Src/interrupt.c ****         /* === 3. ПИД-РЕГУЛЯТОР ПО ПОЛОЖЕНИЮ ЛИНИИ === */
+ 167:Core/Src/interrupt.c ****         /* Взвешенный "центр тяжести" линии: левый = -2, центр
+ 168:Core/Src/interrupt.c ****         int32_t weighted = (int32_t)(-2) * s_left + (int32_t)(2) * s_right;
+ 169:Core/Src/interrupt.c ****         int32_t error    = weighted / (int32_t)active;   /* -2, -1, 0, +1, +2 */
+ 170:Core/Src/interrupt.c **** 
+ 171:Core/Src/interrupt.c ****         integral += error;
+ 172:Core/Src/interrupt.c ****         if (integral >  I_LIMIT) integral =  I_LIMIT;     /* анти-windup */
+ 173:Core/Src/interrupt.c ****         if (integral < -I_LIMIT) integral = -I_LIMIT;
+ 174:Core/Src/interrupt.c **** 
+ 175:Core/Src/interrupt.c ****         int32_t derivative = error - last_error;
+ 176:Core/Src/interrupt.c ****         int32_t u = KP * error + KI * integral + KD * derivative;
+ 177:Core/Src/interrupt.c ****         last_error = error;
+ 178:Core/Src/interrupt.c **** 
+ 179:Core/Src/interrupt.c ****         /* Симметричный доворот вокруг базовой скорости */
+ 180:Core/Src/interrupt.c ****         int32_t l = BASE_SPEED + u;
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 45
+
+
+ 181:Core/Src/interrupt.c ****         int32_t r = BASE_SPEED - u;
+ 182:Core/Src/interrupt.c **** 
+ 183:Core/Src/interrupt.c ****         /* Ограничение (по линии назад не сдаём — иначе сор
+ 184:Core/Src/interrupt.c ****         if (l > MAX_SPEED) l = MAX_SPEED;
+ 185:Core/Src/interrupt.c ****         if (l < 0)         l = 0;
+ 186:Core/Src/interrupt.c ****         if (r > MAX_SPEED) r = MAX_SPEED;
+ 187:Core/Src/interrupt.c ****         if (r < 0)         r = 0;
+ 188:Core/Src/interrupt.c **** 
+ 189:Core/Src/interrupt.c ****         left_motor((int16_t)l);
+ 190:Core/Src/interrupt.c ****         right_motor((int16_t)r);
+ 191:Core/Src/interrupt.c ****     }
+ 192:Core/Src/interrupt.c **** }
+ 491              		.loc 1 192 1 is_stmt 0 view .LVU117
+ 492 007e 38BD     		pop	{r3, r4, r5, pc}
+ 493              	.LVL21:
+ 494              	.L34:
+ 495              	.LBB12:
+ 144:Core/Src/interrupt.c ****             integral   = 0;
+ 496              		.loc 1 144 13 is_stmt 1 view .LVU118
+ 144:Core/Src/interrupt.c ****             integral   = 0;
+ 497              		.loc 1 144 24 is_stmt 0 view .LVU119
+ 498 0080 0023     		movs	r3, #0
+ 499 0082 404A     		ldr	r2, .L51+16
+ 500 0084 1360     		str	r3, [r2]
+ 145:Core/Src/interrupt.c ****             left_motor(BASE_SPEED);
+ 501              		.loc 1 145 13 is_stmt 1 view .LVU120
+ 145:Core/Src/interrupt.c ****             left_motor(BASE_SPEED);
+ 502              		.loc 1 145 24 is_stmt 0 view .LVU121
+ 503 0086 404A     		ldr	r2, .L51+20
+ 504 0088 1360     		str	r3, [r2]
+ 146:Core/Src/interrupt.c ****             right_motor(BASE_SPEED);
+ 505              		.loc 1 146 13 is_stmt 1 view .LVU122
+ 506 008a 4FF4C870 		mov	r0, #400
+ 507              	.LVL22:
+ 146:Core/Src/interrupt.c ****             right_motor(BASE_SPEED);
+ 508              		.loc 1 146 13 is_stmt 0 view .LVU123
+ 509 008e FFF7FEFF 		bl	left_motor
+ 510              	.LVL23:
+ 147:Core/Src/interrupt.c ****             return;
+ 511              		.loc 1 147 13 is_stmt 1 view .LVU124
+ 512 0092 4FF4C870 		mov	r0, #400
+ 513 0096 FFF7FEFF 		bl	right_motor
+ 514              	.LVL24:
+ 148:Core/Src/interrupt.c ****         }
+ 515              		.loc 1 148 13 view .LVU125
+ 516 009a F0E7     		b	.L28
+ 517              	.LVL25:
+ 518              	.L31:
+ 150:Core/Src/interrupt.c ****         {
+ 519              		.loc 1 150 26 is_stmt 0 discriminator 1 view .LVU126
+ 520 009c 10B9     		cbnz	r0, .L32
+ 152:Core/Src/interrupt.c ****         }
+ 521              		.loc 1 152 13 is_stmt 1 view .LVU127
+ 152:Core/Src/interrupt.c ****         }
+ 522              		.loc 1 152 25 is_stmt 0 view .LVU128
+ 523 009e 374B     		ldr	r3, .L51+8
+ 524 00a0 0022     		movs	r2, #0
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 46
+
+
+ 525 00a2 1A70     		strb	r2, [r3]
+ 526              	.L32:
+ 156:Core/Src/interrupt.c ****         if (active == 0)
+ 527              		.loc 1 156 9 is_stmt 1 view .LVU129
+ 156:Core/Src/interrupt.c ****         if (active == 0)
+ 528              		.loc 1 156 33 is_stmt 0 view .LVU130
+ 529 00a4 2B19     		adds	r3, r5, r4
+ 156:Core/Src/interrupt.c ****         if (active == 0)
+ 530              		.loc 1 156 17 view .LVU131
+ 531 00a6 50FA83F3 		uxtab	r3, r0, r3
+ 532              	.LVL26:
+ 157:Core/Src/interrupt.c ****         {
+ 533              		.loc 1 157 9 is_stmt 1 view .LVU132
+ 157:Core/Src/interrupt.c ****         {
+ 534              		.loc 1 157 12 is_stmt 0 view .LVU133
+ 535 00aa 13F0FF03 		ands	r3, r3, #255
+ 536              	.LVL27:
+ 157:Core/Src/interrupt.c ****         {
+ 537              		.loc 1 157 12 view .LVU134
+ 538 00ae 2ED0     		beq	.L49
+ 168:Core/Src/interrupt.c ****         int32_t error    = weighted / (int32_t)active;   /* -2, -1, 0, +1, +2 */
+ 539              		.loc 1 168 9 is_stmt 1 view .LVU135
+ 168:Core/Src/interrupt.c ****         int32_t error    = weighted / (int32_t)active;   /* -2, -1, 0, +1, +2 */
+ 540              		.loc 1 168 51 is_stmt 0 view .LVU136
+ 541 00b0 401B     		subs	r0, r0, r5
+ 542              	.LVL28:
+ 168:Core/Src/interrupt.c ****         int32_t error    = weighted / (int32_t)active;   /* -2, -1, 0, +1, +2 */
+ 543              		.loc 1 168 17 view .LVU137
+ 544 00b2 4000     		lsls	r0, r0, #1
+ 545              	.LVL29:
+ 169:Core/Src/interrupt.c **** 
+ 546              		.loc 1 169 9 is_stmt 1 view .LVU138
+ 169:Core/Src/interrupt.c **** 
+ 547              		.loc 1 169 17 is_stmt 0 view .LVU139
+ 548 00b4 90FBF3F0 		sdiv	r0, r0, r3
+ 549              	.LVL30:
+ 171:Core/Src/interrupt.c ****         if (integral >  I_LIMIT) integral =  I_LIMIT;     /* анти-windup */
+ 550              		.loc 1 171 9 is_stmt 1 view .LVU140
+ 171:Core/Src/interrupt.c ****         if (integral >  I_LIMIT) integral =  I_LIMIT;     /* анти-windup */
+ 551              		.loc 1 171 18 is_stmt 0 view .LVU141
+ 552 00b8 334B     		ldr	r3, .L51+20
+ 553 00ba 1A68     		ldr	r2, [r3]
+ 554 00bc 0244     		add	r2, r2, r0
+ 555 00be 1A60     		str	r2, [r3]
+ 172:Core/Src/interrupt.c ****         if (integral < -I_LIMIT) integral = -I_LIMIT;
+ 556              		.loc 1 172 9 is_stmt 1 view .LVU142
+ 172:Core/Src/interrupt.c ****         if (integral < -I_LIMIT) integral = -I_LIMIT;
+ 557              		.loc 1 172 22 is_stmt 0 view .LVU143
+ 558 00c0 1B68     		ldr	r3, [r3]
+ 172:Core/Src/interrupt.c ****         if (integral < -I_LIMIT) integral = -I_LIMIT;
+ 559              		.loc 1 172 12 view .LVU144
+ 560 00c2 962B     		cmp	r3, #150
+ 561 00c4 02DD     		ble	.L39
+ 172:Core/Src/interrupt.c ****         if (integral < -I_LIMIT) integral = -I_LIMIT;
+ 562              		.loc 1 172 34 is_stmt 1 discriminator 1 view .LVU145
+ 172:Core/Src/interrupt.c ****         if (integral < -I_LIMIT) integral = -I_LIMIT;
+ 563              		.loc 1 172 43 is_stmt 0 discriminator 1 view .LVU146
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 47
+
+
+ 564 00c6 304B     		ldr	r3, .L51+20
+ 565 00c8 9622     		movs	r2, #150
+ 566 00ca 1A60     		str	r2, [r3]
+ 567              	.L39:
+ 173:Core/Src/interrupt.c **** 
+ 568              		.loc 1 173 9 is_stmt 1 view .LVU147
+ 173:Core/Src/interrupt.c **** 
+ 569              		.loc 1 173 22 is_stmt 0 view .LVU148
+ 570 00cc 2E4B     		ldr	r3, .L51+20
+ 571 00ce 1B68     		ldr	r3, [r3]
+ 173:Core/Src/interrupt.c **** 
+ 572              		.loc 1 173 12 view .LVU149
+ 573 00d0 13F1960F 		cmn	r3, #150
+ 574 00d4 03DA     		bge	.L40
+ 173:Core/Src/interrupt.c **** 
+ 575              		.loc 1 173 34 is_stmt 1 discriminator 1 view .LVU150
+ 173:Core/Src/interrupt.c **** 
+ 576              		.loc 1 173 43 is_stmt 0 discriminator 1 view .LVU151
+ 577 00d6 2C4B     		ldr	r3, .L51+20
+ 578 00d8 6FF09502 		mvn	r2, #149
+ 579 00dc 1A60     		str	r2, [r3]
+ 580              	.L40:
+ 175:Core/Src/interrupt.c ****         int32_t u = KP * error + KI * integral + KD * derivative;
+ 581              		.loc 1 175 9 is_stmt 1 view .LVU152
+ 175:Core/Src/interrupt.c ****         int32_t u = KP * error + KI * integral + KD * derivative;
+ 582              		.loc 1 175 36 is_stmt 0 view .LVU153
+ 583 00de 294B     		ldr	r3, .L51+16
+ 584 00e0 1C68     		ldr	r4, [r3]
+ 585              	.LVL31:
+ 175:Core/Src/interrupt.c ****         int32_t u = KP * error + KI * integral + KD * derivative;
+ 586              		.loc 1 175 17 view .LVU154
+ 587 00e2 041B     		subs	r4, r0, r4
+ 588              	.LVL32:
+ 176:Core/Src/interrupt.c ****         last_error = error;
+ 589              		.loc 1 176 9 is_stmt 1 view .LVU155
+ 176:Core/Src/interrupt.c ****         last_error = error;
+ 590              		.loc 1 176 17 is_stmt 0 view .LVU156
+ 591 00e4 284A     		ldr	r2, .L51+20
+ 592 00e6 1268     		ldr	r2, [r2]
+ 176:Core/Src/interrupt.c ****         last_error = error;
+ 593              		.loc 1 176 53 view .LVU157
+ 594 00e8 C822     		movs	r2, #200
+ 595 00ea 02FB04F4 		mul	r4, r2, r4
+ 596              	.LVL33:
+ 176:Core/Src/interrupt.c ****         last_error = error;
+ 597              		.loc 1 176 17 view .LVU158
+ 598 00ee 3222     		movs	r2, #50
+ 599 00f0 02FB0044 		mla	r4, r2, r0, r4
+ 600              	.LVL34:
+ 177:Core/Src/interrupt.c **** 
+ 601              		.loc 1 177 9 is_stmt 1 view .LVU159
+ 177:Core/Src/interrupt.c **** 
+ 602              		.loc 1 177 20 is_stmt 0 view .LVU160
+ 603 00f4 1860     		str	r0, [r3]
+ 180:Core/Src/interrupt.c ****         int32_t r = BASE_SPEED - u;
+ 604              		.loc 1 180 9 is_stmt 1 view .LVU161
+ 180:Core/Src/interrupt.c ****         int32_t r = BASE_SPEED - u;
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 48
+
+
+ 605              		.loc 1 180 17 is_stmt 0 view .LVU162
+ 606 00f6 04F5C870 		add	r0, r4, #400
+ 607              	.LVL35:
+ 181:Core/Src/interrupt.c **** 
+ 608              		.loc 1 181 9 is_stmt 1 view .LVU163
+ 181:Core/Src/interrupt.c **** 
+ 609              		.loc 1 181 17 is_stmt 0 view .LVU164
+ 610 00fa C4F5C874 		rsb	r4, r4, #400
+ 611              	.LVL36:
+ 184:Core/Src/interrupt.c ****         if (l < 0)         l = 0;
+ 612              		.loc 1 184 9 is_stmt 1 view .LVU165
+ 184:Core/Src/interrupt.c ****         if (l < 0)         l = 0;
+ 613              		.loc 1 184 12 is_stmt 0 view .LVU166
+ 614 00fe 40F28A23 		movw	r3, #650
+ 184:Core/Src/interrupt.c ****         if (l < 0)         l = 0;
+ 615              		.loc 1 184 12 view .LVU167
+ 616 0102 9842     		cmp	r0, r3
+ 617 0104 22DC     		bgt	.L43
+ 185:Core/Src/interrupt.c ****         if (r > MAX_SPEED) r = MAX_SPEED;
+ 618              		.loc 1 185 9 is_stmt 1 view .LVU168
+ 185:Core/Src/interrupt.c ****         if (r > MAX_SPEED) r = MAX_SPEED;
+ 619              		.loc 1 185 12 is_stmt 0 view .LVU169
+ 620 0106 0028     		cmp	r0, #0
+ 621 0108 22DA     		bge	.L41
+ 185:Core/Src/interrupt.c ****         if (r > MAX_SPEED) r = MAX_SPEED;
+ 622              		.loc 1 185 30 discriminator 1 view .LVU170
+ 623 010a 0020     		movs	r0, #0
+ 624              	.LVL37:
+ 185:Core/Src/interrupt.c ****         if (r > MAX_SPEED) r = MAX_SPEED;
+ 625              		.loc 1 185 30 discriminator 1 view .LVU171
+ 626 010c 20E0     		b	.L41
+ 627              	.LVL38:
+ 628              	.L49:
+ 160:Core/Src/interrupt.c ****             else if (last_error > 0)   { left_motor(TURN_SPEED);  right_motor(-TURN_SPEED); }
+ 629              		.loc 1 160 13 is_stmt 1 view .LVU172
+ 160:Core/Src/interrupt.c ****             else if (last_error > 0)   { left_motor(TURN_SPEED);  right_motor(-TURN_SPEED); }
+ 630              		.loc 1 160 28 is_stmt 0 view .LVU173
+ 631 010e 1D4B     		ldr	r3, .L51+16
+ 632 0110 1B68     		ldr	r3, [r3]
+ 160:Core/Src/interrupt.c ****             else if (last_error > 0)   { left_motor(TURN_SPEED);  right_motor(-TURN_SPEED); }
+ 633              		.loc 1 160 16 view .LVU174
+ 634 0112 002B     		cmp	r3, #0
+ 635 0114 0BDB     		blt	.L50
+ 161:Core/Src/interrupt.c ****             else                       { left_motor(0);           right_motor(0);           }
+ 636              		.loc 1 161 18 is_stmt 1 view .LVU175
+ 161:Core/Src/interrupt.c ****             else                       { left_motor(0);           right_motor(0);           }
+ 637              		.loc 1 161 33 is_stmt 0 view .LVU176
+ 638 0116 1B4B     		ldr	r3, .L51+16
+ 639 0118 1B68     		ldr	r3, [r3]
+ 161:Core/Src/interrupt.c ****             else                       { left_motor(0);           right_motor(0);           }
+ 640              		.loc 1 161 21 view .LVU177
+ 641 011a 002B     		cmp	r3, #0
+ 642 011c 0FDD     		ble	.L38
+ 161:Core/Src/interrupt.c ****             else                       { left_motor(0);           right_motor(0);           }
+ 643              		.loc 1 161 42 is_stmt 1 discriminator 1 view .LVU178
+ 644 011e 4FF49670 		mov	r0, #300
+ 645              	.LVL39:
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 49
+
+
+ 161:Core/Src/interrupt.c ****             else                       { left_motor(0);           right_motor(0);           }
+ 646              		.loc 1 161 42 is_stmt 0 discriminator 1 view .LVU179
+ 647 0122 FFF7FEFF 		bl	left_motor
+ 648              	.LVL40:
+ 161:Core/Src/interrupt.c ****             else                       { left_motor(0);           right_motor(0);           }
+ 649              		.loc 1 161 67 is_stmt 1 discriminator 1 view .LVU180
+ 650 0126 1948     		ldr	r0, .L51+24
+ 651 0128 FFF7FEFF 		bl	right_motor
+ 652              	.LVL41:
+ 653 012c A7E7     		b	.L28
+ 654              	.LVL42:
+ 655              	.L50:
+ 160:Core/Src/interrupt.c ****             else if (last_error > 0)   { left_motor(TURN_SPEED);  right_motor(-TURN_SPEED); }
+ 656              		.loc 1 160 42 discriminator 1 view .LVU181
+ 657 012e 1748     		ldr	r0, .L51+24
+ 658              	.LVL43:
+ 160:Core/Src/interrupt.c ****             else if (last_error > 0)   { left_motor(TURN_SPEED);  right_motor(-TURN_SPEED); }
+ 659              		.loc 1 160 42 is_stmt 0 discriminator 1 view .LVU182
+ 660 0130 FFF7FEFF 		bl	left_motor
+ 661              	.LVL44:
+ 160:Core/Src/interrupt.c ****             else if (last_error > 0)   { left_motor(TURN_SPEED);  right_motor(-TURN_SPEED); }
+ 662              		.loc 1 160 67 is_stmt 1 discriminator 1 view .LVU183
+ 663 0134 4FF49670 		mov	r0, #300
+ 664 0138 FFF7FEFF 		bl	right_motor
+ 665              	.LVL45:
+ 666 013c 9FE7     		b	.L28
+ 667              	.LVL46:
+ 668              	.L38:
+ 162:Core/Src/interrupt.c ****             return;
+ 669              		.loc 1 162 42 view .LVU184
+ 670 013e 0020     		movs	r0, #0
+ 671              	.LVL47:
+ 162:Core/Src/interrupt.c ****             return;
+ 672              		.loc 1 162 42 is_stmt 0 view .LVU185
+ 673 0140 FFF7FEFF 		bl	left_motor
+ 674              	.LVL48:
+ 162:Core/Src/interrupt.c ****             return;
+ 675              		.loc 1 162 67 is_stmt 1 discriminator 1 view .LVU186
+ 676 0144 0020     		movs	r0, #0
+ 677 0146 FFF7FEFF 		bl	right_motor
+ 678              	.LVL49:
+ 163:Core/Src/interrupt.c ****         }
+ 679              		.loc 1 163 13 view .LVU187
+ 680 014a 98E7     		b	.L28
+ 681              	.LVL50:
+ 682              	.L43:
+ 184:Core/Src/interrupt.c ****         if (l < 0)         l = 0;
+ 683              		.loc 1 184 30 is_stmt 0 discriminator 1 view .LVU188
+ 684 014c 40F28A20 		movw	r0, #650
+ 685              	.LVL51:
+ 686              	.L41:
+ 186:Core/Src/interrupt.c ****         if (r < 0)         r = 0;
+ 687              		.loc 1 186 9 is_stmt 1 view .LVU189
+ 186:Core/Src/interrupt.c ****         if (r < 0)         r = 0;
+ 688              		.loc 1 186 12 is_stmt 0 view .LVU190
+ 689 0150 40F28A23 		movw	r3, #650
+ 690 0154 9C42     		cmp	r4, r3
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 50
+
+
+ 691 0156 03DC     		bgt	.L45
+ 187:Core/Src/interrupt.c **** 
+ 692              		.loc 1 187 9 is_stmt 1 view .LVU191
+ 187:Core/Src/interrupt.c **** 
+ 693              		.loc 1 187 12 is_stmt 0 view .LVU192
+ 694 0158 002C     		cmp	r4, #0
+ 695 015a 03DA     		bge	.L42
+ 187:Core/Src/interrupt.c **** 
+ 696              		.loc 1 187 30 discriminator 1 view .LVU193
+ 697 015c 0024     		movs	r4, #0
+ 698              	.LVL52:
+ 187:Core/Src/interrupt.c **** 
+ 699              		.loc 1 187 30 discriminator 1 view .LVU194
+ 700 015e 01E0     		b	.L42
+ 701              	.LVL53:
+ 702              	.L45:
+ 186:Core/Src/interrupt.c ****         if (r < 0)         r = 0;
+ 703              		.loc 1 186 30 discriminator 1 view .LVU195
+ 704 0160 40F28A24 		movw	r4, #650
+ 705              	.LVL54:
+ 706              	.L42:
+ 189:Core/Src/interrupt.c ****         right_motor((int16_t)r);
+ 707              		.loc 1 189 9 is_stmt 1 view .LVU196
+ 708 0164 00B2     		sxth	r0, r0
+ 709              	.LVL55:
+ 189:Core/Src/interrupt.c ****         right_motor((int16_t)r);
+ 710              		.loc 1 189 9 is_stmt 0 view .LVU197
+ 711 0166 FFF7FEFF 		bl	left_motor
+ 712              	.LVL56:
+ 190:Core/Src/interrupt.c ****     }
+ 713              		.loc 1 190 9 is_stmt 1 view .LVU198
+ 714 016a 20B2     		sxth	r0, r4
+ 715 016c FFF7FEFF 		bl	right_motor
+ 716              	.LVL57:
+ 717 0170 85E7     		b	.L28
+ 718              	.L52:
+ 719 0172 00BF     		.align	2
+ 720              	.L51:
+ 721 0174 00000000 		.word	tim2_flag
+ 722 0178 00000000 		.word	button_permission
+ 723 017c 00000000 		.word	is_on_cross
+ 724 0180 00000000 		.word	cross_count
+ 725 0184 00000000 		.word	last_error
+ 726 0188 00000000 		.word	integral
+ 727 018c D4FEFFFF 		.word	-300
+ 728              	.LBE12:
+ 729              		.cfi_endproc
+ 730              	.LFE136:
+ 732              		.section	.text.get_tim2_flag,"ax",%progbits
+ 733              		.align	1
+ 734              		.global	get_tim2_flag
+ 735              		.syntax unified
+ 736              		.thumb
+ 737              		.thumb_func
+ 739              	get_tim2_flag:
+ 740              	.LFB137:
+ 193:Core/Src/interrupt.c **** 
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 51
+
+
+ 194:Core/Src/interrupt.c **** uint8_t get_tim2_flag(void)
+ 195:Core/Src/interrupt.c **** {
+ 741              		.loc 1 195 1 view -0
+ 742              		.cfi_startproc
+ 743              		@ args = 0, pretend = 0, frame = 0
+ 744              		@ frame_needed = 0, uses_anonymous_args = 0
+ 745              		@ link register save eliminated.
+ 196:Core/Src/interrupt.c ****     return tim2_flag;
+ 746              		.loc 1 196 5 view .LVU200
+ 747              		.loc 1 196 12 is_stmt 0 view .LVU201
+ 748 0000 014B     		ldr	r3, .L54
+ 749 0002 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 197:Core/Src/interrupt.c **** }
+ 750              		.loc 1 197 1 view .LVU202
+ 751 0004 7047     		bx	lr
+ 752              	.L55:
+ 753 0006 00BF     		.align	2
+ 754              	.L54:
+ 755 0008 00000000 		.word	tim2_flag
+ 756              		.cfi_endproc
+ 757              	.LFE137:
+ 759              		.section	.text.set_tim2_flag,"ax",%progbits
+ 760              		.align	1
+ 761              		.global	set_tim2_flag
+ 762              		.syntax unified
+ 763              		.thumb
+ 764              		.thumb_func
+ 766              	set_tim2_flag:
+ 767              	.LVL58:
+ 768              	.LFB138:
+ 198:Core/Src/interrupt.c **** 
+ 199:Core/Src/interrupt.c **** void set_tim2_flag(uint8_t flag)
+ 200:Core/Src/interrupt.c **** {
+ 769              		.loc 1 200 1 is_stmt 1 view -0
+ 770              		.cfi_startproc
+ 771              		@ args = 0, pretend = 0, frame = 0
+ 772              		@ frame_needed = 0, uses_anonymous_args = 0
+ 773              		@ link register save eliminated.
+ 201:Core/Src/interrupt.c ****     tim2_flag = flag;
+ 774              		.loc 1 201 5 view .LVU204
+ 775              		.loc 1 201 15 is_stmt 0 view .LVU205
+ 776 0000 014B     		ldr	r3, .L57
+ 777 0002 1870     		strb	r0, [r3]
+ 202:Core/Src/interrupt.c **** }...
+ 778              		.loc 1 202 1 view .LVU206
+ 779 0004 7047     		bx	lr
+ 780              	.L58:
+ 781 0006 00BF     		.align	2
+ 782              	.L57:
+ 783 0008 00000000 		.word	tim2_flag
+ 784              		.cfi_endproc
+ 785              	.LFE138:
+ 787              		.section	.bss.led_counter.0,"aw",%nobits
+ 788              		.align	2
+ 791              	led_counter.0:
+ 792 0000 00000000 		.space	4
+ 793              		.section	.bss.is_on_cross,"aw",%nobits
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 52
+
+
+ 796              	is_on_cross:
+ 797 0000 00       		.space	1
+ 798              		.section	.bss.cross_count,"aw",%nobits
+ 801              	cross_count:
+ 802 0000 00       		.space	1
+ 803              		.section	.bss.integral,"aw",%nobits
+ 804              		.align	2
+ 807              	integral:
+ 808 0000 00000000 		.space	4
+ 809              		.section	.bss.last_error,"aw",%nobits
+ 810              		.align	2
+ 813              	last_error:
+ 814 0000 00000000 		.space	4
+ 815              		.section	.bss.tim2_flag,"aw",%nobits
+ 818              	tim2_flag:
+ 819 0000 00       		.space	1
+ 820              		.section	.bss.button_permission,"aw",%nobits
+ 823              	button_permission:
+ 824 0000 00       		.space	1
+ 825              		.section	.bss.press_time,"aw",%nobits
+ 826              		.align	2
+ 829              	press_time:
+ 830 0000 00000000 		.space	4
+ 831              		.section	.bss.ticks,"aw",%nobits
+ 832              		.align	2
+ 835              	ticks:
+ 836 0000 00000000 		.space	4
+ 837              		.text
+ 838              	.Letext0:
+ 839              		.file 3 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/machine/_default_types.
+ 840              		.file 4 "D:/Tools/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-eabi/include/sys/_stdint.h"
+ 841              		.file 5 "CMSIS/Devices/STM32F4xx/Inc/STM32F411RE/stm32f411xe.h"
+ 842              		.file 6 "Core/Inc/sensors.h"
+ 843              		.file 7 "Core/Inc/motor.h"
+ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s 			page 53
 
 
 DEFINED SYMBOLS
-                            *ABS*:00000000 init_LB2_hw.c
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:21     .text.SysTick_Handler:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:27     .text.SysTick_Handler:00000000 SysTick_Handler
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:45     .text.SysTick_Handler:0000000c $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:1014   .bss.g_ms:00000000 g_ms
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:50     .text.EXTI2_IRQHandler:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:56     .text.EXTI2_IRQHandler:00000000 EXTI2_IRQHandler
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:137    .text.EXTI2_IRQHandler:00000048 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:1007   .bss.g_btn_last_irq_ms:00000000 g_btn_last_irq_ms
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:1000   .bss.g_btn_press_event:00000000 g_btn_press_event
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:975    .bss.mcu_btn_press_count:00000000 mcu_btn_press_count
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:994    .bss.g_btn_release_event:00000000 g_btn_release_event
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:149    .text.LED_On_Index:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:155    .text.LED_On_Index:00000000 LED_On_Index
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:168    .text.LED_On_Index:00000008 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:237    .text.LED_On_Index:00000064 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:243    .text.LED_Off_Index:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:249    .text.LED_Off_Index:00000000 LED_Off_Index
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:262    .text.LED_Off_Index:00000008 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:331    .text.LED_Off_Index:00000064 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:337    .text.LED_AllOff:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:343    .text.LED_AllOff:00000000 LED_AllOff
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:365    .text.LED_AllOff:00000018 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:370    .text.LED_Next:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:376    .text.LED_Next:00000000 LED_Next
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:436    .text.LED_Next:00000044 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:947    .data.currentLed:00000000 currentLed
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:928    .bss.blinkLedIsOn:00000000 blinkLedIsOn
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:922    .bss.lastBlinkTime_ms:00000000 lastBlinkTime_ms
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:445    .text.GPIO_Init_LEDs:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:451    .text.GPIO_Init_LEDs:00000000 GPIO_Init_LEDs
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:487    .text.GPIO_Init_LEDs:00000034 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:492    .text.GPIO_Init_Button_PD2_Pulldown:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:498    .text.GPIO_Init_Button_PD2_Pulldown:00000000 GPIO_Init_Button_PD2_Pulldown
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:528    .text.GPIO_Init_Button_PD2_Pulldown:00000028 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:534    .text.EXTI_Init_PD2:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:540    .text.EXTI_Init_PD2:00000000 EXTI_Init_PD2
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:597    .text.EXTI_Init_PD2:00000048 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:604    .text.SysTick_Init_1ms:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:610    .text.SysTick_Init_1ms:00000000 SysTick_Init_1ms
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:649    .text.SysTick_Init_1ms:00000024 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:655    .text.Button_Process:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:661    .text.Button_Process:00000000 Button_Process
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:803    .text.Button_Process:00000090 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:988    .bss.g_btn_is_pressed:00000000 g_btn_is_pressed
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:982    .bss.g_btn_press_start_ms:00000000 g_btn_press_start_ms
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:940    .data.blinkModeEnabled:00000000 blinkModeEnabled
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:961    .bss.mcu_action_2s_count:00000000 mcu_action_2s_count
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:934    .bss.blinkFreqIndex:00000000 blinkFreqIndex
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:968    .bss.mcu_action_short_count:00000000 mcu_action_short_count
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:954    .bss.mcu_action_4s_count:00000000 mcu_action_4s_count
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:819    .text.Blink_Process:00000000 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:825    .text.Blink_Process:00000000 Blink_Process
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:907    .text.Blink_Process:00000050 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:1020   .rodata.g_blinkHalfPeriods:00000000 g_blinkHalfPeriods
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:919    .bss.lastBlinkTime_ms:00000000 $d
-ARM GAS  C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s 			page 54
-
-
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:929    .bss.blinkLedIsOn:00000000 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:935    .bss.blinkFreqIndex:00000000 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:944    .data.currentLed:00000000 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:951    .bss.mcu_action_4s_count:00000000 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:958    .bss.mcu_action_2s_count:00000000 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:965    .bss.mcu_action_short_count:00000000 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:972    .bss.mcu_btn_press_count:00000000 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:979    .bss.g_btn_press_start_ms:00000000 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:989    .bss.g_btn_is_pressed:00000000 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:995    .bss.g_btn_release_event:00000000 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:1001   .bss.g_btn_press_event:00000000 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:1004   .bss.g_btn_last_irq_ms:00000000 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:1011   .bss.g_ms:00000000 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:1017   .rodata.g_blinkHalfPeriods:00000000 $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:175    .text.LED_On_Index:0000000f $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:175    .text.LED_On_Index:00000010 $t
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:269    .text.LED_Off_Index:0000000f $d
-C:\Users\VICTUS\AppData\Local\Temp\ccj1R031.s:269    .text.LED_Off_Index:00000010 $t
+                            *ABS*:00000000 interrupt.c
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:21     .text.led_toggle:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:26     .text.led_toggle:00000000 led_toggle
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:45     .text.led_toggle:0000000c $d
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:50     .text.SysTick_Handler:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:56     .text.SysTick_Handler:00000000 SysTick_Handler
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:119    .text.SysTick_Handler:00000038 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:791    .bss.led_counter.0:00000000 led_counter.0
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:823    .bss.button_permission:00000000 button_permission
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:835    .bss.ticks:00000000 ticks
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:126    .text.get_ticks:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:132    .text.get_ticks:00000000 get_ticks
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:148    .text.get_ticks:00000008 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:153    .text.button_interrupt_init:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:159    .text.button_interrupt_init:00000000 button_interrupt_init
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:226    .text.button_interrupt_init:00000044 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:233    .text.EXTI15_10_IRQHandler:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:239    .text.EXTI15_10_IRQHandler:00000000 EXTI15_10_IRQHandler
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:327    .text.EXTI15_10_IRQHandler:00000060 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:829    .bss.press_time:00000000 press_time
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:801    .bss.cross_count:00000000 cross_count
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:796    .bss.is_on_cross:00000000 is_on_cross
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:813    .bss.last_error:00000000 last_error
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:807    .bss.integral:00000000 integral
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:341    .text.get_button_permission:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:347    .text.get_button_permission:00000000 get_button_permission
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:363    .text.get_button_permission:00000008 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:368    .text.TIM2_IRQHandler:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:374    .text.TIM2_IRQHandler:00000000 TIM2_IRQHandler
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:721    .text.TIM2_IRQHandler:00000174 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:818    .bss.tim2_flag:00000000 tim2_flag
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:733    .text.get_tim2_flag:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:739    .text.get_tim2_flag:00000000 get_tim2_flag
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:755    .text.get_tim2_flag:00000008 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:760    .text.set_tim2_flag:00000000 $t
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:766    .text.set_tim2_flag:00000000 set_tim2_flag
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:783    .text.set_tim2_flag:00000008 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:788    .bss.led_counter.0:00000000 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:797    .bss.is_on_cross:00000000 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:802    .bss.cross_count:00000000 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:804    .bss.integral:00000000 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:810    .bss.last_error:00000000 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:819    .bss.tim2_flag:00000000 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:824    .bss.button_permission:00000000 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:826    .bss.press_time:00000000 $d
+C:\Users\VICTUS\AppData\Local\Temp\ccxvK5df.s:832    .bss.ticks:00000000 $d
 
 UNDEFINED SYMBOLS
-SystemCoreClockUpdate
-SystemCoreClock
+read_right_sensor
+read_middle_sensor
+read_left_sensor
+left_motor
+right_motor
